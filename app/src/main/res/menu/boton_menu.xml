@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/listaJugadoresFragment"
+        android:enabled="true"
+        android:icon="@drawable/icono_list_jugador"
+        android:iconTint="#0F1871"
+        android:title="Jugadores"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/pantJuegoFragment"
+        android:enabled="true"
+        android:icon="@drawable/icono_pant_juego"
+        android:iconTint="#0F1871"
+        android:title="Jugar"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/editarFragment"
+        android:enabled="true"
+        android:icon="@drawable/icono_editar"
+        android:iconTint="#0F1871"
+        android:title="Editar"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/resultadoFragment"
+        android:enabled="true"
+        android:icon="@drawable/icono_resultado"
+        android:iconTint="#0F1871"
+        android:title="Resultados"
+        app:showAsAction="ifRoom" />
+
+</menu>
