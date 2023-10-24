@@ -3,6 +3,7 @@ package es.unex.nbafantasy
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -18,10 +19,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    private val navController by lazy {
+    private lateinit var navController:NavController
+    /*private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
-    }
+
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +33,9 @@ class MainActivity : AppCompatActivity() {
         setUpUi()
     }
 
-    fun setUpUi(){
-        binding.bottomNavigation.setupWithNavController(navController)
+    private fun setUpUi(){
+        initNavigation()
+    /*  binding.bottomNavigation.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(
                 setOf( R.id.editarFragment,
                     R.id.pantJuegoFragment,
@@ -41,7 +44,13 @@ class MainActivity : AppCompatActivity() {
         )
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
+*/
+    }
 
+    private fun initNavigation() {
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHost.navController
+        binding.bottomNavigation.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
