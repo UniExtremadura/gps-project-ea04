@@ -21,10 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController:NavController
-    /*private val navController by lazy {
-        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
-
-    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,16 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpUi(){
         initNavigation()
-    /*  binding.bottomNavigation.setupWithNavController(navController)
-        appBarConfiguration = AppBarConfiguration(
-                setOf( R.id.editarFragment,
-                    R.id.pantJuegoFragment,
-                    R.id.listaJugadoresFragment,
-                    R.id.resultadoFragment)
-        )
-        setSupportActionBar(binding.toolbar)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-*/
     }
 
     private fun initNavigation() {
@@ -54,11 +40,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
     }
 
-    /*override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
-*/
     private fun setUpListeners(){
 
 
