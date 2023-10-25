@@ -9,12 +9,13 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import dagger.hilt.android.AndroidEntryPoint
 import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.home.EditarFragment
 import es.unex.nbafantasy.home.ListaJugadoresFragment
 import es.unex.nbafantasy.home.PantJuegoFragment
 import es.unex.nbafantasy.home.ResultadoFragment
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -53,12 +54,12 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setupWithNavController(navController)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+    /*override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
-
-    fun setUpListeners(){
+*/
+    private fun setUpListeners(){
 
 
     }

@@ -5,10 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.hilt.android.AndroidEntryPoint
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.databinding.FragmentEditarBinding
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
-
+@AndroidEntryPoint
 class ListaJugadoresFragment : Fragment() {
 
     private var _binding: FragmentListaJugadoresBinding? = null

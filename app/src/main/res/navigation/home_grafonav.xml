@@ -10,6 +10,7 @@
         android:name="es.unex.nbafantasy.home.EditarFragment"
         android:label="@string/editar_opcion"
         tools:layout="@layout/fragment_editar" />
+
     <fragment
         android:id="@+id/listaJugadoresFragment"
         android:name="es.unex.nbafantasy.home.ListaJugadoresFragment"
@@ -19,10 +20,19 @@
         android:id="@+id/pantJuegoFragment"
         android:name="es.unex.nbafantasy.home.PantJuegoFragment"
         android:label="@string/juego_opcion"
-        tools:layout="@layout/fragment_pant_juego" />
+        tools:layout="@layout/fragment_pant_juego" >
+        <action
+            android:id="@+id/action_pantJuegoFragment_to_pantallaJuegoActivity"
+            app:destination="@id/pantallaJuegoActivity" />
+    </fragment>
     <fragment
         android:id="@+id/resultadoFragment"
         android:name="es.unex.nbafantasy.home.ResultadoFragment"
         android:label="@string/resultado_opcion"
         tools:layout="@layout/fragment_resultado" />
+    <activity
+        android:id="@+id/pantallaJuegoActivity"
+        android:name="es.unex.nbafantasy.Juego.PantallaJuegoActivity"
+        android:label="activity_pantalla_juego2"
+        tools:layout="@layout/activity_pantalla_juego" />
 </navigation>
