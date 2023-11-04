@@ -32,7 +32,7 @@
         tools:layout="@layout/fragment_resultado" />
     <activity
         android:id="@+id/pantallaJuegoActivity"
-        android:name="es.unex.nbafantasy.Juego.PantallaJuegoActivity"
+        android:name="es.unex.nbafantasy.juego.PantallaJuegoActivity"
         android:label="activity_pantalla_juego2"
         tools:layout="@layout/activity_pantalla_juego" />
 </navigation>

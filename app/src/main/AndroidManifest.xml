@@ -14,12 +14,24 @@
         android:theme="@style/Theme.NBAFantasy"
         tools:targetApi="31">
         <activity
-            android:name=".Juego.PantallaJuegoActivity"
+            android:name=".juego.PantallaJuegoActivity"
             android:exported="false"
             android:label="@string/title_activity_pantalla_juego"
             android:theme="@style/Theme.NBAFantasy" />
         <activity
+            android:name=".juego.resultadoPartido.VictoriaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".juego.resultadoPartido.DerrotaActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".inicioSesion.RegistroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".inicioSesion.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

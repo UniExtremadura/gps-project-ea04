@@ -4,23 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".juego.PantallaJuegoActivity"
-    android:background="@drawable/pant_juego">
-
+    tools:context=".juego.resultadoPartido.DerrotaActivity"
+    android:background="@drawable/pant_derrota">
 
     <Button
-        android:id="@+id/bt_comenzar_partida"
-        android:layout_width="240dp"
-        android:layout_height="55dp"
-        android:backgroundTint="#C7112C"
-        android:text="Comenzar partida"
+        android:id="@+id/bt_salir_derrota"
+        android:layout_width="158dp"
+        android:layout_height="57dp"
+        android:backgroundTint="#0F1871"
+        android:text="Salir"
         android:textSize="23dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.517" />
-
+        app:layout_constraintVertical_bias="0.887" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
