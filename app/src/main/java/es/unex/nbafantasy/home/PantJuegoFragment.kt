@@ -35,8 +35,6 @@ class PantJuegoFragment : Fragment() {
     }
 
     private fun initNav() {
-
-
         binding.btJugar.setOnClickListener {
             findNavController().navigate(
                 PantJuegoFragmentDirections.actionPantJuegoFragmentToPantallaJuegoActivity()
