@@ -40,28 +40,47 @@ class ComprobacionCredenciales private constructor() {
 
         )
 
-        fun inicioSesion(username: String, password: String): ComprobacionCredenciales {
+        /**
+         * Metodo que comprueba si algunos de los campos del inicio de sesion son incorrectos
+         * Devuelve:
+         *    -true: cuando se ha producido algun error
+         *    -false: cuando todos los elementos son correctos
+         */
+        fun inicioSesion(nombre: String, contrasena: String): ComprobacionCredenciales {
             //Nombre usuario debe tener mas de 4 caracteres
-            return if (username.isBlank() || username.length < MINCHARS) checks[1]// Username incorrecto
+            return if (nombre.isBlank() || nombre.length < MINCHARS) checks[1]// Username incorrecto
 
             //Contrasena debe tener mas de 4 caracteres
-            else if (password.isBlank() || password.length < MINCHARS) checks[2] // Contrasena incorrecta
+            else if (contrasena.isBlank() || contrasena.length < MINCHARS) checks[2] // Contrasena incorrecta
 
             else checks[0] //Credenciales correctas
         }
 
-        fun registro(username: String, password: String, repassword: String): ComprobacionCredenciales {
+        /**
+         * Metodo que comprueba si algunos de los campos del registro de usuario son incorrectos
+         * Devuelve:
+         *    -true: cuando se ha producido algun error
+         *    -false: cuando todos los elementos son correctos
+         */
+        fun registro(nombre: String, contrasena: String, repassword: String): ComprobacionCredenciales {
             //Nombre usuario debe tener mas de 4 caracteres
-            return if (username.isBlank() || username.length < MINCHARS) checks[1]  // Username incorrecto
+            return if (nombre.isBlank() || nombre.length < MINCHARS) checks[1]  // Username incorrecto
 
             //Contrasena debe tener mas de 4 caracteres
-            else if (password.isBlank() || password.length < MINCHARS) checks[2]  // Contrasena incorrecta
+            else if (contrasena.isBlank() || contrasena.length < MINCHARS) checks[2]  // Contrasena incorrecta
 
             //Si la contrasena y la repeticion de la contrasena es erronea
-            else if (password!=repassword) checks[3] //Contrasena y repeticion NO coinciden
+            else if (contrasena!=repassword) checks[3] //Contrasena y repeticion NO coinciden
             else checks[0] //Credenciales correctas
         }
+
+        fun compararContrasena(contrasena1: String, contrasena2: String): ComprobacionCredenciales{
+            return if (contrasena1!=contrasena2) checks[3]
+            else checks[0]
+
+        }
     }
+
 
     enum class CredentialError {
         PasswordError, UsernameError, Success

@@ -22,18 +22,6 @@ class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityRegistroBinding
 
-    companion object{
-        const val NOMBRE = "JOIN_NOMBRE"
-        const val CONTRASENA = "JOIN_CONTRASENA"
-        fun start(
-            context: Context,
-            responseLauncher: ActivityResultLauncher<Intent>
-        ){
-            val intent = Intent(context,RegistroActivity::class.java)
-            responseLauncher.launch(intent)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
@@ -88,7 +76,6 @@ class RegistroActivity : AppCompatActivity() {
 
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
-
         MainActivity.start(this,usuario)
     }
 
