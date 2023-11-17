@@ -3,10 +3,10 @@ package es.unex.nbafantasy.inicioSesion
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Usuario
@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun leerAutologin(){
-        val preferencias=PreferenceManager.getDefaultSharedPreferences(this).all
+        val preferencias= PreferenceManager.getDefaultSharedPreferences(this).all
 
         val recordatorioDatos=preferencias["recordatorioDatos"] as Boolean? ?: false
         val nombreUsuario= preferencias["nombreUsuario"] as String? ?: ""

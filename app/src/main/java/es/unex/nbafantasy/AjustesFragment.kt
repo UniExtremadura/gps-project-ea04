@@ -1,9 +1,10 @@
 package es.unex.nbafantasy
 
 import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
+
 import android.content.Context
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 
 import android.view.View
@@ -11,8 +12,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
+import androidx.preference.PreferenceFragmentCompat
+
 import es.unex.nbafantasy.bd.roomBD.BD
 
 class AjustesFragment : PreferenceFragmentCompat(){

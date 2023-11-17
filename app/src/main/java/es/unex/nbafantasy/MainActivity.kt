@@ -1,5 +1,7 @@
 package es.unex.nbafantasy
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -26,8 +28,6 @@ import es.unex.nbafantasy.home.ResultadoFragment
 
 class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickListener {
 
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             context: Context,
             usuario: Usuario,
         ){
-            val intent=Intent(context, MainActivity::class.java).apply {
+            val intent= Intent(context, MainActivity::class.java).apply {
                 putExtra(USUARIO, usuario)
             }
             context.startActivity(intent)
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener{_,destination,_ ->
-            if(destination.id==R.id.ajustesFragment){
+            if(destination.id==R.id.ajustesFragment||destination.id==R.id.listaJugadoresDetailsFragment){
                 binding.toolbar.menu.clear()
                 binding.bottomNavigation.visibility= View.GONE
             }else{

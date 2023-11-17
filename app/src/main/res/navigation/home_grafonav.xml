@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/listaJugadoresDetailsFragment"
         android:name="es.unex.nbafantasy.home.ListaJugadoresDetailsFragment"
-        android:label="ListaJugadoresDetailsFragment" >
+        android:label="Detalles del jugador" >
         <argument
             android:name="nba"
             app:argType="es.unex.nbafantasy.Data.model.NBAData" />
