@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Usuario
@@ -29,7 +29,23 @@ class LoginActivity : AppCompatActivity() {
         db= BD.getInstance(applicationContext)!!
 
         setUpListener()
+        leerAutologin()
     }
+
+    private fun leerAutologin(){
+        val preferencias=PreferenceManager.getDefaultSharedPreferences(this).all
+
+        val recordatorioDatos=preferencias["recordatorioDatos"] as Boolean? ?: false
+        val nombreUsuario= preferencias["nombreUsuario"] as String? ?: ""
+        val contrasena = preferencias["contrasena"] as String? ?: ""
+
+        if(recordatorioDatos){
+            binding.etNombre.setText(nombreUsuario)
+            binding.etContrasena.setText(contrasena)
+        }
+
+    }
+
 
     private fun setUpListener(){
 

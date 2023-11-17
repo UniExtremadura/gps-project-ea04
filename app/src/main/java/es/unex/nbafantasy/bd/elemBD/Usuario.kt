@@ -11,3 +11,4 @@ data class Usuario(
     val nombre: String = "",
     val contrasena: String = ""
 ) : Serializable
+

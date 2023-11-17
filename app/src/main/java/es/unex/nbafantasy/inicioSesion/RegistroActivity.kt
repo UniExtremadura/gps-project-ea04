@@ -1,18 +1,12 @@
 package es.unex.nbafantasy.inicioSesion
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.MainActivity
-import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
-import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
