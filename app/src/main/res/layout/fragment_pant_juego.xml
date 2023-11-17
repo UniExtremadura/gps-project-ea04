@@ -4,9 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.PantJuegoFragment"
-    android:background="@drawable/pant_principal">
+    tools:context=".home.PantJuegoFragment">
 
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="800dp"
+        android:scaleType="center"
+        android:src="@drawable/pant_principal" />
 
     <Button
         android:id="@+id/bt_jugar"
@@ -16,5 +27,8 @@
         android:text="Jugar"
         android:textSize="23dp"
         android:translationX="115dp"
-        android:translationY="450dp" />
+        android:translationY="450dp"
+
+
+        tools:layout_editor_absoluteY="450dp" />
 </FrameLayout>

@@ -1,24 +1,24 @@
 package es.unex.nbafantasy
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import dagger.hilt.android.AndroidEntryPoint
+import es.unex.nbafantasy.Data.api.Data
+import es.unex.nbafantasy.Data.model.NBAData
+import es.unex.nbafantasy.Data.model.NBASeasonData
 import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.home.EditarFragment
 import es.unex.nbafantasy.home.ListaJugadoresFragment
+import es.unex.nbafantasy.home.ListaJugadoresFragmentDirections
+
 import es.unex.nbafantasy.home.PantJuegoFragment
 import es.unex.nbafantasy.home.ResultadoFragment
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickListener {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         setUpUI()
     }
 
-    fun setUpUI() {
+    private fun setUpUI() {
         /*//Inicializacion de cada Fragment
         discoverFragment = DiscoverFragment()
         libraryFragment = LibraryFragment()
@@ -70,6 +70,12 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+    override fun onShowClick(nbadata: NBAData, season: NBASeasonData) {
+        val action = ListaJugadoresFragmentDirections.actionListaJugadoresFragmentToListaJugadoresDetailsFragment(
+            nbadata,season
+        )
+        navController.navigate(action)
     }
 
 

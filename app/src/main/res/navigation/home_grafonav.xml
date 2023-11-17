@@ -15,7 +15,11 @@
         android:id="@+id/listaJugadoresFragment"
         android:name="es.unex.nbafantasy.home.ListaJugadoresFragment"
         android:label="@string/listjugador_opcion"
-        tools:layout="@layout/fragment_lista_jugadores" />
+        tools:layout="@layout/fragment_lista_jugadores" >
+        <action
+            android:id="@+id/action_listaJugadoresFragment_to_listaJugadoresDetailsFragment"
+            app:destination="@id/listaJugadoresDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/pantJuegoFragment"
         android:name="es.unex.nbafantasy.home.PantJuegoFragment"
@@ -35,4 +39,15 @@
         android:name="es.unex.nbafantasy.juego.PantallaJuegoActivity"
         android:label="activity_pantalla_juego2"
         tools:layout="@layout/activity_pantalla_juego" />
+    <fragment
+        android:id="@+id/listaJugadoresDetailsFragment"
+        android:name="es.unex.nbafantasy.home.ListaJugadoresDetailsFragment"
+        android:label="ListaJugadoresDetailsFragment" >
+        <argument
+            android:name="nba"
+            app:argType="es.unex.nbafantasy.Data.model.NBAData" />
+        <argument
+            android:name="stats"
+            app:argType="es.unex.nbafantasy.Data.model.NBASeasonData" />
+    </fragment>
 </navigation>

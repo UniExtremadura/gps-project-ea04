@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
-import dagger.hilt.android.AndroidEntryPoint
 import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
-@AndroidEntryPoint
+
 class PantJuegoFragment : Fragment() {
 
     private lateinit var botonJuego: Button

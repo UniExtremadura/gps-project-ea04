@@ -28,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:itemIconTint="@color/design_default_color_error"
-        app:itemTextColor="#B00020"
+        app:itemTextColor="@color/red"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
