@@ -34,4 +34,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.89" />
+
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="76dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="396dp"
+        android:text="Nombre"
+        android:textColor="#C7112C"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.158"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="305dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="420dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvContrasena"
+        android:layout_width="131dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="88dp"
+        android:text="Contraseña"
+        android:textColor="#C7112C"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.189"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNombre" />
+
+    <EditText
+        android:id="@+id/etContrasena"
+        android:layout_width="305dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="56dp"
+        android:hint="Contraseña"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etNombre" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

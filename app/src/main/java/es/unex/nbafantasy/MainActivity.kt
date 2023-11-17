@@ -2,6 +2,10 @@ package es.unex.nbafantasy
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -10,6 +14,8 @@ import androidx.navigation.ui.setupWithNavController
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
 import es.unex.nbafantasy.Data.model.NBASeasonData
+import dagger.hilt.android.AndroidEntryPoint
+import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.home.EditarFragment
 import es.unex.nbafantasy.home.ListaJugadoresFragment
@@ -19,13 +25,25 @@ import es.unex.nbafantasy.home.PantJuegoFragment
 import es.unex.nbafantasy.home.ResultadoFragment
 
 class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickListener {
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var editarFragment: EditarFragment
-    private lateinit var listaJugadoresFragment: ListaJugadoresFragment
-    private lateinit var pantJuegoFragment: PantJuegoFragment
-    private lateinit var resultadoFragment: ResultadoFragment
+    companion object{
+        const val USUARIO="USUARIO"
+
+        fun start(
+            context: Context,
+            usuario: Usuario,
+        ){
+            val intent=Intent(context, MainActivity::class.java).apply {
+                putExtra(USUARIO, usuario)
+            }
+            context.startActivity(intent)
+        }
+    }
 
     val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
@@ -39,21 +57,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
         setUpUI()
     }
 
-    private fun setUpUI() {
-        /*//Inicializacion de cada Fragment
-        discoverFragment = DiscoverFragment()
-        libraryFragment = LibraryFragment()
-        userFragment = UserFragment()
-
-        //FRAGMENTO INICIAL DEFINIDO que va a ser discoverFragment, es decir cuando se arranque la
-        // aplicacion y se vea la ventana HOME se vera este fragmento
-        //setCurrentFragment(discoverFragment)
-
-        // Obtenemos el navHostFragment a partir del fragmetManager
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
-        //A la barra de bnavegacion inferior lo configuramos con el NavController
-        binding.bottomNavigation.setupWithNavController(navHostFragment.navController)*/
+    fun setUpUI() {
 
         binding.bottomNavigation.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(
@@ -63,8 +67,20 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
                 R.id.pantJuegoFragment,
                 R.id.resultadoFragment)
         )
+
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        navController.addOnDestinationChangedListener{_,destination,_ ->
+            if(destination.id==R.id.ajustesFragment){
+                binding.toolbar.menu.clear()
+                binding.bottomNavigation.visibility= View.GONE
+            }else{
+                binding.toolbar.visibility=View.VISIBLE
+                binding.bottomNavigation.visibility=View.VISIBLE
+            }
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -79,4 +95,23 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_barra, menu)
+        val searchItem = menu?.findItem(R.id.accion_ajustes)
+        val searchView = searchItem?.actionView as? SearchView
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.accion_ajustes -> {
+            val accion= HomeGrafonavDirections.acccionMainToAjustesFragment()
+            navController.navigate(accion)
+            true
+        }else -> {
+            super.onOptionsItemSelected(item)
+        }
+
+    }
 }

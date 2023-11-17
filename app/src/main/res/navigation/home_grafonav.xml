@@ -5,6 +5,11 @@
     android:id="@+id/home_grafonav"
     app:startDestination="@id/pantJuegoFragment">
 
+    <action
+        android:id="@+id/acccion_main_to_ajustesFragment"
+        app:destination="@id/ajustesFragment"
+        />
+
     <fragment
         android:id="@+id/editarFragment"
         android:name="es.unex.nbafantasy.home.EditarFragment"
@@ -50,4 +55,9 @@
             android:name="stats"
             app:argType="es.unex.nbafantasy.Data.model.NBASeasonData" />
     </fragment>
+    <fragment
+        android:id="@+id/ajustesFragment"
+        android:name="es.unex.nbafantasy.AjustesFragment"
+        android:label="Ajustes"/>
+
 </navigation>
