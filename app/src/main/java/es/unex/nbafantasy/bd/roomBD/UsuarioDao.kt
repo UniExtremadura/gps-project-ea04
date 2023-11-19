@@ -12,21 +12,14 @@ interface UsuarioDao {
     suspend fun busquedaNombre(nombreUsuario: String): Usuario
 
     /**
-     * Devuelve un Usuario dado su userId.
+     * Devuelve un Usuario dado su usuarioId.
      *
-     * @param usuario
+     * @param usuarioiD
      */
-    @Query("SELECT * FROM usuario WHERE userId= :userId")
-    suspend fun getUsuarioId(userId: Int): Usuario
 
-    /**
-     * Devuelve un Usuario dado su nombre de usuario y contraseña.
-     *
-     * @param nombre
-     * @param contrasena
-     */
-    @Query ("SELECT * FROM usuario WHERE nombre = :nombre")
-    suspend fun getByNombreUsuario(nombre: String): Usuario
+    @Query("SELECT * FROM usuario WHERE usuarioId= :usuarioId")
+    suspend fun getUsuarioId(usuarioId: Int): Usuario
+
 
     /**
      * Devuelve un Usuario dado su nombre de usuario y contraseña.
@@ -38,7 +31,7 @@ interface UsuarioDao {
     suspend fun getByLogin(nombre: String, contrasena: String): Usuario
 
     /**
-     * Inserta un usario en la tabla de usuario.
+     * Inserta un usuario en la tabla de usuario.
      *
      * @param usuario
      */
@@ -54,7 +47,7 @@ interface UsuarioDao {
     suspend fun actualizarUsuario(usuario: Usuario)
 
     /**
-     * Borra todos los Usuarios de la tabla de usuarios.
+     * Borra todos los Usuarios de la tabla de usuario.
      */
     @Query("DELETE FROM usuario")
     suspend fun deleteAll()
