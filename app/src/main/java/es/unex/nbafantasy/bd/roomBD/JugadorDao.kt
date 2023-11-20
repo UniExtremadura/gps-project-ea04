@@ -22,6 +22,12 @@ interface JugadorDao {
     suspend fun getJugadorId(jugadorId: Int): Jugador
 
     /**
+     * Devuelve una lista de jugadores
+     */
+    @Query("SELECT * FROM jugador")
+    suspend fun getAll(): List<Jugador>
+
+    /**
      * Inserta un jugador en la tabla de jugador.
      *
      * @param jugador
