@@ -99,8 +99,8 @@ class ListaJugadoresFragment : Fragment() {
 
     private suspend fun fetchShows(): List<Data> {
         val apiData = mutableListOf<Data>()
-        val playerIds = listOf(1, 4, 8, 9, 12, 15, 18, 19, 22, 24, 28, 30, 32, 33, 37,
-            38, 44, 45, 48, 53, 112, 114, 115, 117, 125, 231, 236, 237, 250, 251)
+        val playerIds = listOf(8, 4, 9, 12, 15, 18, 24, 28, 33, 37, 48, 53, 57, 79, 112,
+            114, 115, 117, 125, 132, 140, 145, 175, 236, 237, 250, 246, 322, 434)
         try {
             for (playerId in playerIds) {
                 val playerData = getNetworkService().getPlayerById(playerId)
