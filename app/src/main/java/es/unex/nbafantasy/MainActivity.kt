@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var intent: Intent
 
     companion object{
         const val USUARIO="USUARIO"
@@ -53,6 +54,8 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         setUpUI()
     }
