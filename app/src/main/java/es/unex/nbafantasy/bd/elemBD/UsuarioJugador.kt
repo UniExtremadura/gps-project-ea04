@@ -14,6 +14,13 @@ import java.io.Serializable
             childColumns = ["usuarioId"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Jugador::class,
+            parentColumns = ["jugadorId"],
+            childColumns = ["jugadorId"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.CASCADE
         )
     ]
 )
