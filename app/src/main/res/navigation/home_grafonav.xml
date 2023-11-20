@@ -59,5 +59,20 @@
         android:id="@+id/ajustesFragment"
         android:name="es.unex.nbafantasy.AjustesFragment"
         android:label="Ajustes"/>
+    <activity
+        android:id="@+id/darCartaActivity"
+        android:name="es.unex.nbafantasy.juego.DarCartaActivity"
+        android:label="activity_dar_carta"
+        tools:layout="@layout/activity_dar_carta" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="es.unex.nbafantasy.inicioSesion.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+    <activity
+        android:id="@+id/registroActivity"
+        android:name="es.unex.nbafantasy.inicioSesion.RegistroActivity"
+        android:label="activity_registro"
+        tools:layout="@layout/activity_registro" />
 
 </navigation>

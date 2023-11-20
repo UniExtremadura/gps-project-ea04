@@ -19,7 +19,7 @@ interface JugadorDao {
      */
 
     @Query("SELECT * FROM jugador WHERE jugadorId= :jugadorId")
-    suspend fun getJugadorId(jugadorId: Int): Usuario
+    suspend fun getJugadorId(jugadorId: Int): Jugador
 
     /**
      * Inserta un jugador en la tabla de jugador.

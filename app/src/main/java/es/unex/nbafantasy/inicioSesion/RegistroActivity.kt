@@ -8,6 +8,7 @@ import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
+import es.unex.nbafantasy.juego.DarCartaActivity
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
 
@@ -70,7 +71,7 @@ class RegistroActivity : AppCompatActivity() {
 
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
-        MainActivity.start(this,usuario)
+        DarCartaActivity.start(this,usuario)
     }
 
 
