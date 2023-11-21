@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
@@ -15,27 +14,32 @@ import es.unex.nbafantasy.Data.model.NBASeasonData
 import es.unex.nbafantasy.Data.toNBAData
 import es.unex.nbafantasy.Data.toSeasonAverages
 import es.unex.nbafantasy.MainActivity
-import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
+import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
+import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityDarCartaBinding
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class DarCartaActivity : AppCompatActivity() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
     private lateinit var db: BD
     private lateinit var binding:ActivityDarCartaBinding
+    private lateinit var listaJugador: List<Jugador>
+
     private var pesoPuntos = 0.2
     private var pesoTapones = 0.1
     private var pesoRebotes = 0.15
     private var pesoRobos = 0.15
     private var pesoAsistencias = 0.2
     private var pesoErrores = 0.1
+
     companion object{
         const val USUARIO="USUARIO"
 
@@ -58,28 +62,39 @@ class DarCartaActivity : AppCompatActivity() {
         //Inicializacion BD
         db= BD.getInstance(applicationContext)!!
         setUpUI()
-        //DarCarta()
-        // Obtener el usuario del intent
-        val usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 
-        // Verificar si el usuario no es nulo
-        with(binding) {
-            btAceptar.setOnClickListener {
-                if (usuario != null) {
-                    // Llamar a la función de navegación con el usuario
-                    navegarPantallaPrincipal(usuario, "Jugadores Recibidos")
+        val usuario = intent?.getSerializableExtra(USUARIO) as? Usuario
+
+        if(usuario!=null) {
+            lifecycleScope.launch {
+                //Espera que la BD este cargada
+                esperarCargaBD()
+
+                Log.e("API CARGADA", "La API se ha cargado")
+
+
+                obtenerJugadores(usuario)
+
+                // Verificar si el usuario no es nulo
+                with(binding) {
+                    btAceptar.setOnClickListener {
+                        if (usuario != null) {
+                            // Llamar a la función de navegación con el usuario
+                            navegarPantallaPrincipal(usuario, "Jugadores Recibidos")
+                        }
+                    }
                 }
             }
+        }else{
+            Log.e("Error", "usuarioId es nulo")
         }
     }
 
-    private fun DarCarta() {
-        TODO("Not yet implemented")
-    }
 
     private fun setUpUI() {
         lifecycleScope.launch {
-            if (_datas.isEmpty() && _seasondatas.isEmpty()) {
+            val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
+            if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
                 try {
                     _datas = fetchShows().filterNotNull().map(Data::toNBAData)
                     _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
@@ -139,10 +154,7 @@ class DarCartaActivity : AppCompatActivity() {
         for (i in Datos) {
             try {
                 val playerId = i.id
-                //Log.d("jug en bucle", "jug en bucle: $playerId")
                 val seasonAverage = getNetworkService().getSeasonAverage(playerId).data
-                //val puntos = seasonAverage.firstOrNull()?.pts ?: -1
-                //Log.d("Season pts en bucle", "Season pts en bucle: $puntos")
 
                 apiSeasonData.addAll(seasonAverage)
             } catch (e: Exception) {
@@ -153,8 +165,71 @@ class DarCartaActivity : AppCompatActivity() {
         }
         return apiSeasonData
     }
+
+    private suspend fun obtenerJugadores(usuario: Usuario) {
+        val random= Random(System.currentTimeMillis())
+        listaJugador = db.jugadorDao().getAll()
+        val numJugadores = listaJugador.size
+
+        val posicionJugador1 = random.nextInt(numJugadores)
+        val posicionJugador2 = random.nextInt(numJugadores)
+        val posicionJugador3 = random.nextInt(numJugadores)
+
+        try {
+            val usuarioId = usuario?.usuarioId
+
+            if (usuarioId != null) {
+                val usuarioJugador1 = UsuarioJugador(usuarioId, posicionJugador1.toLong())
+                db.usuarioJugadorDao().insertar(usuarioJugador1)
+                val jugadorEquipo1=JugadorEquipo(usuarioId, posicionJugador1.toLong())
+                db.jugadorEquipoDao().insertar(jugadorEquipo1)
+
+                val usuarioJugador2 = UsuarioJugador(usuarioId, posicionJugador2.toLong())
+                db.usuarioJugadorDao().insertar(usuarioJugador2)
+                val jugadorEquipo2=JugadorEquipo(usuarioId, posicionJugador2.toLong())
+                db.jugadorEquipoDao().insertar(jugadorEquipo2)
+
+                val usuarioJugador3 = UsuarioJugador(usuarioId, posicionJugador3.toLong())
+                db.usuarioJugadorDao().insertar(usuarioJugador3)
+                val jugadorEquipo3=JugadorEquipo(usuarioId, posicionJugador3.toLong())
+                db.jugadorEquipoDao().insertar(jugadorEquipo3)
+
+                with(binding) {
+                    val nombreApellido1 =
+                        db.jugadorDao().getJugadorId(posicionJugador1.toLong()).nombre + " " +
+                                db.jugadorDao().getJugadorId(posicionJugador1.toLong()).apellido
+                    playersName1.setText(nombreApellido1)
+
+                    val nombreApellido2 =
+                        db.jugadorDao().getJugadorId(posicionJugador2.toLong()).nombre + " " +
+                                db.jugadorDao().getJugadorId(posicionJugador2.toLong()).apellido
+                    playersName2.setText(nombreApellido2)
+
+                    val nombreApellido3 =
+                        db.jugadorDao().getJugadorId(posicionJugador3.toLong()).nombre + " " +
+                                db.jugadorDao().getJugadorId(posicionJugador3.toLong()).apellido
+                    playersName3.setText(nombreApellido3)
+                }
+            } else {
+                Log.e("Error", "usuarioId es nulo")
+            }
+
+
+        }catch(e: Exception) {
+            Log.e("Error", "Error al insertar en UsuarioJugador: ${e.message}", e)
+        }
+    }
+
+    private suspend fun esperarCargaBD() {
+        while (db.jugadorDao().getAll().isEmpty()) {
+            kotlinx.coroutines.delay(100) // Esperar 100 milisegundos antes de volver a verificar
+        }
+    }
+
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
     }
 }
+
+

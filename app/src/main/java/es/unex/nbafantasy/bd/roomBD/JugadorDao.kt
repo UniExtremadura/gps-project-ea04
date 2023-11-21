@@ -19,7 +19,7 @@ interface JugadorDao {
      */
 
     @Query("SELECT * FROM jugador WHERE jugadorId= :jugadorId")
-    suspend fun getJugadorId(jugadorId: Int): Jugador
+    suspend fun getJugadorId(jugadorId: Long): Jugador
 
     /**
      * Devuelve una lista de jugadores
@@ -34,6 +34,12 @@ interface JugadorDao {
      */
     @Insert
     suspend fun insertar(jugador: Jugador): Long
+
+    /**
+     * Cuenta el número de jugadores en la tabla de jugador.
+     */
+    @Query("SELECT COUNT(*) FROM jugador")
+    suspend fun countJugadores(): Int
 
     /**
      * Borra todos los Jugadores de la tabla de jugador.

@@ -5,35 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".juego.DarCartaActivity"
-    android:layout_margin="20dp">
+    android:background="@drawable/pant_dar_cartas">
+
     <TextView
-        android:id="@+id/titulo"
-        android:layout_width="wrap_content"
+        android:id="@+id/players_name1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="4dp"
-        android:textStyle="bold"
-        android:text="titulo"
+        android:gravity="center"
+        android:layout_marginTop="204dp"
+        android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/players_name1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
-        android:text="name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/titulo" />
-
-    <TextView
         android:id="@+id/players_name2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_marginTop="164dp"
         android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
@@ -42,9 +34,11 @@
 
     <TextView
         android:id="@+id/players_name3"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="152dp"
         android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
@@ -56,12 +50,11 @@
         android:layout_width="243dp"
         android:layout_height="52dp"
         android:backgroundTint="#C7112C"
-        android:text="aceptar"
+        android:text="Aceptar"
         android:textSize="23dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.88" />
+        app:layout_constraintVertical_bias="0.923" />
 </androidx.constraintlayout.widget.ConstraintLayout>

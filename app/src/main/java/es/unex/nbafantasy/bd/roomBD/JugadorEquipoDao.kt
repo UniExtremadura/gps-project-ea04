@@ -16,7 +16,7 @@ interface JugadorEquipoDao {
      * @param usuarioId
      */
     @Query("SELECT * FROM jugadorequipo WHERE usuarioId = :usuarioId")
-    suspend fun getJugadorByUsuario(usuarioId: Int): List<JugadorEquipo>
+    suspend fun getJugadorByUsuario(usuarioId: Long): List<JugadorEquipo>
 
 
     /**

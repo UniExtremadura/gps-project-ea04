@@ -4,21 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.PantJuegoFragment">
+    tools:context=".home.PantJuegoFragment"
+    android:background="@drawable/pant_principal">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/jugadorEquipo1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="204dp"
+        android:gravity="center"
+        android:text="name"
+        android:translationY="55dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="800dp"
-        android:scaleType="center"
-        android:src="@drawable/pant_principal" />
+    <TextView
+        android:id="@+id/jugadorEquipo2"
+        android:layout_width="138dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="204dp"
+        android:gravity="center"
+        android:text="name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:translationX="0dp"
+        android:translationY="205dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/jugadorEquipo3"
+        android:layout_width="138dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="204dp"
+        android:gravity="center"
+        android:text="name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:translationX="250dp"
+        android:translationY="205dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <Button
         android:id="@+id/bt_jugar"
         android:layout_width="177dp"
@@ -27,7 +59,7 @@
         android:text="Jugar"
         android:textSize="23dp"
         android:translationX="115dp"
-        android:translationY="450dp"
+        android:translationY="525dp"
 
 
         tools:layout_editor_absoluteY="450dp" />

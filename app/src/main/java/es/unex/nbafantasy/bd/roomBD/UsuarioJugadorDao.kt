@@ -10,7 +10,7 @@ import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 @Dao
 interface UsuarioJugadorDao {
     /**
-     * Devuelve una lista de jugadoresç
+     * Devuelve todos los jugadores de un usuario concreto
      */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
     suspend fun getJugadorByUsuario(usuarioId: Int): List<UsuarioJugador>

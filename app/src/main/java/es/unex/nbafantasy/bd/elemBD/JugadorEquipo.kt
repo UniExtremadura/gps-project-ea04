@@ -26,8 +26,8 @@ import java.io.Serializable
 )
 
 data class JugadorEquipo(
-    val usuarioId: Long?,
-    val jugadorId: Long?
+    val usuarioId: Long,
+    val jugadorId: Long
 ) : Serializable
 
 

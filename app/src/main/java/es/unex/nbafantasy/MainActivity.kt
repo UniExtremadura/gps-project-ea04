@@ -29,12 +29,13 @@ import es.unex.nbafantasy.home.ListaJugadoresFragmentDirections
 
 import es.unex.nbafantasy.home.PantJuegoFragment
 import es.unex.nbafantasy.home.ResultadoFragment
+import es.unex.nbafantasy.juego.DarCartaActivity
 
 class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var intent: Intent
+    private lateinit var usuario: Usuario
 
     companion object{
         const val USUARIO="USUARIO"
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
 
         setUpUI()
     }
@@ -113,12 +114,15 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.accion_ajustes -> {
-            val accion= HomeGrafonavDirections.acccionMainToAjustesFragment()
-            navController.navigate(accion)
+            navController.navigate(HomeGrafonavDirections.acccionMainToAjustesFragment())
             true
         }else -> {
             super.onOptionsItemSelected(item)
         }
+    }
 
+    fun getUsuario(): Usuario? {
+        return usuario
     }
 }
+

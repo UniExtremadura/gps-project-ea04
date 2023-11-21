@@ -56,11 +56,11 @@ class RegistroActivity : AppCompatActivity() {
 
                     if (db?.usuarioDao()?.busquedaNombre(binding.etNombre.text.toString())==null) {
                         val id = db?.usuarioDao()?.insertar(usuario)
+                        val usuario = Usuario(null, etNombre.text.toString(), etContrasena1.text.toString())
 
-                        navegarPantallaPrincipal(
-                            Usuario(null, etNombre.text.toString(), etContrasena1.text.toString()),
-                            comprobar.msg
-                        )
+                        usuario.usuarioId=id
+
+                        navegarPantallaPrincipal(usuario,comprobar.msg)
                     }else{
                         notificarErrorCredencial("Nombre de usuario ocupado")
                     }
