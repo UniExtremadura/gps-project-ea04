@@ -73,16 +73,13 @@ class DarCartaActivity : AppCompatActivity() {
                 setUpUI()
                 kotlinx.coroutines.delay(50)
 
-                //Espera que la BD este cargada
-                // esperarCargaBD()
-
-                listaJugador = db.jugadorDao().getAll()
-                // Log.d("GetJugadores", listaJugador.toString())
 
                 Log.e("API CARGADA", "La API se ha cargado")
 
+
                 obtenerJugadores(usuario)
 
+                // Verificar si el usuario no es nulo
                 with(binding) {
                     btAceptar.setOnClickListener {
                         if (usuario != null) {
@@ -93,48 +90,45 @@ class DarCartaActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
 
-    private fun setUpUI() {
-        lifecycleScope.launch {
-            val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
-            if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
-                try {
-                    _datas = fetchShows().filterNotNull().map(Data::toNBAData)
-                    _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
-                    var i = 0;
-                    for (playerId in _datas) {
-                        val media = (_seasondatas[i].pts * pesoPuntos +
-                                _seasondatas[i].blk * pesoTapones +
-                                _seasondatas[i].reb * pesoRebotes +
-                                _seasondatas[i].stl * pesoRobos +
-                                _seasondatas[i].ast * pesoAsistencias -
-                                _seasondatas[i].turnover * pesoErrores)*10
-                        val jugador = Jugador(
-                            null,
-                            playerId.firstName,
-                            playerId.lastName,
-                            playerId.team?.fullName,
-                            playerId.team?.conference,
-                            playerId.position,
-                            playerId.heightInches?.toDouble(),
-                            _seasondatas[i].pts,
-                            _seasondatas[i].blk,
-                            _seasondatas[i].reb,
-                            _seasondatas[i].stl,
-                            _seasondatas[i].ast,
-                            _seasondatas[i].min,
-                            _seasondatas[i].turnover,
-                            media.round(2)
-                            )
-                        db?.jugadorDao()?.insertar(jugador)
-                        i=i+1;
-                    }
-                } catch (error: APIError) {
-                    Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
+    private suspend fun setUpUI() {
+        val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
+        if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
+            try {
+                _datas = fetchShows().filterNotNull().map(Data::toNBAData)
+                _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
+                var i = 0;
+                for (playerId in _datas) {
+                    val media = (_seasondatas[i].pts * pesoPuntos +
+                            _seasondatas[i].blk * pesoTapones +
+                            _seasondatas[i].reb * pesoRebotes +
+                            _seasondatas[i].stl * pesoRobos +
+                            _seasondatas[i].ast * pesoAsistencias -
+                            _seasondatas[i].turnover * pesoErrores)*10
+                    val jugador = Jugador(
+                        null,
+                        playerId.firstName,
+                        playerId.lastName,
+                        playerId.team?.fullName,
+                        playerId.team?.conference,
+                        playerId.position,
+                        playerId.heightInches?.toDouble(),
+                        _seasondatas[i].pts,
+                        _seasondatas[i].blk,
+                        _seasondatas[i].reb,
+                        _seasondatas[i].stl,
+                        _seasondatas[i].ast,
+                        _seasondatas[i].min,
+                        _seasondatas[i].turnover,
+                        media.round(2)
+                    )
+                    db?.jugadorDao()?.insertar(jugador)
+                    i=i+1;
                 }
+            } catch (error: APIError) {
+                Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -178,9 +172,14 @@ class DarCartaActivity : AppCompatActivity() {
         listaJugador = db.jugadorDao().getAll()
         val numJugadores = listaJugador.size
 
-        val posicionJugador1 = random.nextInt(numJugadores)
-        val posicionJugador2 = random.nextInt(numJugadores)
-        val posicionJugador3 = random.nextInt(numJugadores)
+        var posicionJugador1 = random.nextInt(numJugadores)
+        if(posicionJugador1==0) posicionJugador1=posicionJugador1+1
+
+        var posicionJugador2 = random.nextInt(numJugadores)
+        if(posicionJugador2==0) posicionJugador2=posicionJugador2+1
+
+        var posicionJugador3 = random.nextInt(numJugadores)
+        if(posicionJugador3==0) posicionJugador3=posicionJugador3+1
 
         try {
             val usuarioId = usuario?.usuarioId
@@ -237,11 +236,11 @@ class DarCartaActivity : AppCompatActivity() {
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
     }
-
     fun Double.round(decimales: Int): Double {
         val factor = 10.0.pow(decimales.toDouble())
         return (this * factor).roundToInt() / factor
     }
 }
+
 
 

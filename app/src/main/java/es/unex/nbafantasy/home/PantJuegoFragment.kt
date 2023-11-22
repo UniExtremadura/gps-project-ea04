@@ -28,11 +28,11 @@ class PantJuegoFragment : Fragment() {
     private lateinit var db: BD
     private lateinit var listaEquipo: List<JugadorEquipo>
     private lateinit var usuario:Usuario
-    private lateinit var listener: ListaJugadoresFragment.OnShowClickListener
+    private lateinit var listener: ListaJugadoresFragment.OnJugadorClickListener
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
-        if (context is ListaJugadoresFragment.OnShowClickListener) {
+        if (context is ListaJugadoresFragment.OnJugadorClickListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
