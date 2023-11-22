@@ -20,12 +20,14 @@ class RegistroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        //Inicializacion BD
-        db= BD.getInstance(applicationContext)!!
+        lifecycleScope.launch {
+            setContentView(binding.root)
 
-        setUpListener()
+            //Inicializacion BD
+            db = BD.getInstance(applicationContext)!!
+            setUpListener()
+        }
     }
 
     private fun setUpListener() {

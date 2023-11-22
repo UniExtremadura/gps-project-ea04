@@ -18,6 +18,7 @@ import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
 import es.unex.nbafantasy.juego.DarCartaActivity
+import es.unex.nbafantasy.juego.PantallaJuegoActivity
 import kotlinx.coroutines.launch
 
 class PantJuegoFragment : Fragment() {
@@ -25,8 +26,18 @@ class PantJuegoFragment : Fragment() {
     private lateinit var _binding:FragmentPantJuegoBinding
     private val binding get()=_binding!!
     private lateinit var db: BD
-    private lateinit var listaUsuarioJugador: List<JugadorEquipo>
-    private lateinit var text: EditText
+    private lateinit var listaEquipo: List<JugadorEquipo>
+    private lateinit var usuario:Usuario
+    private lateinit var listener: ListaJugadoresFragment.OnShowClickListener
+
+    override fun onAttach(context: android.content.Context) {
+        super.onAttach(context)
+        if (context is ListaJugadoresFragment.OnShowClickListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnShowClickListener")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +49,17 @@ class PantJuegoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        db= BD.getInstance(requireContext())!!
+
         setUpUi()
 
+        binding.btJugar.setOnClickListener {
+            initNav()
+        }
     }
 
     private fun setUpUi() {
-        db= BD.getInstance(requireContext())!!
-        val usuario = (requireActivity() as? MainActivity)?.getUsuario()
+        usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
 
         if(usuario!=null) {
             lifecycleScope.launch {
@@ -53,61 +68,48 @@ class PantJuegoFragment : Fragment() {
         }else{
             Log.e("Error", "USUARIO es nulo")
         }
-
-        initNav()
     }
     private suspend fun mostrarJugadores(usuario: Usuario){
+        //TODO COMPROBAR QUE HAYA 3 JUGADORES PARA PODER INICIAR PARTIDA Y VER HASTA DONDE LLEGA EL SIZE PARA MOSTRAR
         with(binding) {
             val usuarioId = usuario?.usuarioId
 
             if (usuarioId != null) {
-                listaUsuarioJugador = db.jugadorEquipoDao().getJugadorByUsuario(usuarioId)
+                listaEquipo = db.jugadorEquipoDao().getJugadorByUsuario(usuarioId)
 
-                val usuarioJugador1 = listaUsuarioJugador.get(0)
-                val nombreApellido1 =
-                    db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).nombre + " " +
-                            db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).apellido
-                jugadorEquipo1.setText(nombreApellido1)
+                if (listaEquipo.size > 0) {
+                    val usuarioJugador1 = listaEquipo.get(0)
+                    val nombreApellido1 =
+                        db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).nombre + " " +
+                                db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).apellido
+                    jugadorEquipo1.setText(nombreApellido1)
 
-                val usuarioJugador2 = listaUsuarioJugador.get(1)
-                val nombreApellido2 =
-                    db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).nombre + " " +
-                            db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).apellido
-                jugadorEquipo2.setText(nombreApellido2)
+                    if (listaEquipo.size > 1) {
+                        val usuarioJugador2 = listaEquipo.get(1)
+                        val nombreApellido2 =
+                            db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).nombre + " " +
+                                    db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).apellido
+                        jugadorEquipo2.setText(nombreApellido2)
 
-                val usuarioJugador3 = listaUsuarioJugador.get(2)
-                val nombreApellido3 =
-                    db.jugadorDao().getJugadorId(usuarioJugador3.jugadorId).nombre + " " +
-                            db.jugadorDao().getJugadorId(usuarioJugador3.jugadorId).apellido
-                jugadorEquipo3.setText(nombreApellido3)
-
-
-
-                /*val nombreApellido1 =
-                db.jugadorDao().getJugadorId(posicionJugador1).nombre + " " +
-                        db.jugadorDao().getJugadorId(posicionJugador1).apellido
-            playersName1.setText(nombreApellido1)
-
-            val nombreApellido2 =
-                db.jugadorDao().getJugadorId(posicionJugador2).nombre + " " +
-                        db.jugadorDao().getJugadorId(posicionJugador2).apellido
-            playersName2.setText(nombreApellido2)
-
-            val nombreApellido3 =
-                db.jugadorDao().getJugadorId(posicionJugador3).nombre + " " +
-                        db.jugadorDao().getJugadorId(posicionJugador3).apellido
-            playersName3.setText(nombreApellido3)*/
-            }else{
-                Log.e("Error", "usuarioId es nulo")
+                        if (listaEquipo.size > 2) {
+                            val usuarioJugador3 = listaEquipo.get(2)
+                            val nombreApellido3 =
+                                db.jugadorDao()
+                                    .getJugadorId(usuarioJugador3.jugadorId).nombre + " " +
+                                        db.jugadorDao()
+                                            .getJugadorId(usuarioJugador3.jugadorId).apellido
+                            jugadorEquipo3.setText(nombreApellido3)
+                        }
+                    }
+                } else {
+                    Log.e("Error", "usuarioId es nulo")
+                }
             }
         }
     }
 
+
     private fun initNav() {
-        binding.btJugar.setOnClickListener {
-            findNavController().navigate(
-                PantJuegoFragmentDirections.actionPantJuegoFragmentToPantallaJuegoActivity()
-            )
-        }
+        PantallaJuegoActivity.start(context, usuario)
     }
 }

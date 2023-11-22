@@ -25,6 +25,7 @@ class ListaJugadoresFragment : Fragment() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
     private lateinit var listener: OnShowClickListener
+
     interface OnShowClickListener {
         fun onShowClick(data: NBAData, seasondata: NBASeasonData)
     }

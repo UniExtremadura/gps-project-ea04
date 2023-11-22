@@ -24,6 +24,8 @@ import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityDarCartaBinding
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
 import kotlinx.coroutines.launch
+import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class DarCartaActivity : AppCompatActivity() {
@@ -33,12 +35,12 @@ class DarCartaActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
 
-    private var pesoPuntos = 0.2
-    private var pesoTapones = 0.1
-    private var pesoRebotes = 0.15
-    private var pesoRobos = 0.15
+    private var pesoPuntos = 0.25
+    private var pesoTapones = 0.12
+    private var pesoRebotes = 0.12
+    private var pesoRobos = 0.11
     private var pesoAsistencias = 0.2
-    private var pesoErrores = 0.1
+    private var pesoErrores = 0.25
 
     companion object{
         const val USUARIO="USUARIO"
@@ -61,21 +63,25 @@ class DarCartaActivity : AppCompatActivity() {
 
         //Inicializacion BD
         db= BD.getInstance(applicationContext)!!
-        setUpUI()
+
 
         val usuario = intent?.getSerializableExtra(USUARIO) as? Usuario
 
         if(usuario!=null) {
             lifecycleScope.launch {
+                setUpUI()
+                kotlinx.coroutines.delay(50)
+
                 //Espera que la BD este cargada
-                esperarCargaBD()
+                // esperarCargaBD()
+
+                listaJugador = db.jugadorDao().getAll()
+                // Log.d("GetJugadores", listaJugador.toString())
 
                 Log.e("API CARGADA", "La API se ha cargado")
 
-
                 obtenerJugadores(usuario)
 
-                // Verificar si el usuario no es nulo
                 with(binding) {
                     btAceptar.setOnClickListener {
                         if (usuario != null) {
@@ -85,51 +91,50 @@ class DarCartaActivity : AppCompatActivity() {
                     }
                 }
             }
-        }else{
-            Log.e("Error", "usuarioId es nulo")
         }
+
     }
 
 
-    private fun setUpUI() {
-        lifecycleScope.launch {
-            val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
-            if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
-                try {
-                    _datas = fetchShows().filterNotNull().map(Data::toNBAData)
-                    _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
-                    var i = 0;
-                    for (playerId in _datas) {
-                        val jugador = Jugador(
-                            null,
-                            playerId.firstName,
-                            playerId.lastName,
-                            playerId.team?.fullName,
-                            playerId.team?.conference,
-                            playerId.position,
-                            playerId.heightInches?.toDouble(),
-                            _seasondatas[i].pts,
-                            _seasondatas[i].blk,
-                            _seasondatas[i].reb,
-                            _seasondatas[i].stl,
-                            _seasondatas[i].ast,
-                            _seasondatas[i].min,
-                            _seasondatas[i].turnover,
-                            _seasondatas[i].pts * pesoPuntos +
-                                    _seasondatas[i].blk * pesoTapones +
-                                    _seasondatas[i].reb * pesoRebotes +
-                                    _seasondatas[i].stl * pesoRobos +
-                                    _seasondatas[i].ast * pesoAsistencias -
-                                    _seasondatas[i].turnover * pesoErrores
-                            )
-                        db?.jugadorDao()?.insertar(jugador)
-                        i=i+1;
-                    }
-                } catch (error: APIError) {
-                    Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
+    private suspend fun setUpUI() {
+        val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
+        if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
+            try {
+                _datas = fetchShows().filterNotNull().map(Data::toNBAData)
+                _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
+                var i = 0;
+                for (playerId in _datas) {
+                    val media = (_seasondatas[i].pts * pesoPuntos +
+                            _seasondatas[i].blk * pesoTapones +
+                            _seasondatas[i].reb * pesoRebotes +
+                            _seasondatas[i].stl * pesoRobos +
+                            _seasondatas[i].ast * pesoAsistencias -
+                            _seasondatas[i].turnover * pesoErrores)*10
+                    val jugador = Jugador(
+                        null,
+                        playerId.firstName,
+                        playerId.lastName,
+                        playerId.team?.fullName,
+                        playerId.team?.conference,
+                        playerId.position,
+                        playerId.heightInches?.toDouble(),
+                        _seasondatas[i].pts,
+                        _seasondatas[i].blk,
+                        _seasondatas[i].reb,
+                        _seasondatas[i].stl,
+                        _seasondatas[i].ast,
+                        _seasondatas[i].min,
+                        _seasondatas[i].turnover,
+                        media.round(2)
+                        )
+                    db?.jugadorDao()?.insertar(jugador)
+                    i=i+1;
                 }
+            } catch (error: APIError) {
+                Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     suspend fun fetchShows(): List<Data> {
@@ -222,13 +227,21 @@ class DarCartaActivity : AppCompatActivity() {
 
     private suspend fun esperarCargaBD() {
         while (db.jugadorDao().getAll().isEmpty()) {
-            kotlinx.coroutines.delay(100) // Esperar 100 milisegundos antes de volver a verificar
+            kotlinx.coroutines.delay(50) // Esperar 50 milisegundos antes de volver a verificar
+        }
+        while (db.jugadorDao().getAll().size<28) {
+            kotlinx.coroutines.delay(50) // Esperar 50 milisegundos antes de volver a verificar
         }
     }
 
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
+    }
+
+    fun Double.round(decimales: Int): Double {
+        val factor = 10.0.pow(decimales.toDouble())
+        return (this * factor).roundToInt() / factor
     }
 }
 

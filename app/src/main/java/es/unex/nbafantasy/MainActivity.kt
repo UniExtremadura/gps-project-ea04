@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -30,6 +31,7 @@ import es.unex.nbafantasy.home.ListaJugadoresFragmentDirections
 import es.unex.nbafantasy.home.PantJuegoFragment
 import es.unex.nbafantasy.home.ResultadoFragment
 import es.unex.nbafantasy.juego.DarCartaActivity
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickListener {
 
@@ -60,9 +62,10 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
-
-        setUpUI()
+        lifecycleScope.launch {
+            usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+            setUpUI()
+        }
     }
 
     fun setUpUI() {
@@ -104,11 +107,12 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_barra, menu)
-        val searchItem = menu?.findItem(R.id.accion_ajustes)
-        val searchView = searchItem?.actionView as? SearchView
-
-        return super.onCreateOptionsMenu(menu)
+        lifecycleScope.launch {
+            menuInflater.inflate(R.menu.menu_barra, menu)
+            val searchItem = menu?.findItem(R.id.accion_ajustes)
+            val searchView = searchItem?.actionView as? SearchView
+        }
+            return super.onCreateOptionsMenu(menu)
     }
 
 

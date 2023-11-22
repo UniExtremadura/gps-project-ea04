@@ -23,13 +23,15 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        //Inicializacion BD
-        db= BD.getInstance(applicationContext)!!
+        lifecycleScope.launch {
+            setContentView(binding.root)
+            //Inicializacion BD
+            db= BD.getInstance(applicationContext)!!
 
-        setUpListener()
-        leerAutologin()
+            setUpListener()
+            leerAutologin()
+        }
     }
 
     private fun leerAutologin(){
@@ -100,11 +102,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navegacionRegistroActivity() {
-        val btnRegistro = findViewById<Button>(R.id.bt_registro)
-        btnRegistro.setOnClickListener{
-            val intent = Intent (this, RegistroActivity::class.java)
-            startActivity(intent)
-        }
+        val intent = Intent (this, RegistroActivity::class.java)
+        startActivity(intent)
     }
 
     private fun notificarErrorCredencial(mensaje: String){

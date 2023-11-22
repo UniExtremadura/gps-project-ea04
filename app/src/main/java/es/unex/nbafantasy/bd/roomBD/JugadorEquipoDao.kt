@@ -30,7 +30,7 @@ interface JugadorEquipoDao {
     /**
      * Borra todos los jugadores de un usario concreto de la tabla de usuarioJugador.
      */
-    @Query("DELETE FROM UsuarioJugador WHERE usuarioId = :usuarioId")
+    @Query("DELETE FROM JugadorEquipo WHERE usuarioId = :usuarioId")
     suspend fun deleteAll(usuarioId: Long)
 
 }
