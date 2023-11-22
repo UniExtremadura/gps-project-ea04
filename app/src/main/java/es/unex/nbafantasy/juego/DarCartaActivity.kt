@@ -24,6 +24,9 @@ import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityDarCartaBinding
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
 import kotlinx.coroutines.launch
+import kotlin.math.log
+import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class DarCartaActivity : AppCompatActivity() {
@@ -33,12 +36,12 @@ class DarCartaActivity : AppCompatActivity() {
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
 
-    private var pesoPuntos = 0.2
-    private var pesoTapones = 0.1
-    private var pesoRebotes = 0.15
-    private var pesoRobos = 0.15
+    private var pesoPuntos = 0.25
+    private var pesoTapones = 0.12
+    private var pesoRebotes = 0.12
+    private var pesoRobos = 0.11
     private var pesoAsistencias = 0.2
-    private var pesoErrores = 0.1
+    private var pesoErrores = 0.25
 
     companion object{
         const val USUARIO="USUARIO"
@@ -100,6 +103,12 @@ class DarCartaActivity : AppCompatActivity() {
                     _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
                     var i = 0;
                     for (playerId in _datas) {
+                        val media = (_seasondatas[i].pts * pesoPuntos +
+                                _seasondatas[i].blk * pesoTapones +
+                                _seasondatas[i].reb * pesoRebotes +
+                                _seasondatas[i].stl * pesoRobos +
+                                _seasondatas[i].ast * pesoAsistencias -
+                                _seasondatas[i].turnover * pesoErrores)*10
                         val jugador = Jugador(
                             null,
                             playerId.firstName,
@@ -115,12 +124,7 @@ class DarCartaActivity : AppCompatActivity() {
                             _seasondatas[i].ast,
                             _seasondatas[i].min,
                             _seasondatas[i].turnover,
-                            _seasondatas[i].pts * pesoPuntos +
-                                    _seasondatas[i].blk * pesoTapones +
-                                    _seasondatas[i].reb * pesoRebotes +
-                                    _seasondatas[i].stl * pesoRobos +
-                                    _seasondatas[i].ast * pesoAsistencias -
-                                    _seasondatas[i].turnover * pesoErrores
+                            media.round(2)
                             )
                         db?.jugadorDao()?.insertar(jugador)
                         i=i+1;
@@ -222,7 +226,11 @@ class DarCartaActivity : AppCompatActivity() {
 
     private suspend fun esperarCargaBD() {
         while (db.jugadorDao().getAll().isEmpty()) {
-            kotlinx.coroutines.delay(100) // Esperar 100 milisegundos antes de volver a verificar
+            kotlinx.coroutines.delay(50) // Esperar 50 milisegundos antes de volver a verificar
+        }
+        while (db.jugadorDao().getAll().size<29) {
+            Log.d("esperar", "esperar:")
+            kotlinx.coroutines.delay(50) // Esperar 50 milisegundos antes de volver a verificar
         }
     }
 
@@ -230,6 +238,11 @@ class DarCartaActivity : AppCompatActivity() {
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
     }
+    fun Double.round(decimales: Int): Double {
+        val factor = 10.0.pow(decimales.toDouble())
+        return (this * factor).roundToInt() / factor
+    }
 }
+
 
 

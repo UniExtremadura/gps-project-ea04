@@ -12,7 +12,7 @@
         android:id="@+id/jugadorEquipo1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="140dp"
         android:gravity="center"
         android:text="name"
         android:translationY="55dp"
@@ -26,7 +26,7 @@
         android:id="@+id/jugadorEquipo2"
         android:layout_width="138dp"
         android:layout_height="66dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -41,7 +41,7 @@
         android:id="@+id/jugadorEquipo3"
         android:layout_width="138dp"
         android:layout_height="66dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="name"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -59,7 +59,7 @@
         android:text="Jugar"
         android:textSize="23dp"
         android:translationX="115dp"
-        android:translationY="525dp"
+        android:translationY="400dp"
 
 
         tools:layout_editor_absoluteY="450dp" />

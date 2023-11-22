@@ -13,7 +13,7 @@ interface UsuarioJugadorDao {
      * Devuelve todos los jugadores de un usuario concreto
      */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
-    suspend fun getJugadorByUsuario(usuarioId: Int): List<UsuarioJugador>
+    suspend fun getJugadorByUsuario(usuarioId: Long): List<UsuarioJugador>
 
 
     /**

@@ -21,9 +21,11 @@ import es.unex.nbafantasy.Data.model.NBASeasonData
 import dagger.hilt.android.AndroidEntryPoint
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
+import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.home.EditarFragment
+import es.unex.nbafantasy.home.EditarFragmentDirections
 import es.unex.nbafantasy.home.ListaJugadoresFragment
 import es.unex.nbafantasy.home.ListaJugadoresFragmentDirections
 
@@ -31,7 +33,7 @@ import es.unex.nbafantasy.home.PantJuegoFragment
 import es.unex.nbafantasy.home.ResultadoFragment
 import es.unex.nbafantasy.juego.DarCartaActivity
 
-class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickListener {
+class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickListener, EditarFragment.OnEditarJugadorClickListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -95,14 +97,17 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnShowClickList
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
-    override fun onShowClick(nbadata: NBAData, season: NBASeasonData) {
+    override fun onShowClick(nbadata: Jugador) {
         val action = ListaJugadoresFragmentDirections.actionListaJugadoresFragmentToListaJugadoresDetailsFragment(
-            nbadata,season
-        )
+            nbadata)
         navController.navigate(action)
     }
 
-
+    override fun onEditClick(data: Jugador, estrella: Boolean) {
+        val action = EditarFragmentDirections.actionEditarFragmentToEditarDetailsFragment(
+            data,estrella)
+        navController.navigate(action)
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_barra, menu)
         val searchItem = menu?.findItem(R.id.accion_ajustes)
