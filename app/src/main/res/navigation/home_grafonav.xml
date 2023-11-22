@@ -14,7 +14,11 @@
         android:id="@+id/editarFragment"
         android:name="es.unex.nbafantasy.home.EditarFragment"
         android:label="@string/editar_opcion"
-        tools:layout="@layout/fragment_editar" />
+        tools:layout="@layout/fragment_editar" >
+        <action
+            android:id="@+id/action_editarFragment_to_editarDetailsFragment"
+            app:destination="@id/editarDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/listaJugadoresFragment"
@@ -50,10 +54,7 @@
         android:label="Detalles del jugador" >
         <argument
             android:name="nba"
-            app:argType="es.unex.nbafantasy.Data.model.NBAData" />
-        <argument
-            android:name="stats"
-            app:argType="es.unex.nbafantasy.Data.model.NBASeasonData" />
+            app:argType="es.unex.nbafantasy.bd.elemBD.Jugador" />
     </fragment>
     <fragment
         android:id="@+id/ajustesFragment"
@@ -74,5 +75,16 @@
         android:name="es.unex.nbafantasy.inicioSesion.RegistroActivity"
         android:label="activity_registro"
         tools:layout="@layout/activity_registro" />
+    <fragment
+        android:id="@+id/editarDetailsFragment"
+        android:name="es.unex.nbafantasy.home.EditarDetailsFragment"
+        android:label="EditarDetailsFragment" >
+        <argument
+            android:name="player"
+            app:argType="es.unex.nbafantasy.bd.elemBD.Jugador" />
+        <argument
+            android:name="estrella"
+            app:argType="boolean"/>
+    </fragment>
 
 </navigation>

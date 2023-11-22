@@ -18,16 +18,17 @@ import es.unex.nbafantasy.Data.toNBAData
 import es.unex.nbafantasy.Data.toSeasonAverages
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
+import es.unex.nbafantasy.bd.elemBD.Jugador
+import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
 import kotlinx.coroutines.launch
 
 class ListaJugadoresFragment : Fragment() {
-    private var _datas: List<NBAData> = emptyList()
-    private var _seasondatas: List<NBASeasonData> = emptyList()
-    private lateinit var listener: OnShowClickListener
-
-    interface OnShowClickListener {
-        fun onShowClick(data: NBAData, seasondata: NBASeasonData)
+    private var _datas: List<Jugador> = emptyList()
+    private lateinit var listener: OnJugadorClickListener
+    private lateinit var db: BD
+    interface OnJugadorClickListener {
+        fun onShowClick(data: Jugador)
     }
 
     private var _binding: FragmentListaJugadoresBinding? = null
@@ -36,8 +37,10 @@ class ListaJugadoresFragment : Fragment() {
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
-        if (context is OnShowClickListener) {
+        if (context is OnJugadorClickListener) {
             listener = context
+            //Inicializacion BD
+            db= BD.getInstance(context)!!
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
         }
@@ -54,13 +57,12 @@ class ListaJugadoresFragment : Fragment() {
         setUpRecyclerView()
 
         lifecycleScope.launch {
-            if (_datas.isEmpty() && _seasondatas.isEmpty()) {
+            if (_datas.isEmpty()) {
                 binding.spinner.visibility = View.VISIBLE
                 try {
-                    _datas = emptyList()
-                    _seasondatas = emptyList()
+                    _datas = db?.jugadorDao()?.getAll()?: emptyList()
 
-                    adapter.updateData(_datas,_seasondatas)
+                    adapter.updateData(_datas)
 
                 } catch (error: APIError) {
                     Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
@@ -73,11 +75,11 @@ class ListaJugadoresFragment : Fragment() {
 
 
     private fun setUpRecyclerView() {
-        adapter = ListaJugadoresAdapter(DataS = _datas, SeasonData = _seasondatas, onClick = { data, seasonData ->
-            listener.onShowClick(data, seasonData)
+        adapter = ListaJugadoresAdapter(DataS = _datas, onClick = {
+            listener.onShowClick(it)
         },
             onLongClick = {
-                Toast.makeText(context, "long click on: "+it.lastName, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "long click on: "+it.apellido, Toast.LENGTH_SHORT).show()
             }
         )
         with(binding) {

@@ -63,6 +63,7 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:$room_version")
 

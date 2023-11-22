@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 
@@ -14,14 +13,13 @@ interface UsuarioJugadorDao {
      * Devuelve todos los jugadores de un usuario concreto
      */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
-        suspend fun getJugadorByUsuario(usuarioId: Long): List<UsuarioJugador>
+    suspend fun getJugadorByUsuario(usuarioId: Long): List<UsuarioJugador>
 
     /**
      * Devuelve un UsuarioJugador concreto dado un usuario y un jugador
      */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId and jugadorId = :jugadorId")
     suspend fun getUnUsuarioJugador(usuarioId: Long, jugadorId: Long): UsuarioJugador
-
 
     /**
      * Inserta un usuario y un jugador en la tabla de usuarioJugador.
