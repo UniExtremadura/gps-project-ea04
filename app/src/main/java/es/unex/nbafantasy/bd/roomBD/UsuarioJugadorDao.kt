@@ -34,5 +34,10 @@ interface UsuarioJugadorDao {
      */
     @Query("DELETE FROM UsuarioJugador WHERE usuarioId = :usuarioId")
     suspend fun deleteAll(usuarioId: Long)
+    /**
+     * Devuelve una lista de UsuarioJugador
+     */
+    @Query("SELECT * FROM UsuarioJugador")
+    suspend fun getAll(): List<UsuarioJugador>
 
 }

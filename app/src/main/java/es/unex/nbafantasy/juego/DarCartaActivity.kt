@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
@@ -96,6 +97,11 @@ class DarCartaActivity : AppCompatActivity() {
     private suspend fun setUpUI() {
         val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
         if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
+            binding.carga.visibility = View.VISIBLE
+            binding.playersName1.visibility = View.GONE
+            binding.playersName2.visibility = View.GONE
+            binding.playersName3.visibility = View.GONE
+            binding.btAceptar.visibility = View.GONE
             try {
                 _datas = fetchShows().filterNotNull().map(Data::toNBAData)
                 _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
@@ -129,6 +135,12 @@ class DarCartaActivity : AppCompatActivity() {
                 }
             } catch (error: APIError) {
                 Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
+            } finally {
+                binding.carga.visibility = View.GONE
+                binding.playersName1.visibility = View.VISIBLE
+                binding.playersName2.visibility = View.VISIBLE
+                binding.playersName3.visibility = View.VISIBLE
+                binding.btAceptar.visibility = View.VISIBLE
             }
         }
     }
@@ -170,16 +182,23 @@ class DarCartaActivity : AppCompatActivity() {
     private suspend fun obtenerJugadores(usuario: Usuario) {
         val random= Random(System.currentTimeMillis())
         listaJugador = db.jugadorDao().getAll()
-        val numJugadores = listaJugador.size
+        val numJugadores = listaJugador.size+1
 
         var posicionJugador1 = random.nextInt(numJugadores)
         if(posicionJugador1==0) posicionJugador1=posicionJugador1+1
 
-        var posicionJugador2 = random.nextInt(numJugadores)
-        if(posicionJugador2==0) posicionJugador2=posicionJugador2+1
+        var posicionJugador2 = 0
+        do{
+            posicionJugador2 = random.nextInt(numJugadores)
+            if(posicionJugador2==0) posicionJugador2=posicionJugador2+1
+        }while(posicionJugador1==posicionJugador2)
 
-        var posicionJugador3 = random.nextInt(numJugadores)
-        if(posicionJugador3==0) posicionJugador3=posicionJugador3+1
+        var posicionJugador3 = 0
+        do{
+            posicionJugador3 = random.nextInt(numJugadores)
+            if(posicionJugador3==0) posicionJugador3=posicionJugador3+1
+        }while(posicionJugador1==posicionJugador3 && posicionJugador2==posicionJugador3)
+
 
         try {
             val usuarioId = usuario?.usuarioId
@@ -241,6 +260,3 @@ class DarCartaActivity : AppCompatActivity() {
         return (this * factor).roundToInt() / factor
     }
 }
-
-
-

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import es.unex.nbafantasy.MainActivity
@@ -52,9 +53,24 @@ class PantJuegoFragment : Fragment() {
         db= BD.getInstance(requireContext())!!
 
         setUpUi()
+        pulsarBoton()
+    }
 
+    private fun pulsarBoton(){
         binding.btJugar.setOnClickListener {
-            initNav()
+            lifecycleScope.launch {
+                val equipoSize =
+                    db.jugadorEquipoDao().getJugadorByUsuario(usuario.usuarioId ?: 0).size
+                if (equipoSize == 3) {
+                    initNav()
+                } else {
+                    Toast.makeText(
+                        getContext(),
+                        "Debes seleccionar 3 jugadores para poder jugar",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 
@@ -70,7 +86,6 @@ class PantJuegoFragment : Fragment() {
         }
     }
     private suspend fun mostrarJugadores(usuario: Usuario){
-        //TODO COMPROBAR QUE HAYA 3 JUGADORES PARA PODER INICIAR PARTIDA Y VER HASTA DONDE LLEGA EL SIZE PARA MOSTRAR
         with(binding) {
             val usuarioId = usuario?.usuarioId
 
@@ -107,7 +122,6 @@ class PantJuegoFragment : Fragment() {
             }
         }
     }
-
 
     private fun initNav() {
         PantallaJuegoActivity.start(context, usuario)

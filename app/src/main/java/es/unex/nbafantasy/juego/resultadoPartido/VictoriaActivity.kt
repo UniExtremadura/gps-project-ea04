@@ -64,19 +64,31 @@ class VictoriaActivity : AppCompatActivity() {
         var valido=false
         val random= Random(System.currentTimeMillis())
         listaJugador = db.jugadorDao().getAll()
-        val numJugadores = listaJugador.size
+        val numJugadores = listaJugador.size+1
 
         var jugadorNuevo=-1
-
-        do{
-            jugadorNuevo = random.nextInt(numJugadores)
-            if (db.usuarioJugadorDao().getUnUsuarioJugador(usuario.usuarioId?:0,jugadorNuevo.toLong())==null){
-                val usuarioJugador=UsuarioJugador(usuario.usuarioId?:0,jugadorNuevo.toLong())
-                db.usuarioJugadorDao().insertar(usuarioJugador)
-                valido=true
+        if(db.usuarioJugadorDao().getAll().size==29){
+            with(binding) {
+                val x = "Mis puntos: " + resultadoPartido.misPuntos.toString()
+                misPuntos.setText(x)
+                val y = "Puntos rival: " + resultadoPartido.puntosRivales.toString()
+                puntosRival.setText(y)
+                jugadorGanado.setText("Has conseguido a todos")
             }
-        }while (valido==false)
-        mostrarText(jugadorNuevo.toLong())
+        }else {
+            do {
+                jugadorNuevo = random.nextInt(numJugadores)
+                if (db.usuarioJugadorDao()
+                        .getUnUsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong()) == null
+                ) {
+                    val usuarioJugador =
+                        UsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong())
+                    db.usuarioJugadorDao().insertar(usuarioJugador)
+                    valido = true
+                }
+            } while (valido == false)
+            mostrarText(jugadorNuevo.toLong())
+        }
     }
 
     private fun mostrarText(jugadorNuevo:Long){

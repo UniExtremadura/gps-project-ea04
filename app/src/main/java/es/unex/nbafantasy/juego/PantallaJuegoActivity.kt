@@ -6,20 +6,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityPantallaJuegoBinding
 import es.unex.nbafantasy.juego.resultadoPartido.DerrotaActivity
 import es.unex.nbafantasy.juego.resultadoPartido.VictoriaActivity
 import kotlinx.coroutines.launch
+import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 
@@ -57,22 +56,17 @@ class PantallaJuegoActivity : AppCompatActivity() {
 
         if(usuario!=null) {
             lifecycleScope.launch {
-                val puntosMiEquipo = mostrarMiEquipo(usuario)
-                val puntosRival= mostrarRival()
-                val resultado = puntosMiEquipo - puntosRival
-                Log.e("Error", " puntosMiEquipo $puntosMiEquipo - puntosRival $puntosRival")
-                val btnContinuar = findViewById<Button>(R.id.bt_comenzar_partida)
 
+                val puntosMiEquipo = mostrarMiEquipo(usuario).round(2)
+                val puntosRival= mostrarRival().round(2)
+                val resultado = (puntosMiEquipo - puntosRival).round(2)
+
+                val btnContinuar = findViewById<Button>(R.id.bt_comenzar_partida)
                 btnContinuar.setOnClickListener {
-                    Log.e("Error", " RESULTADO: $resultado")
                     setUpListener(resultado,puntosMiEquipo,puntosRival)
                 }
-
             }
-        }else{
-            Log.e("Error", "USUARIO es nulo")
         }
-
     }
 
     private suspend fun mostrarMiEquipo(usuario: Usuario):Double{
@@ -115,16 +109,24 @@ class PantallaJuegoActivity : AppCompatActivity() {
     private suspend fun mostrarRival():Double{
         val random= Random(System.currentTimeMillis())
         listaJugador = db.jugadorDao().getAll()
-        val numJugadores = listaJugador.size
+        val numJugadores = listaJugador.size+1
+        //Log.d("AAAAAAAAAA", "TAM jugadores ${listaJugador.size}")
+
 
         var posicionJugador1 = random.nextInt(numJugadores)
         if(posicionJugador1==0) posicionJugador1=posicionJugador1+1
 
-        var posicionJugador2 = random.nextInt(numJugadores)
-        if(posicionJugador2==0) posicionJugador2=posicionJugador2+1
+        var posicionJugador2 = 0
+        do{
+            posicionJugador2 = random.nextInt(numJugadores)
+            if(posicionJugador2==0) posicionJugador2=posicionJugador2+1
+        }while(posicionJugador1 ==posicionJugador2)
 
-        var posicionJugador3 = random.nextInt(numJugadores)
-        if(posicionJugador3==0) posicionJugador3=posicionJugador3+1
+        var posicionJugador3 = 0
+        do{
+            posicionJugador3 = random.nextInt(numJugadores)
+            if(posicionJugador3==0) posicionJugador3=posicionJugador3+1
+        }while(posicionJugador1 ==posicionJugador3 && posicionJugador2 ==posicionJugador3)
 
         with(binding) {
             val usuarioJugador1=db.jugadorDao().getJugadorId(posicionJugador1.toLong()).jugadorId
@@ -156,14 +158,33 @@ class PantallaJuegoActivity : AppCompatActivity() {
     }
 
     private fun setUpListener(resultado:Double, puntosMiEquipo:Double,puntosRival:Double){
-        if(resultado>0){
-                resultadoPartido =
-                    ResultadoPartido(null, usuario.usuarioId?:0, puntosMiEquipo, puntosRival, "Victoria")
-                VictoriaActivity.start(this, usuario, resultadoPartido)
-        }else{
-            resultadoPartido =
-                ResultadoPartido(null, usuario.usuarioId?:0, puntosMiEquipo, puntosRival, "Derrota")
-            DerrotaActivity.start(this,usuario,resultadoPartido)
+
+
+        if (resultado > 0) {
+            resultadoPartido = ResultadoPartido(null,usuario.usuarioId ?: 0,
+                puntosMiEquipo, puntosRival,"Victoria")
+
+            lifecycleScope.launch {
+                db.resultadoPartidoDao().insertar(resultadoPartido)
+            }
+
+            VictoriaActivity.start(this, usuario, resultadoPartido)
+        } else {
+            resultadoPartido = ResultadoPartido(null,usuario.usuarioId ?: 0,
+                puntosMiEquipo, puntosRival,"Derrota")
+
+            lifecycleScope.launch {
+                db.resultadoPartidoDao().insertar(resultadoPartido)
+            }
+
+            DerrotaActivity.start(this, usuario, resultadoPartido)
         }
     }
+
+
+    fun Double.round(decimales: Int): Double {
+        val factor = 10.0.pow(decimales.toDouble())
+        return (this * factor).roundToInt() / factor
+    }
+
 }

@@ -8,7 +8,6 @@ import androidx.room.ForeignKey
 
 
 @Entity(
-    primaryKeys = ["resultadoPartidoId", "usuarioId"],
     foreignKeys = [
         ForeignKey(
             entity = Usuario::class,
@@ -24,8 +23,5 @@ data class ResultadoPartido(
     val usuarioId: Long,
     val misPuntos: Double?,
     val puntosRivales: Double?,
-    val estadoResultado: String? // Derrota
-                                 // Victoria
+    val estadoResultado: String?
 ): Serializable
-
-

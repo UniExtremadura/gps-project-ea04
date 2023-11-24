@@ -7,6 +7,16 @@
     tools:context=".juego.DarCartaActivity"
     android:background="@drawable/pant_dar_cartas">
 
+    <ProgressBar
+        android:id="@+id/carga"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/players_name1"
         android:layout_width="match_parent"
@@ -14,6 +24,7 @@
         android:gravity="center"
         android:layout_marginTop="204dp"
         android:text="name"
+        android:textSize="30dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,8 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="150dp"
         android:text="name"
+        android:textSize="30dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/players_name1"
@@ -38,8 +50,9 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="140dp"
         android:text="name"
+        android:textSize="30dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/players_name1"
@@ -49,7 +62,7 @@
         android:id="@+id/bt_aceptar"
         android:layout_width="243dp"
         android:layout_height="52dp"
-        android:backgroundTint="#C7112C"
+        android:backgroundTint="@color/red"
         android:text="Aceptar"
         android:textSize="23dp"
         app:layout_constraintBottom_toBottomOf="parent"

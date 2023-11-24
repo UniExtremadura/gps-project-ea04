@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -23,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
+import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.home.EditarFragment
@@ -35,7 +37,7 @@ import es.unex.nbafantasy.home.ResultadoFragment
 import es.unex.nbafantasy.juego.DarCartaActivity
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickListener, EditarFragment.OnEditarJugadorClickListener {
+class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickListener, EditarFragment.OnEditarJugadorClickListener, ResultadoFragment.OnResultadoClickListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -110,6 +112,10 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         val action = EditarFragmentDirections.actionEditarFragmentToEditarDetailsFragment(
             data,estrella)
         navController.navigate(action)
+    }
+
+    override fun onResultClick(data: ResultadoPartido) {
+
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         lifecycleScope.launch {

@@ -12,19 +12,19 @@ interface ResultadoPartidoDao {
      * Devuelve todos los partidos de un usuario
      */
     @Query("SELECT * FROM resultadopartido WHERE usuarioId = :usuarioId")
-    suspend fun getResultadoByUsuario(usuarioId: Long): List<ResultadoPartidoDao>
+    suspend fun getResultadoByUsuario(usuarioId: Long): List<ResultadoPartido>
 
     /**
-     * Devuelve un partido concreto de un usuario
+     * Devuelve un partido concreto
      */
-    @Query("SELECT * FROM resultadopartido WHERE usuarioId = :usuarioId and resultadoPartidoId = :resultadoPartidoId")
-    suspend fun getResultado(usuarioId: Long, resultadoPartidoId: Long): ResultadoPartido
+    @Query("SELECT * FROM resultadopartido WHERE resultadoPartidoId = :resultadoPartidoId")
+    suspend fun getResultado(resultadoPartidoId: Long): ResultadoPartido
 
     /**
-    * Inserta un elemento ResultadoPartido en la tabla.
-    *
-    * @param usuarioJugador
-    */
+     * Inserta un elemento ResultadoPartido en la tabla.
+     *
+     * @param usuarioJugador
+     */
     @Insert
     suspend fun insertar(resultadopartido: ResultadoPartido): Long
 

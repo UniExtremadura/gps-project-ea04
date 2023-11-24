@@ -4,13 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.migration.Migration
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
+import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 
 @Database(
-    entities = [Usuario::class, Jugador::class, JugadorEquipo::class, UsuarioJugador::class],
+    entities = [Usuario::class, Jugador::class, JugadorEquipo::class, UsuarioJugador::class, ResultadoPartido::class],
     version = 1
 )
 abstract class BD : RoomDatabase() {
@@ -18,6 +22,7 @@ abstract class BD : RoomDatabase() {
     abstract fun jugadorDao(): JugadorDao
     abstract fun jugadorEquipoDao(): JugadorEquipoDao
     abstract fun usuarioJugadorDao(): UsuarioJugadorDao
+    abstract fun resultadoPartidoDao(): ResultadoPartidoDao
 
     companion object {
         private var INSTANCE: BD? = null
