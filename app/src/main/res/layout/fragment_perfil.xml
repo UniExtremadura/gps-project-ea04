@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PerfilFragment">
+
+    <EditText
+        android:id="@+id/etContrasena1"
+        android:layout_width="305dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Contraseña"
+        android:password="true"
+        android:translationX="41dp"
+        android:translationY="310dp" />
+
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="305dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="text"
+        android:translationX="41dp"
+        android:translationY="200dp" />
+
+    <TextView
+        android:id="@+id/tvContrasena1"
+        android:layout_width="131dp"
+        android:layout_height="21dp"
+        android:text="Contraseña"
+        android:textColor="#C7112C"
+        android:textSize="18dp"
+        android:translationX="41dp"
+        android:translationY="290dp" />
+
+    <EditText
+        android:id="@+id/etContrasena2"
+        android:layout_width="305dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Contraseña"
+        android:password="true"
+        android:translationX="41dp"
+        android:translationY="421dp"/>
+
+    <TextView
+        android:id="@+id/tvContrasena2"
+        android:layout_width="197dp"
+        android:layout_height="23dp"
+        android:text="Repetición contraseña"
+        android:textColor="#C7112C"
+        android:textSize="18dp"
+        android:translationX="41dp"
+        android:translationY="397dp"  />
+
+    <TextView
+        android:id="@+id/tvNombre"
+        android:layout_width="76dp"
+        android:layout_height="21dp"
+        android:text="Nombre"
+        android:textColor="#C7112C"
+        android:textSize="18dp"
+        android:translationX="41dp"
+        android:translationY="180dp"/>
+
+    <Button
+        android:id="@+id/bt_guardar"
+        android:layout_width="200dp"
+        android:layout_height="54dp"
+        android:backgroundTint="#C7112C"
+        android:text="Guardar"
+        android:textSize="23dp"
+        android:translationX="110dp"
+        android:translationY="500dp"/>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="148dp"
+        android:src="@drawable/icono_logo"
+        android:translationX="100dp"
+        android:translationY="20dp" />
+
+
+</FrameLayout>

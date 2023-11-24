@@ -10,6 +10,11 @@
         app:destination="@id/ajustesFragment"
         />
 
+    <action
+        android:id="@+id/acccion_main_to_perfilFragment"
+        app:destination="@id/perfilFragment"
+        />
+
     <fragment
         android:id="@+id/editarFragment"
         android:name="es.unex.nbafantasy.home.EditarFragment"
@@ -78,7 +83,7 @@
     <fragment
         android:id="@+id/editarDetailsFragment"
         android:name="es.unex.nbafantasy.home.EditarDetailsFragment"
-        android:label="EditarDetailsFragment" >
+        android:label="Detalles del jugador" >
         <argument
             android:name="player"
             app:argType="es.unex.nbafantasy.bd.elemBD.Jugador" />
@@ -86,5 +91,10 @@
             android:name="estrella"
             app:argType="boolean"/>
     </fragment>
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="es.unex.nbafantasy.PerfilFragment"
+        android:label="Perfil"
+        tools:layout="@layout/fragment_perfil" />
 
 </navigation>

@@ -9,40 +9,51 @@ import es.unex.nbafantasy.bd.elemBD.Usuario
 
 @Dao
 interface JugadorDao {
+    /**
+     * Realiza una búsqueda de un jugador por su nombre.
+     *
+     * @param nombreJugador El nombre del jugador a buscar.
+     * @return Un objeto [Jugador] que coincide con el nombre proporcionado, o null si no se encuentra.
+     */
     @Query("SELECT * FROM jugador WHERE nombre LIKE :nombreJugador LIMIT 1")
     suspend fun busquedaNombre(nombreJugador: String): Jugador
 
     /**
-     * Devuelve un Jugador dado su jugadorId.
+     * Obtiene un jugador por su identificador único.
      *
-     * @param jugadorId
+     * @param jugadorId El identificador único del jugador.
+     * @return Un objeto [Jugador] que corresponde al identificador proporcionado.
      */
-
     @Query("SELECT * FROM jugador WHERE jugadorId= :jugadorId")
     suspend fun getJugadorId(jugadorId: Long): Jugador
 
     /**
-     * Devuelve una lista de jugadores
+     * Obtiene una lista de todos los jugadores en la base de datos.
+     *
+     * @return Una lista de objetos [Jugador].
      */
     @Query("SELECT * FROM jugador")
     suspend fun getAll(): List<Jugador>
 
     /**
-     * Inserta un jugador en la tabla de jugador.
+     * Inserta un nuevo jugador en la tabla de jugadores.
      *
-     * @param jugador
+     * @param jugador El objeto [Jugador] a insertar.
+     * @return El identificador único del jugador recién insertado.
      */
     @Insert
     suspend fun insertar(jugador: Jugador): Long
 
     /**
-     * Cuenta el número de jugadores en la tabla de jugador.
+     * Obtiene el número total de jugadores en la base de datos.
+     *
+     * @return El número total de jugadores.
      */
     @Query("SELECT COUNT(*) FROM jugador")
     suspend fun countJugadores(): Int
 
     /**
-     * Borra todos los Jugadores de la tabla de jugador.
+     * Elimina todos los jugadores de la tabla de jugadores.
      */
     @Query("DELETE FROM jugador")
     suspend fun deleteAll()

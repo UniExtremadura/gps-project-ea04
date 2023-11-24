@@ -87,7 +87,8 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener{_,destination,_ ->
-            if(destination.id==R.id.ajustesFragment||destination.id==R.id.listaJugadoresDetailsFragment){
+            if(destination.id==R.id.ajustesFragment||destination.id==R.id.listaJugadoresDetailsFragment
+                || destination.id==R.id.perfilFragment){
                 binding.toolbar.menu.clear()
                 binding.bottomNavigation.visibility= View.GONE
             }else{
@@ -128,12 +129,16 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
 
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.accion_ajustes -> {
+        R.id.accion_perfil->{
+            navController.navigate(HomeGrafonavDirections.acccionMainToPerfilFragment())
+            true
+        }R.id.accion_ajustes -> {
             navController.navigate(HomeGrafonavDirections.acccionMainToAjustesFragment())
             true
         }else -> {
             super.onOptionsItemSelected(item)
         }
+
     }
 
     fun getUsuario(): Usuario? {

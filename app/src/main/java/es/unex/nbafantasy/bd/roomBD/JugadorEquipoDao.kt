@@ -12,32 +12,37 @@ import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 @Dao
 interface JugadorEquipoDao {
     /**
-     * Devuelve la lista de jugadores de un Usuario
+     * Obtiene la lista de jugadores asociados a un usuario específico.
      *
-     * @param usuarioId
+     * @param usuarioId El identificador único del usuario.
+     * @return Una lista de objetos [JugadorEquipo] que pertenecen al usuario especificado.
      */
     @Query("SELECT * FROM jugadorequipo WHERE usuarioId = :usuarioId")
     suspend fun getJugadorByUsuario(usuarioId: Long): List<JugadorEquipo>
 
 
     /**
-     * Inserta un usuario y un jugador en la tabla de usuarioJugador.
+     * Inserta una asociación de usuario y jugador en la tabla de jugadorEquipo.
      *
-     * @param jugadorEquipo
+     * @param jugadorEquipo El objeto [JugadorEquipo] que representa la relación entre un usuario y un jugador.
+     * @return El identificador único de la asociación recién insertada.
      */
     @Insert
     suspend fun insertar(jugadorEquipo: JugadorEquipo): Long
 
     /**
-     * Elimina un usuario y un jugador en la tabla de usuarioJugador.
+     * Elimina una asociación de usuario y jugador de la tabla de jugadorEquipo.
      *
-     * @param jugadorEquipo
+     * @param usuarioId El identificador único del usuario.
+     * @param jugadorId El identificador único del jugador.
      */
     @Query("DELETE FROM jugadorEquipo WHERE usuarioId = :usuarioId AND jugadorId = :jugadorId")
     suspend fun Eliminar(usuarioId: Long, jugadorId: Long)
 
     /**
-     * Borra todos los jugadores de un usario concreto de la tabla de usuarioJugador.
+     * Borra todas las asociaciones de un usuario con jugadores de la tabla de jugadorEquipo.
+     *
+     * @param usuarioId El identificador único del usuario.
      */
     @Query("DELETE FROM jugadorEquipo WHERE usuarioId = :usuarioId")
     suspend fun deleteAll(usuarioId: Long)

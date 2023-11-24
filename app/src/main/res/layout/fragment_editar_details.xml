@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="30dp">
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp">
+
     <TextView
         android:id="@+id/players_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="73dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:padding="10dp"
         android:text="name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/red"
         android:textSize="40dp"
-        android:padding="10dp"
         android:textStyle="bold"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,33 +39,36 @@
         android:id="@+id/players_team"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="equipo"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnFavoriteDetail" />
+
     <TextView
         android:id="@+id/players_conference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="conferencia"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/players_team"
         app:layout_constraintTop_toBottomOf="@id/players_team" />
+
     <TextView
         android:id="@+id/players_Position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="posicion"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/players_conference"
         app:layout_constraintTop_toBottomOf="@+id/players_conference" />
     <TextView
@@ -90,59 +99,63 @@
         android:id="@+id/players_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="tapones"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_points" />
+
     <TextView
         android:id="@+id/players_rebound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="rebotes"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_block" />
-
-    <TextView
-        android:id="@+id/players_steals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:textStyle="bold"
-        android:text="robos"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_rebound" />
 
     <TextView
         android:id="@+id/players_asist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="asistencias"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_steals" />
 
+    <TextView
+        android:id="@+id/players_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Media general"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/players_turnover" />
 
     <TextView
         android:id="@+id/players_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
         android:text="minutos por partido"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_asist" />
 
@@ -150,23 +163,161 @@
         android:id="@+id/players_turnover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
         android:text="errores por partido"
-        android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_min" />
 
     <TextView
-        android:id="@+id/players_stats"
+        android:id="@+id/players_steals"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Media general"
-        android:textStyle="bold"
+        android:layout_marginStart="20dp"
+        android:paddingBottom="10dp"
+        android:text="robos"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_turnover" />
+        app:layout_constraintTop_toBottomOf="@+id/players_rebound" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="128dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_team"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_conference"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_Position"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_height"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_points"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_block"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView11"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="21dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_rebound"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView12"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView14"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_steals"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView13"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView15"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_asist"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView14"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_min"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView15"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_turnover"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView16"
+        app:srcCompat="@drawable/icono_pelota" />
+
+    <ImageView
+        android:id="@+id/imageView18"
+        android:layout_width="14dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/players_stats"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView17"
+        app:srcCompat="@drawable/icono_pelota" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

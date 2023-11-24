@@ -3,6 +3,7 @@ package es.unex.nbafantasy
 import android.os.Bundle
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -15,12 +16,16 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceFragmentCompat
+import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
+import es.unex.nbafantasy.bd.elemBD.Usuario
 
 import es.unex.nbafantasy.bd.roomBD.BD
+import es.unex.nbafantasy.juego.resultadoPartido.VictoriaActivity
 
 class AjustesFragment : PreferenceFragmentCompat(){
-
+    private  val PREF_MODO_OSCURO = "modoOscuro"
     private lateinit var sharedPreferences: SharedPreferences
+
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferencias, rootKey)
@@ -30,7 +35,7 @@ class AjustesFragment : PreferenceFragmentCompat(){
     }
 
     private val sharedPrefsListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-        if (key == "modoOscuro") {
+        if (key == PREF_MODO_OSCURO) {
             funcionamientoModoOscuro()
         }
     }
@@ -63,4 +68,5 @@ class AjustesFragment : PreferenceFragmentCompat(){
         sharedPreferences?.unregisterOnSharedPreferenceChangeListener(sharedPrefsListener)
     }
 }
+
 

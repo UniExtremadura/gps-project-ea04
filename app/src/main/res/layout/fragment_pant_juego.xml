@@ -12,12 +12,11 @@
         android:id="@+id/jugadorEquipo1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
         android:gravity="center"
         android:text=""
-        android:translationY="50dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
+        android:translationY="190dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,13 +25,12 @@
         android:id="@+id/jugadorEquipo2"
         android:layout_width="138dp"
         android:layout_height="66dp"
-        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
-        android:translationX="0dp"
-        android:translationY="185dp"
+        android:translationX="5dp"
+        android:translationY="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,16 +39,16 @@
         android:id="@+id/jugadorEquipo3"
         android:layout_width="138dp"
         android:layout_height="66dp"
-        android:layout_marginTop="100dp"
         android:gravity="center"
         android:text=""
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
         android:translationX="260dp"
-        android:translationY="185dp"
+        android:translationY="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/bt_jugar"
         android:layout_width="177dp"
@@ -59,7 +57,7 @@
         android:text="Jugar"
         android:textSize="23dp"
         android:translationX="115dp"
-        android:translationY="400dp"
+        android:translationY="470dp"
 
 
         tools:layout_editor_absoluteY="450dp" />

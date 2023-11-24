@@ -81,8 +81,6 @@ class PantJuegoFragment : Fragment() {
             lifecycleScope.launch {
                 mostrarJugadores(usuario)
             }
-        }else{
-            Log.e("Error", "USUARIO es nulo")
         }
     }
     private suspend fun mostrarJugadores(usuario: Usuario){
@@ -116,8 +114,6 @@ class PantJuegoFragment : Fragment() {
                             jugadorEquipo3.setText(nombreApellido3)
                         }
                     }
-                } else {
-                    Log.e("Error", "usuarioId es nulo")
                 }
             }
         }
