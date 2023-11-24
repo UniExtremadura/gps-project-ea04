@@ -66,7 +66,7 @@ class PantJuegoFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         getContext(),
-                        "Debes seleccionar 3 jugadores para poder jugar",
+                        "Debes tener 3 jugadores para poder jugar",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -113,6 +113,7 @@ class PantJuegoFragment : Fragment() {
                                             .getJugadorId(usuarioJugador3.jugadorId).apellido
                             jugadorEquipo3.setText(nombreApellido3)
                         }
+
                     }
                 }
             }

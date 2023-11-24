@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,12 +13,12 @@
         android:layout_height="73dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
-        android:padding="10dp"
         android:text="name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/red"
-        android:textSize="40dp"
+        android:textSize="30dp"
+        android:padding="10dp"
         android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,22 +52,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="conferencia"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/players_team"
         app:layout_constraintTop_toBottomOf="@id/players_team" />
-
     <TextView
         android:id="@+id/players_Position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="posicion"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/players_conference"
         app:layout_constraintTop_toBottomOf="@+id/players_conference" />
     <TextView
@@ -101,76 +99,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="tapones"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_points" />
-
     <TextView
         android:id="@+id/players_rebound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="rebotes"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_block" />
-
-    <TextView
-        android:id="@+id/players_asist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:paddingBottom="10dp"
-        android:text="asistencias"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_steals" />
-
-    <TextView
-        android:id="@+id/players_stats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="Media general"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_turnover" />
-
-    <TextView
-        android:id="@+id/players_min"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:paddingBottom="10dp"
-        android:text="minutos por partido"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_asist" />
-
-    <TextView
-        android:id="@+id/players_turnover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:paddingBottom="10dp"
-        android:text="errores por partido"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_min" />
 
     <TextView
         android:id="@+id/players_steals"
@@ -178,10 +124,58 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="robos"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/players_rebound" />
+
+    <TextView
+        android:id="@+id/players_asist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
         android:textStyle="bold"
+        android:text="asistencias"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/players_steals" />
+
+
+    <TextView
+        android:id="@+id/players_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:textStyle="bold"
+        android:text="minutos por partido"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/players_asist" />
+
+    <TextView
+        android:id="@+id/players_turnover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:text="errores por partido"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/players_min" />
+
+    <TextView
+        android:id="@+id/players_stats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Media general"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_rebound" />
 

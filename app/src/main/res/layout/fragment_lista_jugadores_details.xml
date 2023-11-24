@@ -29,13 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="equipo"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/players_name" />
-
     <TextView
         android:id="@+id/players_conference"
         android:layout_width="wrap_content"
@@ -82,29 +81,28 @@
         app:layout_constraintStart_toStartOf="@+id/players_height"
         app:layout_constraintTop_toBottomOf="@+id/players_height" />
 
-    <TextView
+        <TextView
         android:id="@+id/players_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="tapones"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_points" />
-
     <TextView
         android:id="@+id/players_rebound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="rebotes"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_block" />
 
@@ -114,10 +112,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="robos"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_rebound" />
 
@@ -127,12 +125,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
+        android:textStyle="bold"
         android:text="asistencias"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_steals" />
+
+
+    <TextView
+        android:id="@+id/players_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:paddingBottom="10dp"
+        android:textStyle="bold"
+        android:text="minutos por partido"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/players_asist" />
 
     <TextView
         android:id="@+id/players_turnover"
@@ -141,24 +153,11 @@
         android:layout_marginStart="20dp"
         android:paddingBottom="10dp"
         android:text="errores por partido"
+        android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_min" />
-
-    <TextView
-        android:id="@+id/players_min"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:paddingBottom="10dp"
-        android:text="minutos por partido"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/players_asist" />
 
     <TextView
         android:id="@+id/players_stats"
@@ -166,9 +165,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Media general"
+        android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/players_turnover" />
 
