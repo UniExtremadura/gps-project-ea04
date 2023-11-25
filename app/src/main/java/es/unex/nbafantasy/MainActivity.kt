@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -73,7 +72,6 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
     }
 
     fun setUpUI() {
-
         binding.bottomNavigation.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -96,13 +94,13 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
                 binding.bottomNavigation.visibility=View.VISIBLE
             }
         }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
     override fun onShowClick(nbadata: Jugador) {
         val action = ListaJugadoresFragmentDirections.actionListaJugadoresFragmentToListaJugadoresDetailsFragment(
             nbadata)

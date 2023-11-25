@@ -74,9 +74,7 @@ class DarCartaActivity : AppCompatActivity() {
                 setUpUI()
                 kotlinx.coroutines.delay(50)
 
-
                 Log.e("API CARGADA", "La API se ha cargado")
-
 
                 obtenerJugadores(usuario)
 
@@ -171,8 +169,6 @@ class DarCartaActivity : AppCompatActivity() {
 
                 apiSeasonData.addAll(seasonAverage)
             } catch (e: Exception) {
-                // Manejar la excepción genérica, imprime el mensaje de error
-                Log.e("Error", "Error fetching season data: ${e.message}", e)
                 throw APIError("Unable to fetch data from API", e)
             }
         }
@@ -232,19 +228,9 @@ class DarCartaActivity : AppCompatActivity() {
                                 db.jugadorDao().getJugadorId(posicionJugador3.toLong()).apellido
                     playersName3.setText(nombreApellido3)
                 }
-            } else {
-                Log.e("Error", "usuarioId es nulo")
             }
-
-
         }catch(e: Exception) {
             Log.e("Error", "Error al insertar en UsuarioJugador: ${e.message}", e)
-        }
-    }
-
-    private suspend fun esperarCargaBD() {
-        while (db.jugadorDao().getAll().isEmpty()) {
-            kotlinx.coroutines.delay(100) // Esperar 100 milisegundos antes de volver a verificar
         }
     }
 
@@ -252,6 +238,7 @@ class DarCartaActivity : AppCompatActivity() {
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
     }
+
     fun Double.round(decimales: Int): Double {
         val factor = 10.0.pow(decimales.toDouble())
         return (this * factor).roundToInt() / factor

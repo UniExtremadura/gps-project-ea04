@@ -9,15 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.example.SeasonData
-import es.unex.nbafantasy.Data.api.Data
-import es.unex.nbafantasy.Data.model.NBAData
-import es.unex.nbafantasy.Data.model.NBASeasonData
-import es.unex.nbafantasy.Data.toNBAData
-
-import es.unex.nbafantasy.Data.toSeasonAverages
 import es.unex.nbafantasy.api.APIError
-import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding

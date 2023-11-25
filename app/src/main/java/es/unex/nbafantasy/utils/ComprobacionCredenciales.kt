@@ -8,7 +8,6 @@ class ComprobacionCredenciales private constructor() {
 
     companion object{
 
-        private val TAG = ComprobacionCredenciales::class.java.canonicalName
         private val MINCHARS = 4
 
         //checks es un array y en cada posicion tiene:
@@ -80,7 +79,6 @@ class ComprobacionCredenciales private constructor() {
 
         }
     }
-
 
     enum class CredentialError {
         PasswordError, UsernameError, Success

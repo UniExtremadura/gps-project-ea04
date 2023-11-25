@@ -27,6 +27,7 @@ class ResultadoFragment : Fragment() {
     private lateinit var db: BD
     private lateinit var adapter: ResultadoAdapter
     private val binding get()=_binding!!
+
     interface OnResultadoClickListener {
         fun onResultClick(data: ResultadoPartido)
     }

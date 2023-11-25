@@ -24,8 +24,8 @@ class ResultadoAdapter (
             private val onClick: (show: ResultadoPartido) -> Unit,
             private val onLongClick: (title: ResultadoPartido) -> Unit,
         ) : RecyclerView.ViewHolder(binding.root) {
+
             fun bind(result: ResultadoPartido, totalItems: Int) {
-                //Log.d("Player ID", "Player ID: ${nbadata.firstName}")
                 with(binding) {
                     resultadoPartido.text = "Resultado: " + "${result.estadoResultado}"
                     misPuntos.text = "Mis puntos: " + "${result.misPuntos}"

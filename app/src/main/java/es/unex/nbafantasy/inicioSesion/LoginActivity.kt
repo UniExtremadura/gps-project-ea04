@@ -4,11 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.MainActivity
-import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityLoginBinding

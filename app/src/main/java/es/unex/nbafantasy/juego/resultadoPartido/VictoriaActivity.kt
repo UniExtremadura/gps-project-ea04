@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
@@ -26,7 +24,6 @@ class VictoriaActivity : AppCompatActivity() {
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var db: BD
-    private lateinit var listaUsuarioJugador: List<UsuarioJugador>
     private lateinit var listaJugador: List<Jugador>
     private lateinit var binding:ActivityVictoriaBinding
 
@@ -70,7 +67,7 @@ class VictoriaActivity : AppCompatActivity() {
         listaJugador = db.jugadorDao().getAll()
         val numJugadores = listaJugador.size
 
-        var jugadorNuevo = -1
+        var jugadorNuevo: Int
         if (db.usuarioJugadorDao().getAll().size == 29) {
             with(binding) {
                 val x = "Mis puntos: " + resultadoPartido.misPuntos.toString()
@@ -85,8 +82,6 @@ class VictoriaActivity : AppCompatActivity() {
                 if(jugadorNuevo!=null){
                     if (db.usuarioJugadorDao().getUnUsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong()) == null) {
                         val usuarioJugador = UsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong())
-                        Log.d("USUARIO ID", "USUARIO ID: ${usuarioJugador.usuarioId}")
-                        Log.d("equipo ID", "equipo ID: ${usuarioJugador.jugadorId}")
                         db.usuarioJugadorDao().insertar(usuarioJugador)
                         valido = true
                     }

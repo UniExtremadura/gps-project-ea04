@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.R
@@ -99,8 +98,6 @@ class PantallaJuegoActivity : AppCompatActivity() {
                         db.jugadorDao().getJugadorId(usuarioJugador3.jugadorId).mediaGeneralPartido
 
                 return sumaTotal
-            }else{
-                Log.e("Error", "usuarioId es nulo")
             }
         }
         return 0.0
@@ -110,20 +107,18 @@ class PantallaJuegoActivity : AppCompatActivity() {
         val random= Random(System.currentTimeMillis())
         listaJugador = db.jugadorDao().getAll()
         val numJugadores = listaJugador.size
-        //Log.d("AAAAAAAAAA", "TAM jugadores ${listaJugador.size}")
-
 
         var posicionJugador1 = random.nextInt(numJugadores)+1
 
-        var posicionJugador2 = 0
+        var posicionJugador2: Int
         do{
             posicionJugador2 = random.nextInt(numJugadores)+1
         }while(posicionJugador1 ==posicionJugador2)
 
-        var posicionJugador3 = 0
+        var posicionJugador3: Int
         do{
             posicionJugador3 = random.nextInt(numJugadores)+1
-        }while(posicionJugador1 ==posicionJugador3 && posicionJugador2 ==posicionJugador3)
+        }while(posicionJugador1 ==posicionJugador3 || posicionJugador2 ==posicionJugador3)
 
         with(binding) {
             val usuarioJugador1=db.jugadorDao().getJugadorId(posicionJugador1.toLong()).jugadorId
@@ -155,8 +150,6 @@ class PantallaJuegoActivity : AppCompatActivity() {
     }
 
     private fun setUpListener(resultado:Double, puntosMiEquipo:Double,puntosRival:Double){
-
-
         if (resultado > 0) {
             resultadoPartido = ResultadoPartido(null,usuario.usuarioId ?: 0,
                 puntosMiEquipo, puntosRival,"Victoria")

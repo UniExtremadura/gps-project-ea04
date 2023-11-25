@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
-import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
 import es.unex.nbafantasy.databinding.FragmentPerfilBinding
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
@@ -27,7 +26,6 @@ class PerfilFragment : Fragment() {
 
         cargarDatosUsuario()
         actualizarDatos()
-
     }
 
     override fun onCreateView(
@@ -56,8 +54,6 @@ class PerfilFragment : Fragment() {
                         etContrasena1.text.toString(),
                         etContrasena2.text.toString()
                     )
-
-                    var usuarioNuevo = bd?.usuarioDao()?.busquedaNombre(binding.etNombre.text.toString())
 
                     if (comprobar.fallo) {
                         notificarMensaje(comprobar.msg)
