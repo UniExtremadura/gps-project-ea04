@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
 
         navController.addOnDestinationChangedListener{_,destination,_ ->
             if(destination.id==R.id.ajustesFragment||destination.id==R.id.listaJugadoresDetailsFragment
-                || destination.id==R.id.perfilFragment){
+                || destination.id==R.id.perfilFragment||destination.id==R.id.editarDetailsFragment){
                 binding.toolbar.menu.clear()
                 binding.bottomNavigation.visibility= View.GONE
             }else{
