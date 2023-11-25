@@ -180,24 +180,21 @@ class DarCartaActivity : AppCompatActivity() {
     }
 
     private suspend fun obtenerJugadores(usuario: Usuario) {
-        val random= Random(System.currentTimeMillis())
+        val random = Random(System.currentTimeMillis())
         listaJugador = db.jugadorDao().getAll()
-        val numJugadores = listaJugador.size+1
+        val numJugadores = listaJugador.size
 
-        var posicionJugador1 = random.nextInt(numJugadores)
-        if(posicionJugador1==0) posicionJugador1=posicionJugador1+1
+        var posicionJugador1 = random.nextInt(numJugadores) + 1
 
-        var posicionJugador2 = 0
-        do{
-            posicionJugador2 = random.nextInt(numJugadores)
-            if(posicionJugador2==0) posicionJugador2=posicionJugador2+1
-        }while(posicionJugador1==posicionJugador2)
+        var posicionJugador2: Int
+        do {
+            posicionJugador2 = random.nextInt(numJugadores) + 1
+        } while (posicionJugador2 == posicionJugador1)
 
-        var posicionJugador3 = 0
-        do{
-            posicionJugador3 = random.nextInt(numJugadores)
-            if(posicionJugador3==0) posicionJugador3=posicionJugador3+1
-        }while(posicionJugador1==posicionJugador3 && posicionJugador2==posicionJugador3)
+        var posicionJugador3: Int
+        do {
+            posicionJugador3 = random.nextInt(numJugadores) + 1
+        } while (posicionJugador3 == posicionJugador1 || posicionJugador3 == posicionJugador2)
 
 
         try {
