@@ -34,7 +34,6 @@ class PantJuegoFragment : Fragment() {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

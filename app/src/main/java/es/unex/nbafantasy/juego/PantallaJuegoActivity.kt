@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -68,7 +69,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun mostrarMiEquipo(usuario: Usuario):Double{
+   /* private suspend fun mostrarMiEquipo(usuario: Usuario):Double{
         with(binding) {
             val usuarioId = usuario?.usuarioId
 
@@ -101,7 +102,48 @@ class PantallaJuegoActivity : AppCompatActivity() {
             }
         }
         return 0.0
+    }*/
+   private suspend fun mostrarMiEquipo(usuario: Usuario): Double {
+       with(binding) {
+           val usuarioId = usuario?.usuarioId
+
+           if (usuarioId != null) {
+               listaEquipo = db.jugadorEquipoDao().getJugadorByUsuario(usuarioId)
+
+               mostrarJugadorEnTextView(0, miJugador1)
+               mostrarJugadorEnTextView(1, miJugador2)
+               mostrarJugadorEnTextView(2, miJugador3)
+
+               val sumaTotal = calcularSumaTotal()
+               return sumaTotal
+           }
+       }
+       return 0.0
+   }
+
+    private suspend fun mostrarJugadorEnTextView(index: Int, textView: TextView) {
+        val usuarioJugador = listaEquipo.getOrNull(index)
+        if (usuarioJugador != null) {
+            val jugadorId = usuarioJugador.jugadorId
+            val nombreApellido =
+                "${db.jugadorDao().getJugadorId(jugadorId).nombre} ${db.jugadorDao().getJugadorId(jugadorId).apellido}"
+            textView.text = nombreApellido
+        }
     }
+
+    private suspend fun calcularSumaTotal(): Double {
+        val jugador1 = listaEquipo.getOrNull(0)
+        val jugador2 = listaEquipo.getOrNull(1)
+        val jugador3 = listaEquipo.getOrNull(2)
+
+        val mediaJugador1 = jugador1?.let { db.jugadorDao().getJugadorId(it.jugadorId).mediaGeneralPartido } ?: 0.0
+        val mediaJugador2 = jugador2?.let { db.jugadorDao().getJugadorId(it.jugadorId).mediaGeneralPartido } ?: 0.0
+        val mediaJugador3 = jugador3?.let { db.jugadorDao().getJugadorId(it.jugadorId).mediaGeneralPartido } ?: 0.0
+
+        return mediaJugador1 + mediaJugador2 + mediaJugador3
+    }
+
+
 
     private suspend fun mostrarRival():Double{
         val random= Random(System.currentTimeMillis())

@@ -30,11 +30,8 @@ class EditarDetailsFragment: Fragment() {
         binding.playersHeight.text = "Altura en Pulgadas: " + nba.alturaPulgadas
         binding.playersPoints.text = "Puntos Por partido: " + nba.puntosPartido
         binding.playersBlock.text = "Tapones por partido: " + nba.taponesPartido
-        binding.playersRebound.text = "Rebotes por partido: " + nba.erroresPartido
-        binding.playersSteals.text = "Robos por partido: " + nba.robosPartido
-        binding.playersAsist.text = "Asistencias por partido: " + nba.asistenciasPartido
-        binding.playersMin.text = "Minutos por partido: " + nba.minutosPartido
-        binding.playersTurnover.text = "Errores por partido: " + nba.erroresPartido
+        binding.playersRebound.text = "rebotes por partido: " + nba.rebotesPartido
+        binding.playersAsist.text = "asistencias por partido: " + nba.asistenciasPartido
         binding.playersStats.text = "Media general: " + nba.mediaGeneralPartido
         binding.btnFavoriteDetail.isSelected = selected
     }

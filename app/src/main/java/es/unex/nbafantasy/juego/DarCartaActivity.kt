@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
@@ -36,7 +37,7 @@ class DarCartaActivity : AppCompatActivity() {
     private lateinit var db: BD
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
-
+    private lateinit var usuario: Usuario
     private var pesoPuntos = 0.25
     private var pesoTapones = 0.12
     private var pesoRebotes = 0.12
@@ -67,7 +68,7 @@ class DarCartaActivity : AppCompatActivity() {
         db= BD.getInstance(applicationContext)!!
 
 
-        val usuario = intent?.getSerializableExtra(USUARIO) as? Usuario
+        usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 
         if(usuario!=null) {
             lifecycleScope.launch {
@@ -76,7 +77,7 @@ class DarCartaActivity : AppCompatActivity() {
 
                 Log.e("API CARGADA", "La API se ha cargado")
 
-                obtenerJugadores(usuario)
+                obtenerJugadores()
 
                 // Verificar si el usuario no es nulo
                 with(binding) {
@@ -175,7 +176,7 @@ class DarCartaActivity : AppCompatActivity() {
         return apiSeasonData
     }
 
-    private suspend fun obtenerJugadores(usuario: Usuario) {
+    /*private suspend fun obtenerJugadores(usuario: Usuario) {
         val random = Random(System.currentTimeMillis())
         listaJugador = db.jugadorDao().getAll()
         val numJugadores = listaJugador.size
@@ -232,8 +233,64 @@ class DarCartaActivity : AppCompatActivity() {
         }catch(e: Exception) {
             Log.e("Error", "Error al insertar en UsuarioJugador: ${e.message}", e)
         }
+    }*/
+
+    private suspend fun obtenerJugadores() {
+        try {
+            val usuarioId = usuario?.usuarioId
+
+            if (usuarioId != null) {
+
+                val posicionJugador1 = obtenerPosicionAleatoria()
+                val posicionJugador2 = obtenerPosicionAleatoria(posicionJugador1)
+                val posicionJugador3 = obtenerPosicionAleatoria(posicionJugador1, posicionJugador2)
+
+                insertarUsuarioJugador(posicionJugador1)
+                insertarUsuarioJugador(posicionJugador2)
+                insertarUsuarioJugador(posicionJugador3)
+
+                insertarJugadorEquipo(posicionJugador1)
+                insertarJugadorEquipo(posicionJugador2)
+                insertarJugadorEquipo(posicionJugador3)
+
+                mostrarNombresJugadores(posicionJugador1, binding.playersName1)
+                mostrarNombresJugadores(posicionJugador2, binding.playersName2)
+                mostrarNombresJugadores(posicionJugador3, binding.playersName3)
+            }
+        } catch (e: Exception) {
+            Log.e("Error", "Error al insertar en UsuarioJugador: ${e.message}", e)
+        }
     }
 
+    private suspend fun obtenerPosicionAleatoria(vararg exclusiones: Int): Int {
+
+        val numJugadores = (db.jugadorDao().getAll()).size
+        val random = Random(System.currentTimeMillis())
+        val listaExclusiones = exclusiones.toList()
+
+        var posicion: Int
+        do {
+            posicion = random.nextInt(numJugadores) + 1
+        } while (posicion in listaExclusiones)
+
+        return posicion
+    }
+
+    private suspend fun insertarUsuarioJugador(posicionJugador: Int) {
+        val usuarioJugador = UsuarioJugador(usuario.usuarioId?:0, posicionJugador.toLong())
+        db.usuarioJugadorDao().insertar(usuarioJugador)
+    }
+
+    private suspend fun insertarJugadorEquipo(posicionJugador: Int) {
+        val jugadorEquipo = JugadorEquipo(usuario.usuarioId?:0, posicionJugador.toLong())
+        db.jugadorEquipoDao().insertar(jugadorEquipo)
+    }
+
+    private suspend fun mostrarNombresJugadores(posicionJugador: Int, textView: TextView) {
+        val jugador = db.jugadorDao().getJugadorId(posicionJugador.toLong())
+        val nombreApellido = "${jugador.nombre} ${jugador.apellido}"
+        textView.text = nombreApellido
+    }
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
