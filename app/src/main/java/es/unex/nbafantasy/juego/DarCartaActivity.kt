@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
+import es.unex.nbafantasy.Data.Repository
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
 import es.unex.nbafantasy.Data.model.NBASeasonData
@@ -34,16 +35,12 @@ import kotlin.random.Random
 class DarCartaActivity : AppCompatActivity() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
+    private lateinit var repository: Repository
     private lateinit var db: BD
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
     private lateinit var usuario: Usuario
-    private var pesoPuntos = 0.25
-    private var pesoTapones = 0.12
-    private var pesoRebotes = 0.12
-    private var pesoRobos = 0.11
-    private var pesoAsistencias = 0.2
-    private var pesoErrores = 0.25
+
 
     companion object{
         const val USUARIO="USUARIO"
@@ -66,7 +63,7 @@ class DarCartaActivity : AppCompatActivity() {
 
         //Inicializacion BD
         db= BD.getInstance(applicationContext)!!
-
+        repository = Repository.getInstance(db.jugadorDao(),getNetworkService())
 
         usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 
@@ -102,9 +99,10 @@ class DarCartaActivity : AppCompatActivity() {
             binding.playersName3.visibility = View.GONE
             binding.btAceptar.visibility = View.GONE
             try {
-                _datas = fetchShows().filterNotNull().map(Data::toNBAData)
-                _seasondatas = fetchSeason(_datas).filterNotNull().map(SeasonData::toSeasonAverages)
-                var i = 0;
+                _datas = repository.fetchRecentPlayers()
+                _seasondatas = repository.fetchSeason(_datas).map(SeasonData::toSeasonAverages)
+                repository.ObtenerJugadores(_datas,_seasondatas)
+                /*var i = 0;
                 for (playerId in _datas) {
                     val media = (_seasondatas[i].pts * pesoPuntos +
                             _seasondatas[i].blk * pesoTapones +
@@ -131,7 +129,7 @@ class DarCartaActivity : AppCompatActivity() {
                     )
                     db?.jugadorDao()?.insertar(jugador)
                     i=i+1;
-                }
+                }*/
             } catch (error: APIError) {
                 Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
             } finally {
@@ -175,65 +173,6 @@ class DarCartaActivity : AppCompatActivity() {
         }
         return apiSeasonData
     }
-
-    /*private suspend fun obtenerJugadores(usuario: Usuario) {
-        val random = Random(System.currentTimeMillis())
-        listaJugador = db.jugadorDao().getAll()
-        val numJugadores = listaJugador.size
-
-        var posicionJugador1 = random.nextInt(numJugadores) + 1
-
-        var posicionJugador2: Int
-        do {
-            posicionJugador2 = random.nextInt(numJugadores) + 1
-        } while (posicionJugador2 == posicionJugador1)
-
-        var posicionJugador3: Int
-        do {
-            posicionJugador3 = random.nextInt(numJugadores) + 1
-        } while (posicionJugador3 == posicionJugador1 || posicionJugador3 == posicionJugador2)
-
-
-        try {
-            val usuarioId = usuario?.usuarioId
-
-            if (usuarioId != null) {
-                val usuarioJugador1 = UsuarioJugador(usuarioId, posicionJugador1.toLong())
-                db.usuarioJugadorDao().insertar(usuarioJugador1)
-                val jugadorEquipo1=JugadorEquipo(usuarioId, posicionJugador1.toLong())
-                db.jugadorEquipoDao().insertar(jugadorEquipo1)
-
-                val usuarioJugador2 = UsuarioJugador(usuarioId, posicionJugador2.toLong())
-                db.usuarioJugadorDao().insertar(usuarioJugador2)
-                val jugadorEquipo2=JugadorEquipo(usuarioId, posicionJugador2.toLong())
-                db.jugadorEquipoDao().insertar(jugadorEquipo2)
-
-                val usuarioJugador3 = UsuarioJugador(usuarioId, posicionJugador3.toLong())
-                db.usuarioJugadorDao().insertar(usuarioJugador3)
-                val jugadorEquipo3=JugadorEquipo(usuarioId, posicionJugador3.toLong())
-                db.jugadorEquipoDao().insertar(jugadorEquipo3)
-
-                with(binding) {
-                    val nombreApellido1 =
-                        db.jugadorDao().getJugadorId(posicionJugador1.toLong()).nombre + " " +
-                                db.jugadorDao().getJugadorId(posicionJugador1.toLong()).apellido
-                    playersName1.setText(nombreApellido1)
-
-                    val nombreApellido2 =
-                        db.jugadorDao().getJugadorId(posicionJugador2.toLong()).nombre + " " +
-                                db.jugadorDao().getJugadorId(posicionJugador2.toLong()).apellido
-                    playersName2.setText(nombreApellido2)
-
-                    val nombreApellido3 =
-                        db.jugadorDao().getJugadorId(posicionJugador3.toLong()).nombre + " " +
-                                db.jugadorDao().getJugadorId(posicionJugador3.toLong()).apellido
-                    playersName3.setText(nombreApellido3)
-                }
-            }
-        }catch(e: Exception) {
-            Log.e("Error", "Error al insertar en UsuarioJugador: ${e.message}", e)
-        }
-    }*/
 
     private suspend fun obtenerJugadores() {
         try {
@@ -296,8 +235,4 @@ class DarCartaActivity : AppCompatActivity() {
         MainActivity.start(this,usuario)
     }
 
-    fun Double.round(decimales: Int): Double {
-        val factor = 10.0.pow(decimales.toDouble())
-        return (this * factor).roundToInt() / factor
-    }
 }

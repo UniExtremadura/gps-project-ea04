@@ -1,14 +1,22 @@
 package es.unex.nbafantasy.bd.roomBD
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.Usuario
 
 @Dao
 interface JugadorDao {
+    @Query("SELECT * FROM jugador")
+    fun getAllJugadores(): LiveData<List<Jugador>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(Jugador: List<Jugador>)
     /**
      * Realiza una búsqueda de un jugador por su nombre.
      *
