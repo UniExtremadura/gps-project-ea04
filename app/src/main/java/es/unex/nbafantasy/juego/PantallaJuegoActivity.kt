@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.ResultadoPartidoRepository
 import es.unex.nbafantasy.R
+import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
@@ -30,7 +32,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
     private lateinit var listaJugador: List<Jugador>
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
-
+    private lateinit var repositoryResultadoPartido: ResultadoPartidoRepository
 
     companion object{
         const val USUARIO="USUARIO"
@@ -53,6 +55,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
 
         db= BD.getInstance(applicationContext)!!
         usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+        repositoryResultadoPartido = ResultadoPartidoRepository.getInstance(db.resultadoPartidoDao())
 
         if(usuario!=null) {
             lifecycleScope.launch {
@@ -68,58 +71,23 @@ class PantallaJuegoActivity : AppCompatActivity() {
             }
         }
     }
-
-   /* private suspend fun mostrarMiEquipo(usuario: Usuario):Double{
+    private suspend fun mostrarMiEquipo(usuario: Usuario): Double {
         with(binding) {
             val usuarioId = usuario?.usuarioId
 
             if (usuarioId != null) {
-                listaEquipo = db.jugadorEquipoDao().getJugadorByUsuario(usuarioId)
+                listaEquipo = db.jugadorEquipoDao().getJugadoresByUsuario(usuarioId)
 
-                val usuarioJugador1 = listaEquipo.get(0)
-                val nombreApellido1 =
-                    db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).nombre + " " +
-                            db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).apellido
-                miJugador1.setText(nombreApellido1)
+                mostrarJugadorEnTextView(0, miJugador1)
+                mostrarJugadorEnTextView(1, miJugador2)
+                mostrarJugadorEnTextView(2, miJugador3)
 
-                val usuarioJugador2 = listaEquipo.get(1)
-                val nombreApellido2 =
-                    db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).nombre + " " +
-                            db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).apellido
-                miJugador2.setText(nombreApellido2)
-
-                val usuarioJugador3 = listaEquipo.get(2)
-                val nombreApellido3 =
-                    db.jugadorDao().getJugadorId(usuarioJugador3.jugadorId).nombre + " " +
-                            db.jugadorDao().getJugadorId(usuarioJugador3.jugadorId).apellido
-                miJugador3.setText(nombreApellido3)
-
-                val sumaTotal= db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).mediaGeneralPartido +
-                        db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).mediaGeneralPartido +
-                        db.jugadorDao().getJugadorId(usuarioJugador3.jugadorId).mediaGeneralPartido
-
+                val sumaTotal = calcularSumaTotal()
                 return sumaTotal
             }
         }
         return 0.0
-    }*/
-   private suspend fun mostrarMiEquipo(usuario: Usuario): Double {
-       with(binding) {
-           val usuarioId = usuario?.usuarioId
-
-           if (usuarioId != null) {
-               listaEquipo = db.jugadorEquipoDao().getJugadorByUsuario(usuarioId)
-
-               mostrarJugadorEnTextView(0, miJugador1)
-               mostrarJugadorEnTextView(1, miJugador2)
-               mostrarJugadorEnTextView(2, miJugador3)
-
-               val sumaTotal = calcularSumaTotal()
-               return sumaTotal
-           }
-       }
-       return 0.0
-   }
+    }
 
     private suspend fun mostrarJugadorEnTextView(index: Int, textView: TextView) {
         val usuarioJugador = listaEquipo.getOrNull(index)
@@ -197,7 +165,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
                 puntosMiEquipo, puntosRival,"Victoria")
 
             lifecycleScope.launch {
-                db.resultadoPartidoDao().insertar(resultadoPartido)
+                repositoryResultadoPartido.insertarResultado(resultadoPartido)
             }
 
             VictoriaActivity.start(this, usuario, resultadoPartido)
@@ -206,7 +174,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
                 puntosMiEquipo, puntosRival,"Derrota")
 
             lifecycleScope.launch {
-                db.resultadoPartidoDao().insertar(resultadoPartido)
+                repositoryResultadoPartido.insertarResultado(resultadoPartido)
             }
 
             DerrotaActivity.start(this, usuario, resultadoPartido)

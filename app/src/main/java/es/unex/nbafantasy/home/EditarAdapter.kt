@@ -40,7 +40,7 @@ class EditarAdapter(
                 playersStatsEdit.text = "Estadisticas: " + "${nbadata.mediaGeneralPartido}"
 
                 lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                    listaUsuarioEquipo = db?.jugadorEquipoDao()?.getJugadorByUsuario(usuario) ?: emptyList()
+                    listaUsuarioEquipo = db?.jugadorEquipoDao()?.getJugadoresByUsuario(usuario) ?: emptyList()
                     for (equipo in listaUsuarioEquipo) {
                         if (equipo.jugadorId == nbadata.jugadorId) {
                             isFavorite = true
@@ -106,7 +106,7 @@ class EditarAdapter(
         }
 
         private suspend fun EliminarUsuarioEquipo(usuario: Long, jugadorId: Long) {
-            db.jugadorEquipoDao().Eliminar(usuario, jugadorId)
+            db.jugadorEquipoDao().eliminar(usuario, jugadorId)
         }
     }
 

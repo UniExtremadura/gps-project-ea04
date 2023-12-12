@@ -7,8 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.JugadorEquipoRepository
+import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
+import es.unex.nbafantasy.api.getNetworkService
+import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
@@ -26,6 +30,9 @@ class PantJuegoFragment : Fragment() {
     private lateinit var usuario:Usuario
     private lateinit var listener: ListaJugadoresFragment.OnJugadorClickListener
 
+    private lateinit var repositoryJugadorEquipo: JugadorEquipoRepository
+    private lateinit var repositoryJugador: JugadorRepository
+
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
         if (context is ListaJugadoresFragment.OnJugadorClickListener) {
@@ -34,6 +41,7 @@ class PantJuegoFragment : Fragment() {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +53,8 @@ class PantJuegoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         db= BD.getInstance(requireContext())!!
+        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
+        repositoryJugadorEquipo = JugadorEquipoRepository.getInstance(db.jugadorEquipoDao())
 
         setUpUi()
         pulsarBoton()
@@ -53,8 +63,7 @@ class PantJuegoFragment : Fragment() {
     private fun pulsarBoton(){
         binding.btJugar.setOnClickListener {
             lifecycleScope.launch {
-                val equipoSize =
-                    db.jugadorEquipoDao().getJugadorByUsuario(usuario.usuarioId ?: 0).size
+                val equipoSize =obtenerListaJugadores().size
                 if (equipoSize == 3) {
                     initNav()
                 } else {
@@ -82,38 +91,37 @@ class PantJuegoFragment : Fragment() {
             val usuarioId = usuario?.usuarioId
 
             if (usuarioId != null) {
-                listaEquipo = db.jugadorEquipoDao().getJugadorByUsuario(usuarioId)
+                listaEquipo = obtenerListaJugadores()
 
                 if (listaEquipo.size > 0) {
                     val usuarioJugador1 = listaEquipo.get(0)
-                    val nombreApellido1 =
-                        db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).nombre + " " +
-                                db.jugadorDao().getJugadorId(usuarioJugador1.jugadorId).apellido
+                    val nombreApellido1 = obtenerNombre(usuarioJugador1.jugadorId)
                     jugadorEquipo1.setText(nombreApellido1)
 
                     if (listaEquipo.size > 1) {
                         val usuarioJugador2 = listaEquipo.get(1)
-                        val nombreApellido2 =
-                            db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).nombre + " " +
-                                    db.jugadorDao().getJugadorId(usuarioJugador2.jugadorId).apellido
+                        val nombreApellido2 = obtenerNombre(usuarioJugador2.jugadorId)
                         jugadorEquipo2.setText(nombreApellido2)
 
                         if (listaEquipo.size > 2) {
                             val usuarioJugador3 = listaEquipo.get(2)
-                            val nombreApellido3 =
-                                db.jugadorDao()
-                                    .getJugadorId(usuarioJugador3.jugadorId).nombre + " " +
-                                        db.jugadorDao()
-                                            .getJugadorId(usuarioJugador3.jugadorId).apellido
+                            val nombreApellido3 = obtenerNombre(usuarioJugador3.jugadorId)
                             jugadorEquipo3.setText(nombreApellido3)
                         }
-
                     }
                 }
             }
         }
     }
 
+    private suspend fun obtenerListaJugadores(): List<JugadorEquipo>{
+        return repositoryJugadorEquipo.getJugadoresUsuario(usuario.usuarioId?:0)
+    }
+
+    private suspend fun obtenerNombre(jugadorId:Long): String {
+        val jugador = repositoryJugador.getJugadorByUsuario(jugadorId)
+        return  jugador.nombre + " " + jugador.apellido
+    }
     private fun initNav() {
         PantallaJuegoActivity.start(context, usuario)
     }

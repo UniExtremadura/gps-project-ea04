@@ -1,7 +1,9 @@
 package es.unex.nbafantasy.bd.roomBD
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
@@ -16,6 +18,9 @@ interface ResultadoPartidoDao {
      */
     @Query("SELECT * FROM resultadopartido WHERE usuarioId = :usuarioId")
     suspend fun getResultadoByUsuario(usuarioId: Long): List<ResultadoPartido>
+
+    @Query("SELECT * FROM ResultadoPartido")
+    fun getAllResultados(): LiveData<List<ResultadoPartido>>
 
     /**
      * Obtiene un resultado de partido específico por su identificador único.
@@ -32,7 +37,7 @@ interface ResultadoPartidoDao {
      * @param resultadopartido El objeto [ResultadoPartido] a insertar.
      * @return El identificador único del resultado de partido recién insertado.
      */
-    @Insert
-    suspend fun insertar(resultadopartido: ResultadoPartido): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertar(resultadopartido: ResultadoPartido)
 
 }

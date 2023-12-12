@@ -8,14 +8,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import es.unex.nbafantasy.Data.ResultadoPartidoRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
+import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
 import es.unex.nbafantasy.databinding.FragmentResultadoBinding
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
@@ -26,6 +29,7 @@ class ResultadoFragment : Fragment() {
     private lateinit var listener: OnResultadoClickListener
     private lateinit var db: BD
     private lateinit var adapter: ResultadoAdapter
+    private lateinit var repositoryResultadoPartido: ResultadoPartidoRepository
     private val binding get()=_binding!!
 
     interface OnResultadoClickListener {
@@ -45,6 +49,8 @@ class ResultadoFragment : Fragment() {
             listener = context
             //Inicializacion BD
             db= BD.getInstance(context)!!
+            repositoryResultadoPartido = ResultadoPartidoRepository.getInstance(db.resultadoPartidoDao())
+
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
         }
@@ -52,27 +58,25 @@ class ResultadoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
-
-        lifecycleScope.launch {
-            if (_datas.isEmpty()) {
-                binding.spinner.visibility = View.VISIBLE
-                try {
-                    val usuario = (requireActivity() as? MainActivity)?.getUsuario()
-                    Idusuario = usuario?.usuarioId?:0
-                    _datas = db?.resultadoPartidoDao()?.getResultadoByUsuario(Idusuario)?: emptyList()
-
-                    adapter.updateData(_datas)
-
-                } catch (error: APIError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                } finally {
-                    binding.spinner.visibility = View.GONE
-                }
+        subscribeUiResultados(adapter)
+        launchDataLoad { repositoryResultadoPartido }
+    }
+    private fun subscribeUiResultados(adapter: ResultadoAdapter) {
+        repositoryResultadoPartido.resultados.observe(viewLifecycleOwner) { resultados ->
+            adapter.updateData(resultados)
+        }
+    }
+    private fun launchDataLoad(block: suspend () -> Unit): Job {
+        return lifecycleScope.launch {
+            try { binding.spinner.visibility = View.VISIBLE
+                block()
+            } catch (error: APIError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            } finally {
+                binding.spinner.visibility = View.GONE
             }
         }
     }
-
-
     private fun setUpRecyclerView() {
         adapter = ResultadoAdapter(DataS = _datas, onClick = {
             listener.onResultClick(it)

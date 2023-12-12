@@ -10,11 +10,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
-import es.unex.nbafantasy.Data.Repository
+import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
 import es.unex.nbafantasy.Data.model.NBASeasonData
-import es.unex.nbafantasy.Data.toNBAData
 import es.unex.nbafantasy.Data.toSeasonAverages
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.api.APIError
@@ -25,17 +24,13 @@ import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityDarCartaBinding
-import es.unex.nbafantasy.databinding.ActivityRegistroBinding
 import kotlinx.coroutines.launch
-import kotlin.math.log
-import kotlin.math.pow
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class DarCartaActivity : AppCompatActivity() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
-    private lateinit var repository: Repository
+    private lateinit var repository: JugadorRepository
     private lateinit var db: BD
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
@@ -63,7 +58,7 @@ class DarCartaActivity : AppCompatActivity() {
 
         //Inicializacion BD
         db= BD.getInstance(applicationContext)!!
-        repository = Repository.getInstance(db.jugadorDao(),getNetworkService())
+        repository = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
 
         usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 

@@ -1,5 +1,6 @@
 package es.unex.nbafantasy.bd.roomBD
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -18,7 +19,7 @@ interface JugadorEquipoDao {
      * @return Una lista de objetos [JugadorEquipo] que pertenecen al usuario especificado.
      */
     @Query("SELECT * FROM jugadorequipo WHERE usuarioId = :usuarioId")
-    suspend fun getJugadorByUsuario(usuarioId: Long): List<JugadorEquipo>
+    suspend fun getJugadoresByUsuario(usuarioId: Long): List<JugadorEquipo>
 
 
     /**
@@ -37,7 +38,7 @@ interface JugadorEquipoDao {
      * @param jugadorId El identificador único del jugador.
      */
     @Query("DELETE FROM jugadorEquipo WHERE usuarioId = :usuarioId AND jugadorId = :jugadorId")
-    suspend fun Eliminar(usuarioId: Long, jugadorId: Long)
+    suspend fun eliminar(usuarioId: Long, jugadorId: Long)
 
     /**
      * Borra todas las asociaciones de un usuario con jugadores de la tabla de jugadorEquipo.

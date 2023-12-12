@@ -17,6 +17,7 @@ interface JugadorDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(Jugador: List<Jugador>)
+
     /**
      * Realiza una búsqueda de un jugador por su nombre.
      *

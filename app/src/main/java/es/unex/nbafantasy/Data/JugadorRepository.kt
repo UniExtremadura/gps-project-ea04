@@ -4,16 +4,15 @@ import com.example.example.SeasonData
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
 import es.unex.nbafantasy.Data.model.NBASeasonData
-import es.unex.nbafantasy.Data.toNBAData
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.NBAFantasyApi
-import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
+import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.roomBD.JugadorDao
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class Repository private constructor(
+class JugadorRepository private constructor(
     private val jugadorDao: JugadorDao,
     private val nbaFantasyApi: NBAFantasyApi
 ) {
@@ -25,6 +24,11 @@ class Repository private constructor(
     private var pesoRobos = 0.11
     private var pesoAsistencias = 0.2
     private var pesoErrores = 0.25
+
+
+    suspend fun getJugadorByUsuario(jugadorId: Long):Jugador{
+        return jugadorDao.getJugadorId(jugadorId)
+    }
 
     suspend fun tryUpdateRecentPlayersCache() {
         if (shouldUpdatePlayersCache()) {
@@ -115,11 +119,11 @@ class Repository private constructor(
         private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
 
         @Volatile
-        private var INSTANCE: Repository? = null
+        private var INSTANCE: JugadorRepository? = null
 
-        fun getInstance(jugadorDao: JugadorDao, nbaFantasyApi: NBAFantasyApi): Repository {
+        fun getInstance(jugadorDao: JugadorDao, nbaFantasyApi: NBAFantasyApi): JugadorRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: Repository(jugadorDao, nbaFantasyApi).also {
+                INSTANCE ?: JugadorRepository(jugadorDao, nbaFantasyApi).also {
                     INSTANCE = it
                 }
             }
