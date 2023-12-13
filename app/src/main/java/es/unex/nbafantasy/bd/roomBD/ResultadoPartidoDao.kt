@@ -18,7 +18,7 @@ interface ResultadoPartidoDao {
      * @return Una lista de objetos [ResultadoPartido] que pertenecen al usuario especificado.
      */
     @Query("SELECT * FROM resultadopartido WHERE usuarioId = :usuarioId")
-    suspend fun getResultadoByUsuario(usuarioId: Long): List<ResultadoPartido>
+    fun getResultadoByUsuario(usuarioId: Long): LiveData<List<ResultadoPartido>>
 
     @Query("SELECT * FROM ResultadoPartido")
     fun getAllResultados(): LiveData<List<ResultadoPartido>>

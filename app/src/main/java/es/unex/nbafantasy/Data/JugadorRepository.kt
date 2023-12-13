@@ -13,7 +13,7 @@ import es.unex.nbafantasy.bd.roomBD.JugadorDao
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-class JugadorRepository private constructor(
+class JugadorRepository (
     private val jugadorDao: JugadorDao,
     private val nbaFantasyApi: NBAFantasyApi
 ) {
@@ -47,7 +47,7 @@ class JugadorRepository private constructor(
         val apiData = mutableListOf<Data>()
         var newapi = emptyList<NBAData>()
         val playerIds = listOf(8, 4, 9, 12, 15, 18, 24, 28, 33, 37, 48, 53, 57, 79, 112,
-            114, 115, 117, 125, 132, 140, 145, 175, 236, 237, 250, 246, 322, 434)
+            114, 115, 117, 125, 132,140, 145, 175, 236, 237, 250, 246, 322, 434)
         try {
             for (playerId in playerIds) {
                 val playerData = nbaFantasyApi.getPlayerById(playerId)
@@ -124,16 +124,5 @@ class JugadorRepository private constructor(
 
     companion object {
         private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
-
-        @Volatile
-        private var INSTANCE: JugadorRepository? = null
-
-        fun getInstance(jugadorDao: JugadorDao, nbaFantasyApi: NBAFantasyApi): JugadorRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: JugadorRepository(jugadorDao, nbaFantasyApi).also {
-                    INSTANCE = it
-                }
-            }
-        }
     }
 }

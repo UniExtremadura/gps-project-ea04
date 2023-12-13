@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
@@ -33,7 +34,6 @@ class EditarFragment : Fragment() {
     private lateinit var jugadorRepository: JugadorRepository
     private lateinit var usuarioJugadorRepository: UsuarioJugadorRepository
     private lateinit var listener: OnEditarJugadorClickListener
-    private lateinit var db: BD
     private var Idusuario: Long = 0
     interface OnEditarJugadorClickListener {
         fun onEditClick(data: Jugador, estrella: Boolean)
@@ -55,10 +55,6 @@ class EditarFragment : Fragment() {
         super.onAttach(context)
         if (context is OnEditarJugadorClickListener) {
             listener = context
-            //Inicializacion BD
-            db= BD.getInstance(requireContext())!!
-            jugadorRepository = JugadorRepository.getInstance(db.jugadorDao(), getNetworkService())
-            usuarioJugadorRepository = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),jugadorRepository)
 
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
@@ -67,6 +63,11 @@ class EditarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+
+        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
+        jugadorRepository = appContainer.repositoryJugador
+        usuarioJugadorRepository = appContainer.repositoryUsuarioJugador
+
         val usuarioId = ((requireActivity() as? MainActivity)?.getUsuario())?.usuarioId?:0
         subscribeEditarJugadores(usuarioId)
         launchDataLoad { usuarioJugadorRepository }

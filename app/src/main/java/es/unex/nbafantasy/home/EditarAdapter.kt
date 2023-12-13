@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.roomBD.BD
@@ -115,8 +116,9 @@ class EditarAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
-        db = BD.getInstance(parent.context)!!
-        jugadorEquipoRepository = JugadorEquipoRepository.getInstance(db.jugadorEquipoDao())
+        val appContainer = (parent.context.applicationContext as NBAFantasyApplication).appContainer
+        jugadorEquipoRepository = appContainer.repositoryJugadorEquipo
+
         val binding = PlayerItemEditarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShowViewHolder(binding, onClick, onLongClick)
     }

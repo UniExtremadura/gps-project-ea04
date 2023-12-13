@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -25,7 +26,6 @@ class PantJuegoFragment : Fragment() {
 
     private lateinit var _binding:FragmentPantJuegoBinding
     private val binding get()=_binding!!
-    private lateinit var db: BD
     private lateinit var listaEquipo: List<JugadorEquipo>
     private lateinit var usuario:Usuario
     private lateinit var listener: ListaJugadoresFragment.OnJugadorClickListener
@@ -52,9 +52,10 @@ class PantJuegoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        db= BD.getInstance(requireContext())!!
-        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
-        repositoryJugadorEquipo = JugadorEquipoRepository.getInstance(db.jugadorEquipoDao())
+
+        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
+        repositoryJugador = appContainer.repositoryJugador
+        repositoryJugadorEquipo = appContainer.repositoryJugadorEquipo
 
         setUpUi()
         pulsarBoton()

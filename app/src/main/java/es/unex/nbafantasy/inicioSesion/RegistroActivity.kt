@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.UsuarioRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
@@ -21,16 +22,12 @@ class RegistroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        lifecycleScope.launch {
-            setContentView(binding.root)
+        val appContainer = (this.application as NBAFantasyApplication).appContainer
+        repositoryUsuario = appContainer.repositoryUsuario
 
-            //Inicializacion BD
-            db = BD.getInstance(applicationContext)!!
-            repositoryUsuario =UsuarioRepository.getInstance(db.usuarioDao())
-
-            setUpListener()
-        }
+        setUpListener()
     }
 
     private fun setUpListener() {

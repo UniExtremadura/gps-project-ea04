@@ -10,7 +10,7 @@ import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 import es.unex.nbafantasy.bd.roomBD.UsuarioDao
 import es.unex.nbafantasy.bd.roomBD.UsuarioJugadorDao
 
-class UsuarioRepository private constructor(
+class UsuarioRepository (
     private val usuarioDao: UsuarioDao) {
 
     suspend fun busquedaNombre(nombreUsuario: String): Usuario {
@@ -33,15 +33,6 @@ class UsuarioRepository private constructor(
         return usuarioDao.getUsuarioId(usuarioId.toInt())
     }
     companion object {
-        @Volatile
-        private var INSTANCE: UsuarioRepository? = null
-
-        fun getInstance(usuarioDao: UsuarioDao): UsuarioRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: UsuarioRepository(usuarioDao).also {
-                    INSTANCE = it
-                }
-            }
-        }
+        private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
     }
 }

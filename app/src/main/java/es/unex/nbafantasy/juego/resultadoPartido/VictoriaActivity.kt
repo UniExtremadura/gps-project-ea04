@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -23,7 +24,6 @@ import kotlin.random.Random
 class VictoriaActivity : AppCompatActivity() {
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
-    private lateinit var db: BD
     private lateinit var repositoryJugador: JugadorRepository
     private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
     private lateinit var listaJugador: List<UsuarioJugador>
@@ -53,10 +53,9 @@ class VictoriaActivity : AppCompatActivity() {
         binding = ActivityVictoriaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db= BD.getInstance(applicationContext)!!
-
-        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(), getNetworkService())
-        repositoryUsuarioJugador = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),repositoryJugador)
+        val appContainer = (this.application as NBAFantasyApplication).appContainer
+        repositoryJugador = appContainer.repositoryJugador
+        repositoryUsuarioJugador = appContainer.repositoryUsuarioJugador
 
 
         lifecycleScope.launch {

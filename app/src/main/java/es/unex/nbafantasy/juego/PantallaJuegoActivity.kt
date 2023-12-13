@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.ResultadoPartidoRepository
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -30,7 +31,6 @@ import kotlin.random.Random
 class PantallaJuegoActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityPantallaJuegoBinding
-    private lateinit var db: BD
     private lateinit var listaEquipo: List<JugadorEquipo>
     private lateinit var listaJugador: List<Jugador>
     private lateinit var usuario: Usuario
@@ -59,12 +59,13 @@ class PantallaJuegoActivity : AppCompatActivity() {
         binding = ActivityPantallaJuegoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        db= BD.getInstance(applicationContext)!!
         usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
 
-        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
-        repositoryJugadorEquipo = JugadorEquipoRepository.getInstance(db.jugadorEquipoDao())
-        repositoryResultadoPartido = ResultadoPartidoRepository.getInstance(db.resultadoPartidoDao())
+        val appContainer = (this.application as NBAFantasyApplication).appContainer
+
+        repositoryJugador = appContainer.repositoryJugador
+        repositoryJugadorEquipo = appContainer.repositoryJugadorEquipo
+        repositoryResultadoPartido = appContainer.repositoryResultadoPartido
 
         if(usuario!=null) {
             lifecycleScope.launch {

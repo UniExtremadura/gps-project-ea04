@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 
 class PerfilFragment : Fragment() {
-    private lateinit var bd: BD
     private lateinit var usuario: Usuario
     private lateinit var _binding: FragmentPerfilBinding
     private val binding get()=_binding!!
@@ -25,9 +24,8 @@ class PerfilFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Inicializacion BD
-        bd= BD.getInstance(requireContext())!!
-        repositoryUsuario =UsuarioRepository.getInstance(bd.usuarioDao())
+        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
+        repositoryUsuario = appContainer.repositoryUsuario
 
         cargarDatosUsuario()
         actualizarDatos()

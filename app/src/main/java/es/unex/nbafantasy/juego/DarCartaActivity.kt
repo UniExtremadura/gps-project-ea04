@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
+import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.Data.api.Data
@@ -17,6 +18,7 @@ import es.unex.nbafantasy.Data.model.NBAData
 import es.unex.nbafantasy.Data.model.NBASeasonData
 import es.unex.nbafantasy.Data.toSeasonAverages
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -33,7 +35,7 @@ class DarCartaActivity : AppCompatActivity() {
     private var _seasondatas: List<NBASeasonData> = emptyList()
     private lateinit var repositoryJugador: JugadorRepository
     private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
-    private lateinit var db: BD
+    private lateinit var repositoryJugadorEquipo: JugadorEquipoRepository
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
     private lateinit var usuario: Usuario
@@ -59,9 +61,12 @@ class DarCartaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //Inicializacion BD
-        db= BD.getInstance(applicationContext)!!
-        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
-        repositoryUsuarioJugador = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),repositoryJugador)
+        val appContainer = (this.application as NBAFantasyApplication).appContainer
+
+        repositoryJugador = appContainer.repositoryJugador
+        repositoryUsuarioJugador = appContainer.repositoryUsuarioJugador
+        repositoryJugadorEquipo = appContainer.repositoryJugadorEquipo
+
         usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 
         if(usuario!=null) {
@@ -88,7 +93,7 @@ class DarCartaActivity : AppCompatActivity() {
 
 
     private suspend fun setUpUI() {
-        val numJugadoresEnBD = db?.jugadorDao()?.countJugadores() ?: 0
+        val numJugadoresEnBD = getAll().size
         if (_datas.isEmpty() && _seasondatas.isEmpty() && numJugadoresEnBD == 0) {
             binding.carga.visibility = View.VISIBLE
             binding.playersName1.visibility = View.GONE
@@ -110,6 +115,11 @@ class DarCartaActivity : AppCompatActivity() {
             }
         }
     }
+
+    private suspend fun getAll(): List<Jugador>{
+        return repositoryJugador.getAll()
+    }
+
     private suspend fun obtenerJugadores() {
         try {
             val usuarioId = usuario?.usuarioId
@@ -138,8 +148,7 @@ class DarCartaActivity : AppCompatActivity() {
     }
 
     private suspend fun obtenerPosicionAleatoria(vararg exclusiones: Int): Int {
-
-        val numJugadores = (db.jugadorDao().getAll()).size
+        val numJugadores = getAll().size
         val random = Random(System.currentTimeMillis())
         val listaExclusiones = exclusiones.toList()
 
@@ -157,15 +166,19 @@ class DarCartaActivity : AppCompatActivity() {
     }
 
     private suspend fun insertarJugadorEquipo(posicionJugador: Int) {
-        val jugadorEquipo = JugadorEquipo(usuario.usuarioId?:0, posicionJugador.toLong())
-        db.jugadorEquipoDao().insertar(jugadorEquipo)
+        repositoryJugadorEquipo.insertar(usuario.usuarioId?:0, posicionJugador.toLong())
     }
 
     private suspend fun mostrarNombresJugadores(posicionJugador: Int, textView: TextView) {
-        val jugador = db.jugadorDao().getJugadorId(posicionJugador.toLong())
+        val jugador = obtenerJugadorById(posicionJugador.toLong())
         val nombreApellido = "${jugador.nombre} ${jugador.apellido}"
         textView.text = nombreApellido
     }
+
+    private suspend fun obtenerJugadorById(jugadorId: Long): Jugador{
+        return repositoryJugador.getJugadorById(jugadorId)
+    }
+
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)

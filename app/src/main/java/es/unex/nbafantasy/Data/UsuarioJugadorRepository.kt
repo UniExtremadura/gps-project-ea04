@@ -9,9 +9,10 @@ import es.unex.nbafantasy.bd.roomBD.JugadorDao
 import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 import es.unex.nbafantasy.bd.roomBD.UsuarioJugadorDao
 
-class UsuarioJugadorRepository private constructor(
+class UsuarioJugadorRepository(
     private val usuarioJugadorDao: UsuarioJugadorDao,
     private val jugadorRepository: JugadorRepository ) {
+
     fun obtenerJugadoresDeUsuario(usuarioId: Long): LiveData<List<Jugador>> {
         return usuarioJugadorDao.getJugadorByUsuario(usuarioId).switchMap { listaUsuarioJugadores ->
             val idsJugadores = listaUsuarioJugadores.map { it.jugadorId }
@@ -31,19 +32,7 @@ class UsuarioJugadorRepository private constructor(
         }
 
         companion object {
-        @Volatile
-        private var INSTANCE: UsuarioJugadorRepository? = null
-
-        fun getInstance(
-            usuarioJugadorDao: UsuarioJugadorDao,
-            jugadorRepository: JugadorRepository
-        ): UsuarioJugadorRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: UsuarioJugadorRepository(usuarioJugadorDao, jugadorRepository).also {
-                    INSTANCE = it
-                }
-            }
+            private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
         }
-    }
 }
 

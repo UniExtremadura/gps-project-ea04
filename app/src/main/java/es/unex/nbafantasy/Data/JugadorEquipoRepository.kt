@@ -6,7 +6,7 @@ import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.roomBD.JugadorDao
 import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 
-class JugadorEquipoRepository private constructor(
+class JugadorEquipoRepository(
     private val jugadorEquipoDao: JugadorEquipoDao) {
     val jugadoresEquipo = jugadorEquipoDao.getAllJugadorEquipo()
 
@@ -25,15 +25,6 @@ class JugadorEquipoRepository private constructor(
 
 
     companion object {
-        @Volatile
-        private var INSTANCE: JugadorEquipoRepository? = null
-
-        fun getInstance(jugadorEquipoDao: JugadorEquipoDao): JugadorEquipoRepository {
-            return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: JugadorEquipoRepository(jugadorEquipoDao).also {
-                    INSTANCE = it
-                }
-            }
-        }
+        private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
     }
 }

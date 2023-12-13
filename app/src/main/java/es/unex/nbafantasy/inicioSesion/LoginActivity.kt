@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityLoginBinding
@@ -24,15 +25,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
 
-        lifecycleScope.launch {
-            setContentView(binding.root)
-            //Inicializacion BD
-            db= BD.getInstance(applicationContext)!!
-            repositoryUsuario =UsuarioRepository.getInstance(db.usuarioDao())
+        setContentView(binding.root)
 
-            setUpListener()
-            leerAutologin()
-        }
+        val appContainer = (this.application as NBAFantasyApplication).appContainer
+        repositoryUsuario = appContainer.repositoryUsuario
+
+        setUpListener()
+        leerAutologin()
     }
 
     private fun leerAutologin(){

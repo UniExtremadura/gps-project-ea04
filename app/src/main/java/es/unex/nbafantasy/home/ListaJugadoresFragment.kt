@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -21,9 +22,7 @@ import kotlinx.coroutines.launch
 class ListaJugadoresFragment : Fragment() {
     private var _datas: List<Jugador> = emptyList()
     private lateinit var listener: OnJugadorClickListener
-    private lateinit var db: BD
-
-    private lateinit var repository: JugadorRepository
+    private lateinit var jugadorRepository: JugadorRepository
 
     interface OnJugadorClickListener {
         fun onShowClick(data: Jugador)
@@ -37,9 +36,6 @@ class ListaJugadoresFragment : Fragment() {
         super.onAttach(context)
         if (context is OnJugadorClickListener) {
             listener = context
-            //Inicializacion BD
-            db= BD.getInstance(context)!!
-            repository = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
 
 
         } else {
@@ -57,12 +53,15 @@ class ListaJugadoresFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
+        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
+        jugadorRepository = appContainer.repositoryJugador
+
         subscribeListaJugadores(adapter)
-        launchDataLoad { repository }
+        launchDataLoad { jugadorRepository }
     }
 
     private fun subscribeListaJugadores(adapter: ListaJugadoresAdapter) {
-        repository.jugadores.observe(viewLifecycleOwner) { jugadores ->
+        jugadorRepository.jugadores.observe(viewLifecycleOwner) { jugadores ->
             adapter.updateData(jugadores)
         }
     }
