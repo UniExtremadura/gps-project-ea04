@@ -16,7 +16,7 @@ interface UsuarioJugadorDao {
      * @return Una lista de objetos [UsuarioJugador] que pertenecen al usuario especificado.
      */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
-    suspend fun getJugadorByUsuario(usuarioId: Long): List<UsuarioJugador>
+    suspend fun getTodosJugadores(usuarioId: Long): List<UsuarioJugador>
 
     /**
      * Obtiene una asociación específica de usuario y jugador por sus identificadores únicos.

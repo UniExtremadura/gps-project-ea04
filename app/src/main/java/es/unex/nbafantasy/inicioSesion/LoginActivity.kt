@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.Data.UsuarioRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var db: BD
-
+    private lateinit var repositoryUsuario: UsuarioRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
             setContentView(binding.root)
             //Inicializacion BD
             db= BD.getInstance(applicationContext)!!
+            repositoryUsuario =UsuarioRepository.getInstance(db.usuarioDao())
 
             setUpListener()
             leerAutologin()
@@ -43,12 +46,9 @@ class LoginActivity : AppCompatActivity() {
             binding.etNombre.setText(nombreUsuario)
             binding.etContrasena.setText(contrasena)
         }
-
     }
 
-
     private fun setUpListener(){
-
         with(binding) {
             btAcceso.setOnClickListener {
                 checkLogin()
@@ -58,8 +58,6 @@ class LoginActivity : AppCompatActivity() {
                 navegacionRegistroActivity()
             }
         }
-
-
     }
 
     private fun checkLogin(){
@@ -73,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
                 notificarErrorCredencial(comprobar.msg)
             }else{
                 lifecycleScope.launch{
-                    val usuario = db?.usuarioDao()?.busquedaNombre(binding.etNombre.text.toString())
+                    val usuario = busquedaNombre(binding.etNombre.text.toString())
                     if (usuario != null) {
                         val comprobarContra = ComprobacionCredenciales.compararContrasena(
                             binding.etContrasena.text.toString(),
@@ -92,6 +90,10 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
+        return repositoryUsuario.busquedaNombre(nombreUsuario)
     }
 
     private fun navegacionMainActivity(usuario: Usuario, mensaje: String){

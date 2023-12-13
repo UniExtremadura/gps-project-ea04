@@ -119,9 +119,10 @@ class PantJuegoFragment : Fragment() {
     }
 
     private suspend fun obtenerNombre(jugadorId:Long): String {
-        val jugador = repositoryJugador.getJugadorByUsuario(jugadorId)
+        val jugador = repositoryJugador.getJugadorById(jugadorId)
         return  jugador.nombre + " " + jugador.apellido
     }
+
     private fun initNav() {
         PantallaJuegoActivity.start(context, usuario)
     }

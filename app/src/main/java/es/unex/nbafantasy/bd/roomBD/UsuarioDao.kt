@@ -65,14 +65,6 @@ interface UsuarioDao {
     suspend fun actualizarUsuario(usuarioId: Long, nuevoNombre: String, nuevaContrasena: String)
 
     /**
-     * Actualiza un Usuario en la tabla.
-     *
-     * @param usuario El objeto [Usuario] a actualizar.
-     */
-    @Update
-    suspend fun actualizarUsuario(usuario: Usuario)
-
-    /**
      * Elimina todos los usuarios de la tabla.
      */
     @Query("DELETE FROM usuario")

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.UsuarioRepository
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentPerfilBinding
@@ -19,10 +20,14 @@ class PerfilFragment : Fragment() {
     private lateinit var usuario: Usuario
     private lateinit var _binding: FragmentPerfilBinding
     private val binding get()=_binding!!
+    private lateinit var repositoryUsuario: UsuarioRepository
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Inicializacion BD
         bd= BD.getInstance(requireContext())!!
+        repositoryUsuario =UsuarioRepository.getInstance(bd.usuarioDao())
 
         cargarDatosUsuario()
         actualizarDatos()
@@ -57,17 +62,32 @@ class PerfilFragment : Fragment() {
 
                     if (comprobar.fallo) {
                         notificarMensaje(comprobar.msg)
-                    } else if (bd?.usuarioDao()
-                            ?.busquedaNombre(binding.etNombre.text.toString()) != null &&
-                        bd?.usuarioDao()?.buscarIdByNombre(binding.etNombre.text.toString())?.toLong() !=usuario.usuarioId) {
+                    } else if (busquedaNombre(binding.etNombre.text.toString()) != null &&
+                        buscarIdByNombre(binding.etNombre.text.toString())?.toLong() !=usuario.usuarioId) {
                         notificarMensaje("Nombre de usuario ocupado")
                     } else {
-                        bd.usuarioDao().actualizarUsuario(usuario.usuarioId ?: 0, etNombre.text.toString(), etContrasena1.text.toString())
+                        actualizar(etNombre.text.toString(), etContrasena1.text.toString())
                         notificarMensaje("Usuario actualizado")
                     }
                 }
             }
         }
+    }
+
+    private suspend fun actualizarUsuario(nuevoNombre:String, nuevaContrasena:String){
+        repositoryUsuario.actualizar(usuario.usuarioId?:0,nuevoNombre,nuevaContrasena)
+    }
+
+    private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
+        return repositoryUsuario.busquedaNombre(nombreUsuario)
+    }
+
+    private suspend fun buscarIdByNombre(nombreUsuario:String): Int{
+        return repositoryUsuario.buscarIdByNombre(nombreUsuario)
+    }
+
+    private suspend fun actualizar(nuevoNombre:String, nuevaContrasena:String){
+        repositoryUsuario.actualizar(usuario.usuarioId?:0, nuevoNombre, nuevaContrasena)
     }
 
     private fun notificarMensaje(mensaje: String){

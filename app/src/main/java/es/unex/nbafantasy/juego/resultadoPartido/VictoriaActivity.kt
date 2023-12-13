@@ -7,9 +7,13 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.JugadorEquipoRepository
+import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
+import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
@@ -24,8 +28,11 @@ class VictoriaActivity : AppCompatActivity() {
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var db: BD
-    private lateinit var listaJugador: List<Jugador>
+    private lateinit var listaJugador: List<UsuarioJugador>
     private lateinit var binding:ActivityVictoriaBinding
+
+    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
+    private lateinit var repositoryJugador: JugadorRepository
 
     companion object {
         const val USUARIO = "USUARIO"
@@ -53,6 +60,10 @@ class VictoriaActivity : AppCompatActivity() {
 
         db= BD.getInstance(applicationContext)!!
 
+        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(), getNetworkService())
+        repositoryUsuarioJugador = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),repositoryJugador)
+
+
         lifecycleScope.launch {
             usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
             resultadoPartido=(intent?.getSerializableExtra(RESULTADOPARTIDO) as? ResultadoPartido)!!
@@ -64,11 +75,11 @@ class VictoriaActivity : AppCompatActivity() {
     private suspend fun darCarta(){
         var valido = false
         val random = Random(System.currentTimeMillis())
-        listaJugador = db.jugadorDao().getAll()
+        listaJugador = getAllMisJugadores()
         val numJugadores = listaJugador.size
 
         var jugadorNuevo: Int
-        if (db.usuarioJugadorDao().getAll().size == 29) {
+        if (listaJugador.size == 29) {
             with(binding) {
                 val x = "Mis puntos: " + resultadoPartido.misPuntos.toString()
                 misPuntos.setText(x)
@@ -80,9 +91,8 @@ class VictoriaActivity : AppCompatActivity() {
             do {
                 jugadorNuevo = random.nextInt(numJugadores) + 1
                 if(jugadorNuevo!=null){
-                    if (db.usuarioJugadorDao().getUnUsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong()) == null) {
-                        val usuarioJugador = UsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong())
-                        db.usuarioJugadorDao().insertar(usuarioJugador)
+                    if (getUnUsuarioJugador(jugadorNuevo.toLong()) == null) {
+                        insertarUsuarioJugador(jugadorNuevo.toLong())
                         valido = true
                     }
                 }
@@ -97,14 +107,35 @@ class VictoriaActivity : AppCompatActivity() {
             misPuntos.setText(x)
             val y = "Puntos rival: " + resultadoPartido.puntosRivales.toString()
             puntosRival.setText(y)
-            val jugador = db.jugadorDao().getJugadorId(jugadorNuevo)
-            val nombreApellido =
-                db.jugadorDao().getJugadorId(jugador.jugadorId ?: 0).nombre + " " +
-                        db.jugadorDao().getJugadorId(jugador.jugadorId ?: 0).apellido
+            val jugador = obtenerJugadorById(jugadorNuevo)
+            val nombreApellido = getNombre(jugador.jugadorId ?: 0)
             jugadorGanado.setText(nombreApellido)
 
         }
     }
+
+    private suspend fun getAllMisJugadores(): List<UsuarioJugador>{
+        return repositoryUsuarioJugador.getAllMisJugadores(usuario.usuarioId?:0)
+    }
+
+    private suspend fun obtenerJugadorById(jugadorId: Long): Jugador{
+        return repositoryJugador.getJugadorById(jugadorId)
+    }
+
+    private suspend fun getNombre(jugadorId:Long): String {
+        val jugador = repositoryJugador.getJugadorById(jugadorId)
+        return  jugador.nombre + " " + jugador.apellido
+    }
+
+    private suspend fun getUnUsuarioJugador(jugadorId: Long): UsuarioJugador{
+        return repositoryUsuarioJugador.getUnUsuarioJugador(usuario.usuarioId?:0,jugadorId)
+    }
+
+    private suspend fun insertarUsuarioJugador(jugadorId:Long){
+        val usuarioJugador= UsuarioJugador(usuario.usuarioId?:0, jugadorId)
+        repositoryUsuarioJugador.insertarUsuarioJugador(usuarioJugador)
+    }
+
     private fun setUpListener(){
         val btnContinuar = findViewById<Button>(R.id.bt_salir_victoria)
         btnContinuar.setOnClickListener{

@@ -69,7 +69,7 @@ class EditarFragment : Fragment() {
                     val usuario = (requireActivity() as? MainActivity)?.getUsuario()
                     Idusuario = usuario?.usuarioId?:0
 
-                    listaUsuarioJugador = db?.usuarioJugadorDao()?.getJugadorByUsuario(Idusuario) ?: emptyList()
+                    listaUsuarioJugador = db?.usuarioJugadorDao()?.getTodosJugadores(Idusuario) ?: emptyList()
 
                     //guarda en datas todos los usuarios que
                     for(jug in listaUsuarioJugador){

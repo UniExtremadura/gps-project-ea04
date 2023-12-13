@@ -1,5 +1,6 @@
 package es.unex.nbafantasy.Data
 
+import androidx.lifecycle.LiveData
 import com.example.example.SeasonData
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
@@ -17,7 +18,6 @@ class JugadorRepository private constructor(
     private val nbaFantasyApi: NBAFantasyApi
 ) {
     private var lastUpdateTimeMillis: Long = 0L
-    val jugadores = jugadorDao.getAllJugadores()
     private var pesoPuntos = 0.25
     private var pesoTapones = 0.12
     private var pesoRebotes = 0.12
@@ -25,8 +25,13 @@ class JugadorRepository private constructor(
     private var pesoAsistencias = 0.2
     private var pesoErrores = 0.25
 
+    val jugadores= jugadorDao.getAllJugadores()
 
-    suspend fun getJugadorByUsuario(jugadorId: Long):Jugador{
+    suspend fun getAll(): List<Jugador> {
+        return jugadorDao.getAll()
+    }
+
+    suspend fun getJugadorById(jugadorId: Long):Jugador{
         return jugadorDao.getJugadorId(jugadorId)
     }
 

@@ -14,10 +14,6 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceFragmentCompat
-import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.bd.elemBD.Usuario
-
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.juego.resultadoPartido.VictoriaActivity
 
 class AjustesFragment : PreferenceFragmentCompat(){

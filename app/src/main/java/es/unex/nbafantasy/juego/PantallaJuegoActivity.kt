@@ -6,7 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.JugadorEquipoRepository
+import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.ResultadoPartidoRepository
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.getNetworkService
@@ -32,7 +35,10 @@ class PantallaJuegoActivity : AppCompatActivity() {
     private lateinit var listaJugador: List<Jugador>
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
+
     private lateinit var repositoryResultadoPartido: ResultadoPartidoRepository
+    private lateinit var repositoryJugadorEquipo: JugadorEquipoRepository
+    private lateinit var repositoryJugador: JugadorRepository
 
     companion object{
         const val USUARIO="USUARIO"
@@ -55,6 +61,9 @@ class PantallaJuegoActivity : AppCompatActivity() {
 
         db= BD.getInstance(applicationContext)!!
         usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+
+        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
+        repositoryJugadorEquipo = JugadorEquipoRepository.getInstance(db.jugadorEquipoDao())
         repositoryResultadoPartido = ResultadoPartidoRepository.getInstance(db.resultadoPartidoDao())
 
         if(usuario!=null) {
@@ -76,7 +85,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
             val usuarioId = usuario?.usuarioId
 
             if (usuarioId != null) {
-                listaEquipo = db.jugadorEquipoDao().getJugadoresByUsuario(usuarioId)
+                listaEquipo = obtenerListaJugadores()
 
                 mostrarJugadorEnTextView(0, miJugador1)
                 mostrarJugadorEnTextView(1, miJugador2)
@@ -89,12 +98,16 @@ class PantallaJuegoActivity : AppCompatActivity() {
         return 0.0
     }
 
+    private suspend fun obtenerListaJugadores(): List<JugadorEquipo>{
+        return repositoryJugadorEquipo.getJugadoresUsuario(usuario.usuarioId?:0)
+    }
+
     private suspend fun mostrarJugadorEnTextView(index: Int, textView: TextView) {
         val usuarioJugador = listaEquipo.getOrNull(index)
         if (usuarioJugador != null) {
             val jugadorId = usuarioJugador.jugadorId
-            val nombreApellido =
-                "${db.jugadorDao().getJugadorId(jugadorId).nombre} ${db.jugadorDao().getJugadorId(jugadorId).apellido}"
+            val nombreApellido = getNombre(jugadorId)
+
             textView.text = nombreApellido
         }
     }
@@ -104,18 +117,18 @@ class PantallaJuegoActivity : AppCompatActivity() {
         val jugador2 = listaEquipo.getOrNull(1)
         val jugador3 = listaEquipo.getOrNull(2)
 
-        val mediaJugador1 = jugador1?.let { db.jugadorDao().getJugadorId(it.jugadorId).mediaGeneralPartido } ?: 0.0
-        val mediaJugador2 = jugador2?.let { db.jugadorDao().getJugadorId(it.jugadorId).mediaGeneralPartido } ?: 0.0
-        val mediaJugador3 = jugador3?.let { db.jugadorDao().getJugadorId(it.jugadorId).mediaGeneralPartido } ?: 0.0
+
+        val mediaJugador1 = jugador1?.let { getJugadorById(it.jugadorId).mediaGeneralPartido } ?: 0.0
+        val mediaJugador2 = jugador2?.let { getJugadorById(it.jugadorId).mediaGeneralPartido } ?: 0.0
+        val mediaJugador3 = jugador3?.let { getJugadorById(it.jugadorId).mediaGeneralPartido } ?: 0.0
 
         return mediaJugador1 + mediaJugador2 + mediaJugador3
     }
 
-
-
     private suspend fun mostrarRival():Double{
         val random= Random(System.currentTimeMillis())
-        listaJugador = db.jugadorDao().getAll()
+        listaJugador = getAll()
+
         val numJugadores = listaJugador.size
 
         var posicionJugador1 = random.nextInt(numJugadores)+1
@@ -131,32 +144,39 @@ class PantallaJuegoActivity : AppCompatActivity() {
         }while(posicionJugador1 ==posicionJugador3 || posicionJugador2 ==posicionJugador3)
 
         with(binding) {
-            val usuarioJugador1=db.jugadorDao().getJugadorId(posicionJugador1.toLong()).jugadorId
-            val nombreApellido1 =
-                db.jugadorDao().getJugadorId(posicionJugador1.toLong()).nombre + " " +
-                        db.jugadorDao().getJugadorId(posicionJugador1.toLong()).apellido
+            val usuarioJugador1=getJugadorById(posicionJugador1.toLong())
+            val nombreApellido1=getNombre(usuarioJugador1.jugadorId?:0.toLong())
             equipoContrarioJugador1.setText(nombreApellido1)
 
-            val usuarioJugador2=db.jugadorDao().getJugadorId(posicionJugador2.toLong()).jugadorId
-            val nombreApellido2 =
-                db.jugadorDao().getJugadorId(posicionJugador2.toLong()).nombre + " " +
-                        db.jugadorDao().getJugadorId(posicionJugador2.toLong()).apellido
+            val usuarioJugador2=getJugadorById(posicionJugador2.toLong())
+            val nombreApellido2=getNombre(usuarioJugador2.jugadorId?:0.toLong())
             equipoContrarioJugador2.setText(nombreApellido2)
 
-            val usuarioJugador3=db.jugadorDao().getJugadorId(posicionJugador3.toLong()).jugadorId
-            val nombreApellido3 =
-                db.jugadorDao().getJugadorId(posicionJugador3.toLong()).nombre + " " +
-                        db.jugadorDao().getJugadorId(posicionJugador3.toLong()).apellido
+            val usuarioJugador3=getJugadorById(posicionJugador3.toLong())
+            val nombreApellido3=getNombre(usuarioJugador3.jugadorId?:0.toLong())
             equipoContrarioJugador3.setText(nombreApellido3)
 
+
             if(usuarioJugador1!=null && usuarioJugador2!=null && usuarioJugador3!=null) {
-                val sumaTotal = db.jugadorDao().getJugadorId(usuarioJugador1).mediaGeneralPartido +
-                        db.jugadorDao().getJugadorId(usuarioJugador2).mediaGeneralPartido +
-                        db.jugadorDao().getJugadorId(usuarioJugador3).mediaGeneralPartido
+                val sumaTotal = usuarioJugador1.mediaGeneralPartido + usuarioJugador2.mediaGeneralPartido +
+                        usuarioJugador3.mediaGeneralPartido
                 return sumaTotal
             }
         }
         return 0.0
+    }
+
+    private suspend fun getAll(): List<Jugador>{
+        return repositoryJugador.getAll()
+    }
+
+    private suspend fun getJugadorById(jugadorId: Long): Jugador{
+        return repositoryJugador.getJugadorById(jugadorId)
+    }
+
+    private suspend fun getNombre(jugadorId:Long): String {
+        val jugador = repositoryJugador.getJugadorById(jugadorId)
+        return  jugador.nombre + " " + jugador.apellido
     }
 
     private fun setUpListener(resultado:Double, puntosMiEquipo:Double,puntosRival:Double){

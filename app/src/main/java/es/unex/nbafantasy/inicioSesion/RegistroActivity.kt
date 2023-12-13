@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.UsuarioRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
@@ -14,8 +15,8 @@ import kotlinx.coroutines.launch
 
 class RegistroActivity : AppCompatActivity() {
     private lateinit var db: BD
-
     private lateinit var binding:ActivityRegistroBinding
+    private lateinit var repositoryUsuario: UsuarioRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,8 @@ class RegistroActivity : AppCompatActivity() {
 
             //Inicializacion BD
             db = BD.getInstance(applicationContext)!!
+            repositoryUsuario =UsuarioRepository.getInstance(db.usuarioDao())
+
             setUpListener()
         }
     }
@@ -56,8 +59,8 @@ class RegistroActivity : AppCompatActivity() {
                         etContrasena1.text.toString()
                     )
 
-                    if (db?.usuarioDao()?.busquedaNombre(binding.etNombre.text.toString())==null) {
-                        val id = db?.usuarioDao()?.insertar(usuario)
+                    if (busquedaNombre(binding.etNombre.text.toString())==null) {
+                        val id = insertarUsuario(usuario)
                         val usuario = Usuario(null, etNombre.text.toString(), etContrasena1.text.toString())
 
                         usuario.usuarioId=id
@@ -76,8 +79,15 @@ class RegistroActivity : AppCompatActivity() {
         DarCartaActivity.start(this,usuario)
     }
 
-
     private fun notificarErrorCredencial(mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
+    }
+
+    private suspend fun insertarUsuario(usuario:Usuario):Long{
+        return repositoryUsuario.insertar(usuario)
+    }
+
+    private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
+        return repositoryUsuario.busquedaNombre(nombreUsuario)
     }
 }
