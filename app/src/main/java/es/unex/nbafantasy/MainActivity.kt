@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -15,13 +14,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.example.SeasonData
-import es.unex.nbafantasy.Data.api.Data
-import es.unex.nbafantasy.Data.model.NBAData
-import es.unex.nbafantasy.Data.model.NBASeasonData
-import dagger.hilt.android.AndroidEntryPoint
-import es.unex.nbafantasy.api.APIError
-import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario

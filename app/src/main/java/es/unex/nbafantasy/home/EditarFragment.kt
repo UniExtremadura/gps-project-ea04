@@ -10,9 +10,12 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
+import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
@@ -20,13 +23,15 @@ import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentEditarBinding
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
 import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
 class EditarFragment : Fragment() {
     private var _todosJugadores: List<Jugador> = emptyList()
     private var _datas: MutableList<Jugador> = mutableListOf()
-    private var _JugadoresEnEquipo: MutableList<Jugador> = mutableListOf()
+    private lateinit var jugadorRepository: JugadorRepository
+    private lateinit var usuarioJugadorRepository: UsuarioJugadorRepository
     private lateinit var listener: OnEditarJugadorClickListener
     private lateinit var db: BD
     private var Idusuario: Long = 0
@@ -52,6 +57,8 @@ class EditarFragment : Fragment() {
             listener = context
             //Inicializacion BD
             db= BD.getInstance(requireContext())!!
+            jugadorRepository = JugadorRepository.getInstance(db.jugadorDao(), getNetworkService())
+            usuarioJugadorRepository = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),jugadorRepository)
 
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
@@ -60,47 +67,24 @@ class EditarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
-        lifecycleScope.launch {
-            if (_datas.isEmpty()) {
+        val usuarioId = ((requireActivity() as? MainActivity)?.getUsuario())?.usuarioId?:0
+        subscribeEditarJugadores(usuarioId)
+        launchDataLoad { usuarioJugadorRepository }
+    }
+    private fun subscribeEditarJugadores(usuarioId: Long) {
+        usuarioJugadorRepository.obtenerJugadoresDeUsuario(usuarioId).observe(viewLifecycleOwner) { jugadores ->
+            adapter.updateData(jugadores, usuarioId)
+        }
+    }
+    private fun launchDataLoad(block: suspend () -> Unit): Job {
+        return lifecycleScope.launch {
+            try {
                 binding.spinnerEditar.visibility = View.VISIBLE
-                try {
-                    _todosJugadores = db?.jugadorDao()?.getAll() ?: emptyList()//todos los jugadores
-
-                    val usuario = (requireActivity() as? MainActivity)?.getUsuario()
-                    Idusuario = usuario?.usuarioId?:0
-
-                    listaUsuarioJugador = db?.usuarioJugadorDao()?.getTodosJugadores(Idusuario) ?: emptyList()
-
-                    //guarda en datas todos los usuarios que
-                    for(jug in listaUsuarioJugador){
-                        for(todos in _todosJugadores) {
-                            if(jug.jugadorId == todos.jugadorId) {
-                                if (!_datas.contains(todos)) {
-                                    // Insertar "todos" en la lista _datas
-                                    _datas.add(todos)
-                                }
-                            }
-                        }
-                    }
-
-                    /*for(jug in listaUsuarioEquipo){
-                        for(todos in _todosJugadores) {
-                            if(jug.jugadorId == todos.jugadorId) {
-                                if (!_JugadoresEnEquipo.contains(todos)) {
-                                    // Insertar "todos" en la lista _datas
-                                    _JugadoresEnEquipo.add(todos)
-                                }
-                            }
-                        }
-                    }*/
-
-                    adapter.updateData(_datas,Idusuario)
-
-                } catch (error: APIError) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                } finally {
-                    binding.spinnerEditar.visibility = View.GONE
-                }
+                block()
+            } catch (error: APIError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            } finally {
+                binding.spinnerEditar.visibility = View.GONE
             }
         }
     }

@@ -91,7 +91,7 @@ class ResultadoFragment : Fragment() {
 
         }
 
-        android.util.Log.d("DiscoverFragment", "setUpRecyclerView")
+        android.util.Log.d("ResultadoFragment", "setUpRecyclerView")
 
     }
     override fun onDestroyView() {

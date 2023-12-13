@@ -34,7 +34,9 @@ class JugadorRepository private constructor(
     suspend fun getJugadorById(jugadorId: Long):Jugador{
         return jugadorDao.getJugadorId(jugadorId)
     }
-
+    fun getJugadoresByIds(ids: List<Long>): LiveData<List<Jugador>> {
+        return jugadorDao.getJugadoresByIds(ids)
+    }
     suspend fun tryUpdateRecentPlayersCache() {
         if (shouldUpdatePlayersCache()) {
             fetchRecentPlayers()

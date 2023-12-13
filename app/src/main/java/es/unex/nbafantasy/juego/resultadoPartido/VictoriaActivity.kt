@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
@@ -28,11 +30,10 @@ class VictoriaActivity : AppCompatActivity() {
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var db: BD
-    private lateinit var listaJugador: List<UsuarioJugador>
-    private lateinit var binding:ActivityVictoriaBinding
-
-    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
     private lateinit var repositoryJugador: JugadorRepository
+    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
+    private lateinit var listaJugador: List<Jugador>
+    private lateinit var binding:ActivityVictoriaBinding
 
     companion object {
         const val USUARIO = "USUARIO"

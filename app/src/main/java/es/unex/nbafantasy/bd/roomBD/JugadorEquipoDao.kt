@@ -7,11 +7,14 @@ import androidx.room.Insert
 import androidx.room.Query
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
+import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 
 @Dao
 interface JugadorEquipoDao {
+    @Query("SELECT * FROM JugadorEquipo")
+    fun getAllJugadorEquipo(): LiveData<List<JugadorEquipo>>
     /**
      * Obtiene la lista de jugadores asociados a un usuario específico.
      *

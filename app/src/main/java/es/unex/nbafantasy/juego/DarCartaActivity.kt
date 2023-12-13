@@ -170,4 +170,5 @@ class DarCartaActivity : AppCompatActivity() {
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
     }
+
 }

@@ -57,15 +57,13 @@ class ListaJugadoresFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
-        subscribeUi(adapter)
-        launchDataLoad {
-            repository.tryUpdateRecentPlayersCache()
-        }
+        subscribeListaJugadores(adapter)
+        launchDataLoad { repository }
     }
 
-    private fun subscribeUi(adapter: ListaJugadoresAdapter) {
-        repository.jugadores.observe(viewLifecycleOwner) {
-                _datas -> adapter.updateData(_datas)
+    private fun subscribeListaJugadores(adapter: ListaJugadoresAdapter) {
+        repository.jugadores.observe(viewLifecycleOwner) { jugadores ->
+            adapter.updateData(jugadores)
         }
     }
 
@@ -96,7 +94,7 @@ class ListaJugadoresFragment : Fragment() {
 
         }
 
-        android.util.Log.d("DiscoverFragment", "setUpRecyclerView")
+        android.util.Log.d("ListaJugadoresFragment", "setUpRecyclerView")
 
     }
 
