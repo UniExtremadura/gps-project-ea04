@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
+import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
@@ -24,6 +27,8 @@ class VictoriaActivity : AppCompatActivity() {
     private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var db: BD
+    private lateinit var repositoryJugador: JugadorRepository
+    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
     private lateinit var listaJugador: List<Jugador>
     private lateinit var binding:ActivityVictoriaBinding
 
@@ -52,6 +57,8 @@ class VictoriaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db= BD.getInstance(applicationContext)!!
+        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(), getNetworkService())
+        repositoryUsuarioJugador = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),repositoryJugador)
 
         lifecycleScope.launch {
             usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
@@ -82,7 +89,8 @@ class VictoriaActivity : AppCompatActivity() {
                 if(jugadorNuevo!=null){
                     if (db.usuarioJugadorDao().getUnUsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong()) == null) {
                         val usuarioJugador = UsuarioJugador(usuario.usuarioId ?: 0, jugadorNuevo.toLong())
-                        db.usuarioJugadorDao().insertar(usuarioJugador)
+                        repositoryUsuarioJugador.insertarUsuarioJugador(usuarioJugador)
+                        //db.usuarioJugadorDao().insertar(usuarioJugador)
                         valido = true
                     }
                 }

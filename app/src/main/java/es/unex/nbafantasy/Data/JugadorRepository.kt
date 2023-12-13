@@ -1,5 +1,6 @@
 package es.unex.nbafantasy.Data
 
+import androidx.lifecycle.LiveData
 import com.example.example.SeasonData
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
@@ -29,7 +30,9 @@ class JugadorRepository private constructor(
     suspend fun getJugadorByUsuario(jugadorId: Long):Jugador{
         return jugadorDao.getJugadorId(jugadorId)
     }
-
+    fun getJugadoresByIds(ids: List<Long>): LiveData<List<Jugador>> {
+        return jugadorDao.getJugadoresByIds(ids)
+    }
     suspend fun tryUpdateRecentPlayersCache() {
         if (shouldUpdatePlayersCache()) {
             fetchRecentPlayers()

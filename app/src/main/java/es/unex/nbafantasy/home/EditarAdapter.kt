@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import es.unex.nbafantasy.Data.JugadorEquipoRepository
+import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.roomBD.BD
@@ -24,6 +26,7 @@ class EditarAdapter(
     private val jugadoresSeleccionados = mutableListOf<Jugador>()
     private lateinit var listaUsuarioEquipo: List<JugadorEquipo>
     private lateinit var db: BD
+    private lateinit var jugadorEquipoRepository: JugadorEquipoRepository
 
     inner class ShowViewHolder(
         private val binding: PlayerItemEditarBinding,
@@ -40,7 +43,8 @@ class EditarAdapter(
                 playersStatsEdit.text = "Estadisticas: " + "${nbadata.mediaGeneralPartido}"
 
                 lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                    listaUsuarioEquipo = db?.jugadorEquipoDao()?.getJugadoresByUsuario(usuario) ?: emptyList()
+                    //listaUsuarioEquipo = db?.jugadorEquipoDao()?.getJugadoresByUsuario(usuario) ?: emptyList()
+                    listaUsuarioEquipo = jugadorEquipoRepository.getJugadoresUsuario(usuario)
                     for (equipo in listaUsuarioEquipo) {
                         if (equipo.jugadorId == nbadata.jugadorId) {
                             isFavorite = true
@@ -102,16 +106,17 @@ class EditarAdapter(
         }
 
         private suspend fun insertarUsuarioEquipo(usuario: Long, jugadorId: Long) {
-            db.jugadorEquipoDao().insertar(JugadorEquipo(usuario, jugadorId))
+            jugadorEquipoRepository.insertar(usuario, jugadorId)
         }
 
         private suspend fun EliminarUsuarioEquipo(usuario: Long, jugadorId: Long) {
-            db.jugadorEquipoDao().eliminar(usuario, jugadorId)
+            jugadorEquipoRepository.eliminar(usuario, jugadorId)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
         db = BD.getInstance(parent.context)!!
+        jugadorEquipoRepository = JugadorEquipoRepository.getInstance(db.jugadorEquipoDao())
         val binding = PlayerItemEditarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShowViewHolder(binding, onClick, onLongClick)
     }

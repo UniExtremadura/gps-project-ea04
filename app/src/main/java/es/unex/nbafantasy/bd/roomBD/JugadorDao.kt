@@ -15,6 +15,9 @@ interface JugadorDao {
     @Query("SELECT * FROM jugador")
     fun getAllJugadores(): LiveData<List<Jugador>>
 
+    @Query("SELECT * FROM Jugador WHERE jugadorId IN (:ids)")
+    fun getJugadoresByIds(ids: List<Long>): LiveData<List<Jugador>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(Jugador: List<Jugador>)
 

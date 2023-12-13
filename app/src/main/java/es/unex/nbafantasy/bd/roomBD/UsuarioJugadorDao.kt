@@ -1,14 +1,19 @@
 package es.unex.nbafantasy.bd.roomBD
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import es.unex.nbafantasy.bd.elemBD.Jugador
+import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 
 @Dao
 interface UsuarioJugadorDao {
+    @Query("SELECT * FROM UsuarioJugador")
+    fun getAllJugUsuarios(): LiveData<List<UsuarioJugador>>
     /**
      * Obtiene todos los jugadores asociados a un usuario específico.
      *
@@ -16,7 +21,7 @@ interface UsuarioJugadorDao {
      * @return Una lista de objetos [UsuarioJugador] que pertenecen al usuario especificado.
      */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
-    suspend fun getJugadorByUsuario(usuarioId: Long): List<UsuarioJugador>
+    fun getJugadorByUsuario(usuarioId: Long): LiveData<List<UsuarioJugador>>
 
     /**
      * Obtiene una asociación específica de usuario y jugador por sus identificadores únicos.
@@ -34,7 +39,7 @@ interface UsuarioJugadorDao {
      * @param usuarioJugador El objeto [UsuarioJugador] que representa la relación entre un usuario y un jugador.
      * @return El identificador único de la asociación recién insertada.
      */
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertar(usuarioJugador: UsuarioJugador): Long
 
     /**

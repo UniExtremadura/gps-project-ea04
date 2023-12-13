@@ -8,6 +8,7 @@ import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 
 class JugadorEquipoRepository private constructor(
     private val jugadorEquipoDao: JugadorEquipoDao) {
+    val jugadoresEquipo = jugadorEquipoDao.getAllJugadorEquipo()
 
     suspend fun insertar(usuarioId: Long, jugadorId: Long): Long{
         val jugadorEquipo = JugadorEquipo(usuarioId, jugadorId)

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
 import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.Data.api.Data
 import es.unex.nbafantasy.Data.model.NBAData
 import es.unex.nbafantasy.Data.model.NBASeasonData
@@ -30,7 +31,8 @@ import kotlin.random.Random
 class DarCartaActivity : AppCompatActivity() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
-    private lateinit var repository: JugadorRepository
+    private lateinit var repositoryJugador: JugadorRepository
+    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
     private lateinit var db: BD
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
@@ -58,8 +60,8 @@ class DarCartaActivity : AppCompatActivity() {
 
         //Inicializacion BD
         db= BD.getInstance(applicationContext)!!
-        repository = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
-
+        repositoryJugador = JugadorRepository.getInstance(db.jugadorDao(),getNetworkService())
+        repositoryUsuarioJugador = UsuarioJugadorRepository.getInstance(db.usuarioJugadorDao(),repositoryJugador)
         usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 
         if(usuario!=null) {
@@ -94,37 +96,9 @@ class DarCartaActivity : AppCompatActivity() {
             binding.playersName3.visibility = View.GONE
             binding.btAceptar.visibility = View.GONE
             try {
-                _datas = repository.fetchRecentPlayers()
-                _seasondatas = repository.fetchSeason(_datas).map(SeasonData::toSeasonAverages)
-                repository.ObtenerJugadores(_datas,_seasondatas)
-                /*var i = 0;
-                for (playerId in _datas) {
-                    val media = (_seasondatas[i].pts * pesoPuntos +
-                            _seasondatas[i].blk * pesoTapones +
-                            _seasondatas[i].reb * pesoRebotes +
-                            _seasondatas[i].stl * pesoRobos +
-                            _seasondatas[i].ast * pesoAsistencias -
-                            _seasondatas[i].turnover * pesoErrores)*10
-                    val jugador = Jugador(
-                        null,
-                        playerId.firstName,
-                        playerId.lastName,
-                        playerId.team?.fullName,
-                        playerId.team?.conference,
-                        playerId.position,
-                        playerId.heightInches?.toDouble(),
-                        _seasondatas[i].pts,
-                        _seasondatas[i].blk,
-                        _seasondatas[i].reb,
-                        _seasondatas[i].stl,
-                        _seasondatas[i].ast,
-                        _seasondatas[i].min,
-                        _seasondatas[i].turnover,
-                        media.round(2)
-                    )
-                    db?.jugadorDao()?.insertar(jugador)
-                    i=i+1;
-                }*/
+                _datas = repositoryJugador.fetchRecentPlayers()
+                _seasondatas = repositoryJugador.fetchSeason(_datas).map(SeasonData::toSeasonAverages)
+                repositoryJugador.ObtenerJugadores(_datas,_seasondatas)
             } catch (error: APIError) {
                 Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
             } finally {
@@ -136,39 +110,6 @@ class DarCartaActivity : AppCompatActivity() {
             }
         }
     }
-
-    suspend fun fetchShows(): List<Data> {
-        val apiData = mutableListOf<Data>()
-        val playerIds = listOf(8, 4, 9, 12, 15, 18, 24, 28, 33, 37, 48, 53, 57, 79, 112,
-            114, 115, 117, 125, 132, 140, 145, 175, 236, 237, 250, 246, 322, 434)
-        try {
-            for (playerId in playerIds) {
-                val playerData = getNetworkService().getPlayerById(playerId)
-                apiData.add(playerData)
-            }
-        } catch (cause: Throwable) {
-            throw APIError("Unable to fetch data from API", cause)
-        }
-
-        return apiData
-    }
-
-    private suspend fun fetchSeason(Datos: List<NBAData>): List<SeasonData> {
-        val apiSeasonData = mutableListOf<SeasonData>()
-
-        for (i in Datos) {
-            try {
-                val playerId = i.id
-                val seasonAverage = getNetworkService().getSeasonAverage(playerId).data
-
-                apiSeasonData.addAll(seasonAverage)
-            } catch (e: Exception) {
-                throw APIError("Unable to fetch data from API", e)
-            }
-        }
-        return apiSeasonData
-    }
-
     private suspend fun obtenerJugadores() {
         try {
             val usuarioId = usuario?.usuarioId
@@ -212,7 +153,8 @@ class DarCartaActivity : AppCompatActivity() {
 
     private suspend fun insertarUsuarioJugador(posicionJugador: Int) {
         val usuarioJugador = UsuarioJugador(usuario.usuarioId?:0, posicionJugador.toLong())
-        db.usuarioJugadorDao().insertar(usuarioJugador)
+        repositoryUsuarioJugador.insertarUsuarioJugador(usuarioJugador)
+        //db.usuarioJugadorDao().insertar(usuarioJugador)
     }
 
     private suspend fun insertarJugadorEquipo(posicionJugador: Int) {
@@ -229,5 +171,4 @@ class DarCartaActivity : AppCompatActivity() {
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
         MainActivity.start(this,usuario)
     }
-
 }
