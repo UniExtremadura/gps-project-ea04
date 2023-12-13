@@ -42,11 +42,14 @@ class PerfilFragment : Fragment() {
     }
 
     private fun cargarDatosUsuario(){
-        usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
-        with(binding){
-            etNombre.setText(usuario.nombre)
-            etContrasena1.setText(usuario.contrasena)
-            etContrasena2.setText(usuario.contrasena)
+        lifecycleScope.launch {
+            usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
+            usuario = buscarId()
+            with(binding) {
+                etNombre.setText(usuario.nombre)
+                etContrasena1.setText(usuario.contrasena)
+                etContrasena2.setText(usuario.contrasena)
+            }
         }
     }
 
@@ -66,7 +69,7 @@ class PerfilFragment : Fragment() {
                         buscarIdByNombre(binding.etNombre.text.toString())?.toLong() !=usuario.usuarioId) {
                         notificarMensaje("Nombre de usuario ocupado")
                     } else {
-                        actualizar(etNombre.text.toString(), etContrasena1.text.toString())
+                        actualizarUsuario(etNombre.text.toString(), etContrasena1.text.toString())
                         notificarMensaje("Usuario actualizado")
                     }
                 }
@@ -86,8 +89,8 @@ class PerfilFragment : Fragment() {
         return repositoryUsuario.buscarIdByNombre(nombreUsuario)
     }
 
-    private suspend fun actualizar(nuevoNombre:String, nuevaContrasena:String){
-        repositoryUsuario.actualizar(usuario.usuarioId?:0, nuevoNombre, nuevaContrasena)
+    private suspend fun buscarId():Usuario{
+        return repositoryUsuario.buscarId(usuario.usuarioId?:0)
     }
 
     private fun notificarMensaje(mensaje: String){

@@ -29,6 +29,9 @@ class UsuarioRepository private constructor(
         return usuarioDao.buscarIdByNombre(nombreUsuario)
     }
 
+    suspend fun buscarId(usuarioId: Long): Usuario{
+        return usuarioDao.getUsuarioId(usuarioId.toInt())
+    }
     companion object {
         @Volatile
         private var INSTANCE: UsuarioRepository? = null
