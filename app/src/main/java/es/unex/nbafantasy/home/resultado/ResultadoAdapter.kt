@@ -1,17 +1,13 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.resultado
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import es.unex.nbafantasy.R
-import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.databinding.PlayerItemBinding
 import es.unex.nbafantasy.databinding.ResultadoItemBinding
-import kotlin.math.log
 
 class ResultadoAdapter (
     private var DataS: List<ResultadoPartido>,

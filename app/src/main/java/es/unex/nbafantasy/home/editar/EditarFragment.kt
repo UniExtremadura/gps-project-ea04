@@ -1,29 +1,22 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.editar
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
-import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentEditarBinding
-import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
-import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

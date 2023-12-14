@@ -1,7 +1,6 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.listaJugadores
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
-import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

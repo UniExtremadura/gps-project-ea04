@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.pantJuego
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,14 +11,10 @@ import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.R
-import es.unex.nbafantasy.api.getNetworkService
-import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
-import es.unex.nbafantasy.juego.DarCartaActivity
+import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragment
 import es.unex.nbafantasy.juego.PantallaJuegoActivity
 import kotlinx.coroutines.launch
 

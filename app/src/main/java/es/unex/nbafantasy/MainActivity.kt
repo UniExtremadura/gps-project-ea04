@@ -18,14 +18,12 @@ import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.ActivityMainBinding
-import es.unex.nbafantasy.home.EditarFragment
-import es.unex.nbafantasy.home.EditarFragmentDirections
-import es.unex.nbafantasy.home.ListaJugadoresFragment
-import es.unex.nbafantasy.home.ListaJugadoresFragmentDirections
+import es.unex.nbafantasy.home.editar.EditarFragment
+import es.unex.nbafantasy.home.editar.EditarFragmentDirections
+import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragment
+import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragmentDirections
 
-import es.unex.nbafantasy.home.PantJuegoFragment
-import es.unex.nbafantasy.home.ResultadoFragment
-import es.unex.nbafantasy.juego.DarCartaActivity
+import es.unex.nbafantasy.home.resultado.ResultadoFragment
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickListener, EditarFragment.OnEditarJugadorClickListener, ResultadoFragment.OnResultadoClickListener {
@@ -76,7 +74,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         setSupportActionBar(binding.toolbar)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        navController.addOnDestinationChangedListener{_,destination,_ ->
+        navController.addOnDestinationChangedListener{_,destination,_->
             if(destination.id==R.id.ajustesFragment||destination.id==R.id.listaJugadoresDetailsFragment
                 || destination.id==R.id.perfilFragment||destination.id==R.id.editarDetailsFragment){
                 binding.toolbar.menu.clear()
@@ -114,7 +112,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
             val searchItem = menu?.findItem(R.id.accion_ajustes)
             val searchView = searchItem?.actionView as? SearchView
         }
-            return super.onCreateOptionsMenu(menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
 
@@ -135,4 +133,3 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         return usuario
     }
 }
-

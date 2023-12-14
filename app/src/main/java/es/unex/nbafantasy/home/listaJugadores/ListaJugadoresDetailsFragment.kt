@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.listaJugadores
 
 import android.os.Bundle
 import android.view.LayoutInflater
