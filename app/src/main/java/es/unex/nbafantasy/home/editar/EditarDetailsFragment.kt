@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.editar
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import es.unex.nbafantasy.databinding.FragmentEditarDetailsBinding
+import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresDetailsFragment
 
 class EditarDetailsFragment: Fragment() {
     private var _binding: FragmentEditarDetailsBinding? = null

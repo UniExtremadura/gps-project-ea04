@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.editar
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
-import es.unex.nbafantasy.Data.UsuarioJugadorRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo

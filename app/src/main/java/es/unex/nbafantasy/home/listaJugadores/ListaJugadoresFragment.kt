@@ -1,28 +1,24 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.listaJugadores
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.api.APIError
-import es.unex.nbafantasy.api.getNetworkService
+
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+
 
 class ListaJugadoresFragment : Fragment() {
-    private var _datas: List<Jugador> = emptyList()
     private lateinit var listener: OnJugadorClickListener
-    private lateinit var jugadorRepository: JugadorRepository
+    private val viewModel: ListaJugadoresViewModel by viewModels { ListaJugadoresViewModel.Factory }
 
     interface OnJugadorClickListener {
         fun onShowClick(data: Jugador)
@@ -36,8 +32,6 @@ class ListaJugadoresFragment : Fragment() {
         super.onAttach(context)
         if (context is OnJugadorClickListener) {
             listener = context
-
-
         } else {
             throw RuntimeException(context.toString() + " must implement OnShowClickListener")
         }
@@ -53,34 +47,27 @@ class ListaJugadoresFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
-        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
-        jugadorRepository = appContainer.repositoryJugador
-
+        viewModel.spinner.observe(viewLifecycleOwner) { show ->
+            binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
+        } // Show a Toast whenever the [toast] is updated a non-null value
+        viewModel.toast.observe(viewLifecycleOwner) { text ->
+            text?.let {
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                viewModel.onToastShown()
+            }
+        }
         subscribeListaJugadores(adapter)
-        launchDataLoad { jugadorRepository }
     }
 
     private fun subscribeListaJugadores(adapter: ListaJugadoresAdapter) {
-        jugadorRepository.jugadores.observe(viewLifecycleOwner) { jugadores ->
+        viewModel.listaJugadores.observe(viewLifecycleOwner) { jugadores ->
             adapter.updateData(jugadores)
         }
     }
 
-    private fun launchDataLoad(block: suspend () -> Unit): Job {
-        return lifecycleScope.launch {
-            try {
-                binding.spinner.visibility = View.VISIBLE
-                block()
-            } catch (error: APIError) {
-                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-            } finally {
-                binding.spinner.visibility = View.GONE
-            }
-        }
-    }
 
     private fun setUpRecyclerView() {
-        adapter = ListaJugadoresAdapter(DataS = _datas, onClick = {
+        adapter = ListaJugadoresAdapter(DataS = emptyList(), onClick = {
             listener.onShowClick(it)
         },
             onLongClick = {

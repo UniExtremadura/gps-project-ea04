@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.home
+package es.unex.nbafantasy.home.resultado
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,13 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.Data.ResultadoPartidoRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.R
 import es.unex.nbafantasy.api.APIError
-import es.unex.nbafantasy.api.getNetworkService
-import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.roomBD.BD
-import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
 import es.unex.nbafantasy.databinding.FragmentResultadoBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -64,7 +60,7 @@ class ResultadoFragment : Fragment() {
         subscribeUiResultados(adapter,usuarioId)
         launchDataLoad { repositoryResultadoPartido }
     }
-    private fun subscribeUiResultados(adapter: ResultadoAdapter,usuarioId: Long) {
+    private fun subscribeUiResultados(adapter: ResultadoAdapter, usuarioId: Long) {
         repositoryResultadoPartido.getResultadoPartidoPorId(usuarioId).observe(viewLifecycleOwner) { resultados ->
             adapter.updateData(resultados)
         }
