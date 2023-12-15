@@ -3,6 +3,7 @@ package es.unex.nbafantasy.inicioSesion
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.data.UsuarioRepository
 import es.unex.nbafantasy.NBAFantasyApplication
@@ -10,21 +11,22 @@ import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityRegistroBinding
 import es.unex.nbafantasy.juego.DarCartaActivity
+import es.unex.nbafantasy.perfil.PerfilViewModel
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
 
 class RegistroActivity : AppCompatActivity() {
     private lateinit var db: BD
     private lateinit var binding:ActivityRegistroBinding
-    private lateinit var repositoryUsuario: UsuarioRepository
-
+    //private lateinit var repositoryUsuario: UsuarioRepository
+    private val viewModel: RegistroViewModel by viewModels { RegistroViewModel.Factory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val appContainer = (this.application as NBAFantasyApplication).appContainer
-        repositoryUsuario = appContainer.repositoryUsuario
+        //val appContainer = (this.application as NBAFantasyApplication).appContainer
+        //repositoryUsuario = appContainer.repositoryUsuario
 
         setUpListener()
     }
@@ -55,8 +57,8 @@ class RegistroActivity : AppCompatActivity() {
                         etContrasena1.text.toString()
                     )
 
-                    if (busquedaNombre(binding.etNombre.text.toString())==null) {
-                        val id = insertarUsuario(usuario)
+                    if (viewModel.busquedaNombre(binding.etNombre.text.toString())==null) {
+                        val id = viewModel.insertarUsuario(usuario)
                         val usuario = Usuario(null, etNombre.text.toString(), etContrasena1.text.toString())
 
                         usuario.usuarioId=id
@@ -79,11 +81,11 @@ class RegistroActivity : AppCompatActivity() {
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
     }
 
-    private suspend fun insertarUsuario(usuario:Usuario):Long{
-        return repositoryUsuario.insertar(usuario)
-    }
+    //private suspend fun insertarUsuario(usuario:Usuario):Long{
+        //return repositoryUsuario.insertar(usuario)
+    //}
 
-    private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
-        return repositoryUsuario.busquedaNombre(nombreUsuario)
-    }
+    //private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
+        //return repositoryUsuario.busquedaNombre(nombreUsuario)
+    //}
 }

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.data.UsuarioRepository
 import es.unex.nbafantasy.MainActivity
@@ -12,13 +14,15 @@ import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityLoginBinding
+import es.unex.nbafantasy.perfil.PerfilViewModel
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var db: BD
-    private lateinit var repositoryUsuario: UsuarioRepository
+    //private lateinit var repositoryUsuario: UsuarioRepository
+    private val viewModel: LoginViewModel by viewModels { LoginViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +30,8 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val appContainer = (this.application as NBAFantasyApplication).appContainer
-        repositoryUsuario = appContainer.repositoryUsuario
+        //val appContainer = (this.application as NBAFantasyApplication).appContainer
+        //repositoryUsuario = appContainer.repositoryUsuario
 
         setUpListener()
         leerAutologin()
@@ -69,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                 notificarErrorCredencial(comprobar.msg)
             }else{
                 lifecycleScope.launch{
-                    val usuario = busquedaNombre(binding.etNombre.text.toString())
+                    val usuario = viewModel.busquedaNombre(binding.etNombre.text.toString())
                     if (usuario != null) {
                         val comprobarContra = ComprobacionCredenciales.compararContrasena(
                             binding.etContrasena.text.toString(),
@@ -90,9 +94,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
-        return repositoryUsuario.busquedaNombre(nombreUsuario)
-    }
+    //private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
+        //return repositoryUsuario.busquedaNombre(nombreUsuario)
+    //}
 
     private fun navegacionMainActivity(usuario: Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
