@@ -24,6 +24,8 @@ interface JugadorEquipoDao {
     @Query("SELECT * FROM jugadorequipo WHERE usuarioId = :usuarioId")
     suspend fun getJugadoresByUsuario(usuarioId: Long): List<JugadorEquipo>
 
+    @Query(" SELECT Jugador.* FROM Jugador INNER JOIN JugadorEquipo ON Jugador.jugadorId = JugadorEquipo.jugadorId WHERE JugadorEquipo.usuarioId = :usuarioId")
+    fun getJugadoresByUsuariolive(usuarioId: Long): LiveData<List<Jugador>>
 
     /**
      * Inserta una asociación de usuario y jugador en la tabla de jugadorEquipo.

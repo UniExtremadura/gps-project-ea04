@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.Data.JugadorEquipoRepository
-import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.data.JugadorEquipoRepository
+import es.unex.nbafantasy.data.JugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo

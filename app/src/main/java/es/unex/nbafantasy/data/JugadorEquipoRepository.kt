@@ -1,18 +1,21 @@
-package es.unex.nbafantasy.Data
+package es.unex.nbafantasy.data
 
-import es.unex.nbafantasy.api.NBAFantasyApi
+import androidx.lifecycle.LiveData
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
-import es.unex.nbafantasy.bd.roomBD.JugadorDao
 import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 
 class JugadorEquipoRepository(
-    private val jugadorEquipoDao: JugadorEquipoDao) {
+    private val jugadorEquipoDao: JugadorEquipoDao
+) {
     val jugadoresEquipo = jugadorEquipoDao.getAllJugadorEquipo()
 
     suspend fun insertar(usuarioId: Long, jugadorId: Long): Long{
         val jugadorEquipo = JugadorEquipo(usuarioId, jugadorId)
         return jugadorEquipoDao.insertar(jugadorEquipo)
+    }
+    fun obtenerJugadoresDeUsuario(usuarioId: Long): LiveData<List<Jugador>> {
+        return jugadorEquipoDao.getJugadoresByUsuariolive(usuarioId)
     }
 
     suspend fun getJugadoresUsuario(usuarioId: Long):List<JugadorEquipo>{

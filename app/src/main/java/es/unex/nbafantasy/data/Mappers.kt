@@ -1,11 +1,10 @@
-package es.unex.nbafantasy.Data
+package es.unex.nbafantasy.data
 
-import com.example.example.SeasonAverages
 import com.example.example.SeasonData
-import es.unex.nbafantasy.Data.api.Data
-import es.unex.nbafantasy.Data.api.Team
-import es.unex.nbafantasy.Data.model.NBAData
-import es.unex.nbafantasy.Data.model.NBASeasonData
+import es.unex.nbafantasy.data.api.Data
+import es.unex.nbafantasy.data.api.Team
+import es.unex.nbafantasy.data.model.NBAData
+import es.unex.nbafantasy.data.model.NBASeasonData
 
 fun Data.toNBAData() = NBAData(
     id = id ?: 0,

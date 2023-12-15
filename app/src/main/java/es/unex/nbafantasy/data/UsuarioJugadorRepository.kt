@@ -1,18 +1,15 @@
-package es.unex.nbafantasy.Data
+package es.unex.nbafantasy.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
-import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
-import es.unex.nbafantasy.bd.roomBD.JugadorDao
-import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 import es.unex.nbafantasy.bd.roomBD.UsuarioJugadorDao
 
 class UsuarioJugadorRepository(
     private val usuarioJugadorDao: UsuarioJugadorDao,
     private val jugadorRepository: JugadorRepository ) {
-
+    val usuarioJugador= usuarioJugadorDao.getAllJugUsuarios()
     fun obtenerJugadoresDeUsuario(usuarioId: Long): LiveData<List<Jugador>> {
         return usuarioJugadorDao.getJugadorByUsuario(usuarioId).switchMap { listaUsuarioJugadores ->
             val idsJugadores = listaUsuarioJugadores.map { it.jugadorId }

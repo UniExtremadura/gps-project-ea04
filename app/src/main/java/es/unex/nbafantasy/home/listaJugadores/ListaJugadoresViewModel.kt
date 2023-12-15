@@ -1,14 +1,12 @@
 package es.unex.nbafantasy.home.listaJugadores
 
-import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.data.JugadorRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import kotlinx.coroutines.Job
@@ -36,15 +34,12 @@ class ListaJugadoresViewModel(
     private fun launchDataLoad(block: suspend () -> Unit): Job {
         return viewModelScope.launch {
             try {
-                //binding.spinner.visibility = View.VISIBLE
                 _spinner.value=true
                 block()
             } catch (error: APIError) {
                 _toast.value = error.message
-                //Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             } finally {
                 _spinner.value=false
-                //binding.spinner.visibility = View.GONE
             }
         }
     }

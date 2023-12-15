@@ -1,15 +1,12 @@
 package es.unex.nbafantasy.home.resultado
 
-import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import es.unex.nbafantasy.Data.ResultadoPartidoRepository
+import es.unex.nbafantasy.data.ResultadoPartidoRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
@@ -20,7 +17,7 @@ import kotlinx.coroutines.launch
 class ResultadoViewModel (
     private val repositoryResultadoPartido: ResultadoPartidoRepository
 ): ViewModel() {
-    var usuario: Usuario?=null
+    var usuario: Usuario? = null
     val resultadoPartidoRepository = repositoryResultadoPartido.getResultadoPartidoPorId(usuario?.usuarioId?:0)
 
     private val _spinner = MutableLiveData<Boolean>()
@@ -43,8 +40,8 @@ class ResultadoViewModel (
         _toast.value=null
     }
 
-    fun getResultado(usuario: Long): LiveData<List<ResultadoPartido>>{
-        return repositoryResultadoPartido.getResultadoPartidoPorId(usuario)
+    fun getResultado(): LiveData<List<ResultadoPartido>>{
+        return repositoryResultadoPartido.getResultadoPartidoPorId(usuario!!.usuarioId!!)
     }
 
     private fun launchDataLoad(block: suspend () -> Unit): Job {

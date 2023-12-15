@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.nbafantasy.Data.JugadorRepository
-import es.unex.nbafantasy.NBAFantasyApplication
 
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
@@ -47,8 +45,8 @@ class ListaJugadoresFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
-        viewModel.spinner.observe(viewLifecycleOwner) { show ->
-            binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
+        viewModel.spinner.observe(viewLifecycleOwner) { jugador ->
+            binding.spinner.visibility = if (jugador) View.VISIBLE else View.GONE
         } // Show a Toast whenever the [toast] is updated a non-null value
         viewModel.toast.observe(viewLifecycleOwner) { text ->
             text?.let {

@@ -1,16 +1,12 @@
 package es.unex.nbafantasy.api
 
 import com.example.example.SeasonAverages
-import com.example.example.SeasonData
-import es.unex.nbafantasy.Data.api.Data
-import es.unex.nbafantasy.Data.api.NBAPlayers
+import es.unex.nbafantasy.data.api.Data
+import es.unex.nbafantasy.data.api.NBAPlayers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
