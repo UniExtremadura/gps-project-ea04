@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.example.SeasonData
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
@@ -33,12 +34,10 @@ import kotlin.random.Random
 class DarCartaActivity : AppCompatActivity() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
-    private lateinit var repositoryJugador: JugadorRepository
-    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
-    private lateinit var repositoryJugadorEquipo: JugadorEquipoRepository
     private lateinit var binding:ActivityDarCartaBinding
     private lateinit var listaJugador: List<Jugador>
-    private lateinit var usuario: Usuario
+
+    private val viewModel: DarCartaViewModel by viewModels { DarCartaViewModel.Factory }
 
 
     companion object{
@@ -63,28 +62,21 @@ class DarCartaActivity : AppCompatActivity() {
         //Inicializacion BD
         val appContainer = (this.application as NBAFantasyApplication).appContainer
 
-        repositoryJugador = appContainer.repositoryJugador
-        repositoryUsuarioJugador = appContainer.repositoryUsuarioJugador
-        repositoryJugadorEquipo = appContainer.repositoryJugadorEquipo
+        viewModel.usuario = intent?.getSerializableExtra(USUARIO) as Usuario
 
-        usuario = intent?.getSerializableExtra(USUARIO) as Usuario
+        lifecycleScope.launch {
+            setUpUI()
+            kotlinx.coroutines.delay(50)
 
-        if(usuario!=null) {
-            lifecycleScope.launch {
-                setUpUI()
-                kotlinx.coroutines.delay(50)
+            Log.e("API CARGADA", "La API se ha cargado")
 
-                Log.e("API CARGADA", "La API se ha cargado")
-
-                obtenerJugadores()
-
-                // Verificar si el usuario no es nulo
-                with(binding) {
-                    btAceptar.setOnClickListener {
-                        if (usuario != null) {
-                            // Llamar a la función de navegación con el usuario
-                            navegarPantallaPrincipal(usuario, "Jugadores Recibidos")
-                        }
+            obtenerJugadores()
+            // Verificar si el usuario no es nulo
+            with(binding) {
+                btAceptar.setOnClickListener {
+                    if (viewModel.usuario != null) {
+                        // Llamar a la función de navegación con el usuario
+                        navegarPantallaPrincipal(viewModel.usuario!!, "Jugadores Recibidos")
                     }
                 }
             }
@@ -101,9 +93,9 @@ class DarCartaActivity : AppCompatActivity() {
             binding.playersName3.visibility = View.GONE
             binding.btAceptar.visibility = View.GONE
             try {
-                _datas = repositoryJugador.fetchRecentPlayers()
-                _seasondatas = repositoryJugador.fetchSeason(_datas).map(SeasonData::toSeasonAverages)
-                repositoryJugador.ObtenerJugadores(_datas,_seasondatas)
+                _datas = viewModel.cargaDatos()
+                _seasondatas = viewModel.cargaEstadisticas(_datas)
+                viewModel.carga(_datas,_seasondatas)
             } catch (error: APIError) {
                 Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show()
             } finally {
@@ -117,12 +109,12 @@ class DarCartaActivity : AppCompatActivity() {
     }
 
     private suspend fun getAll(): List<Jugador>{
-        return repositoryJugador.getAll()
+        return viewModel.getAll()
     }
 
     private suspend fun obtenerJugadores() {
         try {
-            val usuarioId = usuario?.usuarioId
+            val usuarioId = viewModel.usuario?.usuarioId
 
             if (usuarioId != null) {
 
@@ -149,6 +141,7 @@ class DarCartaActivity : AppCompatActivity() {
 
     private suspend fun obtenerPosicionAleatoria(vararg exclusiones: Int): Int {
         val numJugadores = getAll().size
+        Log.e("aaaaaaaaaaaaaaaaaaaaaaaaa", "ausjsjd "+numJugadores)
         val random = Random(System.currentTimeMillis())
         val listaExclusiones = exclusiones.toList()
 
@@ -160,13 +153,13 @@ class DarCartaActivity : AppCompatActivity() {
         return posicion
     }
 
-    private suspend fun insertarUsuarioJugador(posicionJugador: Int) {
-        val usuarioJugador = UsuarioJugador(usuario.usuarioId?:0, posicionJugador.toLong())
-        repositoryUsuarioJugador.insertarUsuarioJugador(usuarioJugador)
+    private fun insertarUsuarioJugador(posicionJugador: Int) {
+        val usuarioJugador = UsuarioJugador(viewModel.usuario!!.usuarioId!!, posicionJugador.toLong())
+        viewModel.insertarUsuarioJugador(usuarioJugador)
     }
 
-    private suspend fun insertarJugadorEquipo(posicionJugador: Int) {
-        repositoryJugadorEquipo.insertar(usuario.usuarioId?:0, posicionJugador.toLong())
+    private fun insertarJugadorEquipo(posicionJugador: Int) {
+        viewModel.insertarJugadorEquipo(posicionJugador)
     }
 
     private suspend fun mostrarNombresJugadores(posicionJugador: Int, textView: TextView) {
@@ -176,7 +169,7 @@ class DarCartaActivity : AppCompatActivity() {
     }
 
     private suspend fun obtenerJugadorById(jugadorId: Long): Jugador{
-        return repositoryJugador.getJugadorById(jugadorId)
+        return viewModel.getJugadorById(jugadorId)
     }
 
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){

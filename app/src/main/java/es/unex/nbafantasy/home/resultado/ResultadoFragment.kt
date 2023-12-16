@@ -7,18 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.nbafantasy.Data.ResultadoPartidoRepository
 import es.unex.nbafantasy.MainActivity
-import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.FragmentResultadoBinding
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class ResultadoFragment : Fragment() {
     private var _binding: FragmentResultadoBinding? = null
@@ -63,15 +55,14 @@ class ResultadoFragment : Fragment() {
                 viewModel.onToastShown()
             }
         }
+        viewModel.usuario = ((requireActivity() as? MainActivity)?.getUsuario())
 
         setUpRecyclerView()
-
-        val usuarioId = ((requireActivity() as? MainActivity)?.getUsuario())?.usuarioId ?: 0
-        subscribeUiResultados(adapter, usuarioId)
+        subscribeUiResultados(adapter)
     }
 
-    private fun subscribeUiResultados(adapter: ResultadoAdapter, usuarioId: Long) {
-        viewModel.getResultado(usuarioId).observe(viewLifecycleOwner) { resultados ->
+    private fun subscribeUiResultados(adapter: ResultadoAdapter) {
+        viewModel.getResultado().observe(viewLifecycleOwner) { resultados ->
             adapter.updateData(resultados)
         }
     }

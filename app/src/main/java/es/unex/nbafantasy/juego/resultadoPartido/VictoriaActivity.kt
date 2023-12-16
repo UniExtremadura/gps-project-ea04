@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.JugadorRepository
 import es.unex.nbafantasy.Data.UsuarioJugadorRepository
@@ -18,16 +20,16 @@ import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityVictoriaBinding
+import es.unex.nbafantasy.home.resultado.ResultadoViewModel
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class VictoriaActivity : AppCompatActivity() {
-    private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
-    private lateinit var repositoryJugador: JugadorRepository
-    private lateinit var repositoryUsuarioJugador: UsuarioJugadorRepository
     private lateinit var listaJugador: List<UsuarioJugador>
     private lateinit var binding:ActivityVictoriaBinding
+
+    private val viewModel: VictoriaViewModel by viewModels { VictoriaViewModel.Factory }
 
     companion object {
         const val USUARIO = "USUARIO"
@@ -54,12 +56,10 @@ class VictoriaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val appContainer = (this.application as NBAFantasyApplication).appContainer
-        repositoryJugador = appContainer.repositoryJugador
-        repositoryUsuarioJugador = appContainer.repositoryUsuarioJugador
 
 
         lifecycleScope.launch {
-            usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+            viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
             resultadoPartido=(intent?.getSerializableExtra(RESULTADOPARTIDO) as? ResultadoPartido)!!
             darCarta()
             setUpListener()
@@ -108,32 +108,32 @@ class VictoriaActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getAllMisJugadores(): List<UsuarioJugador>{
-        return repositoryUsuarioJugador.getAllMisJugadores(usuario.usuarioId?:0)
+    suspend fun getAllMisJugadores(): List<UsuarioJugador>{
+        return viewModel.getAllMisJugadores()
     }
 
-    private suspend fun obtenerJugadorById(jugadorId: Long): Jugador{
-        return repositoryJugador.getJugadorById(jugadorId)
+    suspend fun obtenerJugadorById(jugadorId: Long): Jugador{
+        return viewModel.getJugadorById(jugadorId)
     }
 
-    private suspend fun getNombre(jugadorId:Long): String {
-        val jugador = repositoryJugador.getJugadorById(jugadorId)
+    suspend fun getNombre(jugadorId:Long): String {
+        val jugador = viewModel.getJugadorById(jugadorId)
         return  jugador.nombre + " " + jugador.apellido
     }
 
-    private suspend fun getUnUsuarioJugador(jugadorId: Long): UsuarioJugador{
-        return repositoryUsuarioJugador.getUnUsuarioJugador(usuario.usuarioId?:0,jugadorId)
+    suspend fun getUnUsuarioJugador(jugadorId: Long): UsuarioJugador{
+        return viewModel.getUnUsuarioJugador(jugadorId)
     }
 
-    private suspend fun insertarUsuarioJugador(jugadorId:Long){
-        val usuarioJugador= UsuarioJugador(usuario.usuarioId?:0, jugadorId)
-        repositoryUsuarioJugador.insertarUsuarioJugador(usuarioJugador)
+    private fun insertarUsuarioJugador(jugadorId:Long){
+        val usuarioJugador= UsuarioJugador(viewModel.usuario!!.usuarioId!!, jugadorId)
+        viewModel.insertarUsuarioJugador(usuarioJugador)
     }
 
     private fun setUpListener(){
         val btnContinuar = findViewById<Button>(R.id.bt_salir_victoria)
         btnContinuar.setOnClickListener{
-            MainActivity.start(this,usuario)
+            MainActivity.start(this,viewModel.usuario!!)
         }
     }
 }

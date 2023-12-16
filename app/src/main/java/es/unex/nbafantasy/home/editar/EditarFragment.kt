@@ -66,9 +66,10 @@ class EditarFragment : Fragment() {
         launchDataLoad { usuarioJugadorRepository }
     }
     private fun subscribeEditarJugadores(usuarioId: Long) {
-        usuarioJugadorRepository.obtenerJugadoresDeUsuario(usuarioId).observe(viewLifecycleOwner) { jugadores ->
-            adapter.updateData(jugadores, usuarioId)
-        }
+        usuarioJugadorRepository.obtenerJugadoresDeUsuario(usuarioId)
+            .observe(viewLifecycleOwner) { jugadores ->
+                adapter.updateData(jugadores, usuarioId)
+            }
     }
     private fun launchDataLoad(block: suspend () -> Unit): Job {
         return lifecycleScope.launch {

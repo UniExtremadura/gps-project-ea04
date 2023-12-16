@@ -1,5 +1,6 @@
 package es.unex.nbafantasy.Data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.example.SeasonData
 import es.unex.nbafantasy.Data.api.Data
@@ -34,6 +35,7 @@ class JugadorRepository (
     suspend fun getJugadorById(jugadorId: Long):Jugador{
         return jugadorDao.getJugadorId(jugadorId)
     }
+
     fun getJugadoresByIds(ids: List<Long>): LiveData<List<Jugador>> {
         return jugadorDao.getJugadoresByIds(ids)
     }
@@ -63,6 +65,7 @@ class JugadorRepository (
         }
         return newapi
     }
+
     suspend fun fetchSeason(Datos: List<NBAData>): List<SeasonData> {
         val apiSeasonData = mutableListOf<SeasonData>()
 
@@ -84,6 +87,7 @@ class JugadorRepository (
         val timeFromLastFetch = System.currentTimeMillis() - lastFetchTimeMillis
         return timeFromLastFetch > MIN_TIME_FROM_LAST_FETCH_MILLIS || jugadorDao.countJugadores() == 0
     }
+
     suspend fun ObtenerJugadores(_datas : List<NBAData>,_seasondatas: List<NBASeasonData>){
         var i = 0;
         val listaJug = mutableListOf<Jugador>()
@@ -114,6 +118,8 @@ class JugadorRepository (
             listaJug.add(jugador)
             //db?.jugadorDao()?.insertar(jugador)
             i=i+1;
+
+            Log.e("AAAAAAAAAAAAAA","aa " + jugador.jugadorId )
             }
         jugadorDao.insertAll(listaJug)
     }

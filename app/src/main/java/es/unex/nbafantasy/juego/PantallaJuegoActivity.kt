@@ -6,19 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.LiveData
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.Data.JugadorEquipoRepository
-import es.unex.nbafantasy.Data.JugadorRepository
-import es.unex.nbafantasy.Data.ResultadoPartidoRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
-import es.unex.nbafantasy.api.getNetworkService
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.ActivityPantallaJuegoBinding
 import es.unex.nbafantasy.juego.resultadoPartido.DerrotaActivity
 import es.unex.nbafantasy.juego.resultadoPartido.VictoriaActivity
@@ -33,12 +29,10 @@ class PantallaJuegoActivity : AppCompatActivity() {
     private lateinit var binding:ActivityPantallaJuegoBinding
     private lateinit var listaEquipo: List<JugadorEquipo>
     private lateinit var listaJugador: List<Jugador>
-    private lateinit var usuario: Usuario
     private lateinit var resultadoPartido: ResultadoPartido
 
-    private lateinit var repositoryResultadoPartido: ResultadoPartidoRepository
-    private lateinit var repositoryJugadorEquipo: JugadorEquipoRepository
-    private lateinit var repositoryJugador: JugadorRepository
+    private val viewModel: PantallaJuegoViewModel by viewModels { PantallaJuegoViewModel.Factory }
+
 
     companion object{
         const val USUARIO="USUARIO"
@@ -59,18 +53,14 @@ class PantallaJuegoActivity : AppCompatActivity() {
         binding = ActivityPantallaJuegoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+        viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
 
         val appContainer = (this.application as NBAFantasyApplication).appContainer
 
-        repositoryJugador = appContainer.repositoryJugador
-        repositoryJugadorEquipo = appContainer.repositoryJugadorEquipo
-        repositoryResultadoPartido = appContainer.repositoryResultadoPartido
-
-        if(usuario!=null) {
+        if(viewModel.usuario!=null) {
             lifecycleScope.launch {
 
-                val puntosMiEquipo = mostrarMiEquipo(usuario).round(2)
+                val puntosMiEquipo = mostrarMiEquipo(viewModel.usuario!!).round(2)
                 val puntosRival= mostrarRival().round(2)
                 val resultado = (puntosMiEquipo - puntosRival).round(2)
 
@@ -100,7 +90,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
     }
 
     private suspend fun obtenerListaJugadores(): List<JugadorEquipo>{
-        return repositoryJugadorEquipo.getJugadoresUsuario(usuario.usuarioId?:0)
+        return viewModel.getJugadoresUsuario()
     }
 
     private suspend fun mostrarJugadorEnTextView(index: Int, textView: TextView) {
@@ -168,37 +158,37 @@ class PantallaJuegoActivity : AppCompatActivity() {
     }
 
     private suspend fun getAll(): List<Jugador>{
-        return repositoryJugador.getAll()
+        return viewModel.getAll()
     }
 
     private suspend fun getJugadorById(jugadorId: Long): Jugador{
-        return repositoryJugador.getJugadorById(jugadorId)
+        return viewModel.getJugadorById(jugadorId)
     }
 
     private suspend fun getNombre(jugadorId:Long): String {
-        val jugador = repositoryJugador.getJugadorById(jugadorId)
+        val jugador = viewModel.getJugadorById(jugadorId)
         return  jugador.nombre + " " + jugador.apellido
     }
 
     private fun setUpListener(resultado:Double, puntosMiEquipo:Double,puntosRival:Double){
         if (resultado > 0) {
-            resultadoPartido = ResultadoPartido(null,usuario.usuarioId ?: 0,
+            resultadoPartido = ResultadoPartido(null,viewModel.usuario!!.usuarioId!!,
                 puntosMiEquipo, puntosRival,"Victoria")
 
             lifecycleScope.launch {
-                repositoryResultadoPartido.insertarResultado(resultadoPartido)
+                viewModel.insertarResultado(resultadoPartido)
             }
 
-            VictoriaActivity.start(this, usuario, resultadoPartido)
+            VictoriaActivity.start(this, viewModel.usuario!!, resultadoPartido)
         } else {
-            resultadoPartido = ResultadoPartido(null,usuario.usuarioId ?: 0,
+            resultadoPartido = ResultadoPartido(null,viewModel.usuario!!.usuarioId ?: 0,
                 puntosMiEquipo, puntosRival,"Derrota")
 
             lifecycleScope.launch {
-                repositoryResultadoPartido.insertarResultado(resultadoPartido)
+                viewModel.insertarResultado(resultadoPartido)
             }
 
-            DerrotaActivity.start(this, usuario, resultadoPartido)
+            DerrotaActivity.start(this, viewModel.usuario!!, resultadoPartido)
         }
     }
 

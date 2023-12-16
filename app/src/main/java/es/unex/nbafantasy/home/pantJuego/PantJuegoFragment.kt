@@ -1,11 +1,13 @@
 package es.unex.nbafantasy.home.pantJuego
 
+import PantJuegoViewModel
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.Data.JugadorEquipoRepository
 import es.unex.nbafantasy.Data.JugadorRepository
@@ -15,7 +17,9 @@ import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
 import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragment
+import es.unex.nbafantasy.home.resultado.ResultadoViewModel
 import es.unex.nbafantasy.juego.PantallaJuegoActivity
+import es.unex.nbafantasy.juego.PantallaJuegoViewModel
 import kotlinx.coroutines.launch
 
 class PantJuegoFragment : Fragment() {
@@ -23,11 +27,9 @@ class PantJuegoFragment : Fragment() {
     private lateinit var _binding:FragmentPantJuegoBinding
     private val binding get()=_binding!!
     private lateinit var listaEquipo: List<JugadorEquipo>
-    private lateinit var usuario:Usuario
     private lateinit var listener: ListaJugadoresFragment.OnJugadorClickListener
 
-    private lateinit var repositoryJugadorEquipo: JugadorEquipoRepository
-    private lateinit var repositoryJugador: JugadorRepository
+    private val viewModel: PantJuegoViewModel by viewModels { PantJuegoViewModel.Factory }
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
@@ -50,8 +52,6 @@ class PantJuegoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
-        repositoryJugador = appContainer.repositoryJugador
-        repositoryJugadorEquipo = appContainer.repositoryJugadorEquipo
 
         setUpUi()
         pulsarBoton()
@@ -75,11 +75,11 @@ class PantJuegoFragment : Fragment() {
     }
 
     private fun setUpUi() {
-        usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
+        viewModel.usuario = ((requireActivity() as? MainActivity)?.getUsuario())
 
-        if(usuario!=null) {
+        if(viewModel.usuario!=null) {
             lifecycleScope.launch {
-                mostrarJugadores(usuario)
+                mostrarJugadores(viewModel.usuario!!)
             }
         }
     }
@@ -112,15 +112,15 @@ class PantJuegoFragment : Fragment() {
     }
 
     private suspend fun obtenerListaJugadores(): List<JugadorEquipo>{
-        return repositoryJugadorEquipo.getJugadoresUsuario(usuario.usuarioId?:0)
+        return viewModel.obtenerListaJugadores()
     }
 
     private suspend fun obtenerNombre(jugadorId:Long): String {
-        val jugador = repositoryJugador.getJugadorById(jugadorId)
+        val jugador = viewModel.getJugadorById(jugadorId)
         return  jugador.nombre + " " + jugador.apellido
     }
 
     private fun initNav() {
-        PantallaJuegoActivity.start(context, usuario)
+        PantallaJuegoActivity.start(context, viewModel.usuario!!)
     }
 }

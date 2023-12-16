@@ -37,7 +37,7 @@ interface NBAFantasyApi {
     suspend fun getPlayers(): NBAPlayers
 
     @GET("players/{id}")
-    suspend  fun getPlayerById(@Path("id") playerId: Int): Data
+    suspend fun getPlayerById(@Path("id") playerId: Int): Data
     @GET("season_averages")
     suspend fun getSeasonAverage(
         @Query("player_ids[]") playerNumberIds: Int): SeasonAverages

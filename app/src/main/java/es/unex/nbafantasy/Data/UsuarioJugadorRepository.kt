@@ -23,16 +23,16 @@ class UsuarioJugadorRepository(
         usuarioJugadorDao.insertar(Usuario)
     }
 
-        suspend fun getAllMisJugadores(usuarioId: Long): List<UsuarioJugador> {
-            return usuarioJugadorDao.getTodosJugadores(usuarioId)
-        }
+    suspend fun getAllMisJugadores(usuarioId: Long): List<UsuarioJugador> {
+        return usuarioJugadorDao.getTodosJugadores(usuarioId)
+    }
 
-        suspend fun getUnUsuarioJugador(usuarioId: Long, jugadorId: Long): UsuarioJugador {
-            return usuarioJugadorDao.getUnUsuarioJugador(usuarioId, jugadorId)
-        }
+     suspend fun getUnUsuarioJugador(usuarioId: Long, jugadorId: Long): UsuarioJugador {
+         return usuarioJugadorDao.getUnUsuarioJugador(usuarioId, jugadorId)
+     }
 
-        companion object {
-            private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
-        }
+    companion object {
+        private const val MIN_TIME_FROM_LAST_FETCH_MILLIS: Long = 30000
+    }
 }
 
