@@ -12,17 +12,23 @@ import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
+import es.unex.nbafantasy.data.UsuarioRepository
 import kotlinx.coroutines.launch
 
 class PantallaJuegoViewModel(
     private val repositoryResultadoPartido: ResultadoPartidoRepository,
     private val repositoryJugadorEquipo: JugadorEquipoRepository,
-    private val repositoryJugador: JugadorRepository
+    private val repositoryJugador: JugadorRepository,
+    private val repositoryUsuario: UsuarioRepository
 ): ViewModel() {
     var usuario: Usuario? = null
 
     suspend fun getJugadoresUsuario(): List<JugadorEquipo>{
         return repositoryJugadorEquipo.getJugadoresUsuario(usuario!!.usuarioId!!)
+    }
+
+    fun getUsuario(){
+        usuario=repositoryUsuario.usuario
     }
 
     suspend fun getAll(): List<Jugador>{
@@ -49,7 +55,8 @@ class PantallaJuegoViewModel(
                 return PantallaJuegoViewModel(
                     (application as NBAFantasyApplication).appContainer.repositoryResultadoPartido,
                     (application as NBAFantasyApplication).appContainer.repositoryJugadorEquipo,
-                    (application as NBAFantasyApplication).appContainer.repositoryJugador
+                    (application as NBAFantasyApplication).appContainer.repositoryJugador,
+                    (application as NBAFantasyApplication).appContainer.repositoryUsuario
                 ) as T
             }
         }

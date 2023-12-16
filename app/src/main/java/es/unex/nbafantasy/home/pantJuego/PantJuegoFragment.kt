@@ -2,6 +2,7 @@ package es.unex.nbafantasy.home.pantJuego
 
 import PantJuegoViewModel
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,10 +49,6 @@ class PantJuegoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
-            viewModel.usuario=usuario
-        }
-
         _binding= FragmentPantJuegoBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
@@ -61,8 +58,11 @@ class PantJuegoFragment : Fragment() {
 
         val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
 
-        setUpUi()
-        pulsarBoton()
+        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
+            viewModel.usuario=usuario
+            setUpUi()
+            pulsarBoton()
+        }
     }
 
     private fun pulsarBoton(){

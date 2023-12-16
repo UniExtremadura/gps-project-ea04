@@ -46,11 +46,6 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
-            EditarviewModel.usuario=usuario
-        }
-
         _binding = FragmentEditarBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -72,13 +67,18 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
         EditarviewModel.spinner.observe(viewLifecycleOwner) { jugador ->
             binding.spinnerEditar.visibility = if (jugador) View.VISIBLE else View.GONE
         } // Show a Toast whenever the [toast] is updated a non-null value
+
         EditarviewModel.toast.observe(viewLifecycleOwner) { text ->
             text?.let {
                 Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                 EditarviewModel.onToastShown()
             }
         }
-        subscribeEditarJugadores()
+
+        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
+            EditarviewModel.usuario=usuario
+            subscribeEditarJugadores()
+        }
     }
 
 

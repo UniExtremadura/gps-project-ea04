@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         setContentView(binding.root)
 
         viewModel.getUsuario()
-        Log.e("BBBBBBBBBBB", viewModel.userInSession?.usuarioId.toString())
 
         setUpUI()
     }

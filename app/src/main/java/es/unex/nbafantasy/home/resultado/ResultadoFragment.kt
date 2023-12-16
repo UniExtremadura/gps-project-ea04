@@ -31,11 +31,6 @@ class ResultadoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
-            viewModel.usuario=usuario
-        }
-
         _binding = FragmentResultadoBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -64,8 +59,11 @@ class ResultadoFragment : Fragment() {
             }
         }
 
-        setUpRecyclerView()
-        subscribeUiResultados(adapter)
+        mainViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+            viewModel.usuario = usuario
+            setUpRecyclerView()
+            subscribeUiResultados(adapter)
+        }
     }
 
     private fun subscribeUiResultados(adapter: ResultadoAdapter) {

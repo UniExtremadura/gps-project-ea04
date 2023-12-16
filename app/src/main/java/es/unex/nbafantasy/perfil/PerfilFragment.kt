@@ -25,18 +25,17 @@ class PerfilFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        cargarDatosUsuario()
-        actualizarDatos()
+        mainViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+            viewModel.usuario = usuario
+            cargarDatosUsuario()
+            actualizarDatos()
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
-            viewModel.usuario=usuario
-        }
-
         _binding= FragmentPerfilBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
