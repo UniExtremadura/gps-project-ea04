@@ -1,6 +1,5 @@
-package es.unex.nbafantasy.Data.model
+package es.unex.nbafantasy.data.model
 
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 data class NBASeasonData (

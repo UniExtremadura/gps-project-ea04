@@ -1,4 +1,4 @@
-package es.unex.nbafantasy
+package es.unex.nbafantasy.perfil
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,26 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.Data.UsuarioRepository
-import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.roomBD.BD
+import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.databinding.FragmentPerfilBinding
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
 
 
 class PerfilFragment : Fragment() {
-    private lateinit var usuario: Usuario
     private lateinit var _binding: FragmentPerfilBinding
     private val binding get()=_binding!!
-    private lateinit var repositoryUsuario: UsuarioRepository
-
+    private val viewModel: PerfilViewModel by viewModels { PerfilViewModel.Factory }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
-        repositoryUsuario = appContainer.repositoryUsuario
 
         cargarDatosUsuario()
         actualizarDatos()
@@ -41,8 +35,8 @@ class PerfilFragment : Fragment() {
 
     private fun cargarDatosUsuario(){
         lifecycleScope.launch {
-            usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
-            usuario = buscarId()
+            viewModel.usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
+            val usuario = viewModel.buscarId()
             with(binding) {
                 etNombre.setText(usuario.nombre)
                 etContrasena1.setText(usuario.contrasena)
@@ -63,32 +57,16 @@ class PerfilFragment : Fragment() {
 
                     if (comprobar.fallo) {
                         notificarMensaje(comprobar.msg)
-                    } else if (busquedaNombre(binding.etNombre.text.toString()) != null &&
-                        buscarIdByNombre(binding.etNombre.text.toString())?.toLong() !=usuario.usuarioId) {
+                    } else if (viewModel.busquedaNombre(binding.etNombre.text.toString()) != null &&
+                        viewModel.buscarIdByNombre(binding.etNombre.text.toString())?.toLong() != viewModel.usuario!!.usuarioId) {
                         notificarMensaje("Nombre de usuario ocupado")
                     } else {
-                        actualizarUsuario(etNombre.text.toString(), etContrasena1.text.toString())
+                        viewModel.actualizarUsuario(etNombre.text.toString(), etContrasena1.text.toString())
                         notificarMensaje("Usuario actualizado")
                     }
                 }
             }
         }
-    }
-
-    private suspend fun actualizarUsuario(nuevoNombre:String, nuevaContrasena:String){
-        repositoryUsuario.actualizar(usuario.usuarioId?:0,nuevoNombre,nuevaContrasena)
-    }
-
-    private suspend fun busquedaNombre(nombreUsuario:String): Usuario{
-        return repositoryUsuario.busquedaNombre(nombreUsuario)
-    }
-
-    private suspend fun buscarIdByNombre(nombreUsuario:String): Int{
-        return repositoryUsuario.buscarIdByNombre(nombreUsuario)
-    }
-
-    private suspend fun buscarId():Usuario{
-        return repositoryUsuario.buscarId(usuario.usuarioId?:0)
     }
 
     private fun notificarMensaje(mensaje: String){

@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/ajustesFragment"
-        android:name="es.unex.nbafantasy.AjustesFragment"
+        android:name="es.unex.nbafantasy.ajustes.AjustesFragment"
         android:label="Ajustes"/>
     <activity
         android:id="@+id/darCartaActivity"
@@ -93,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/perfilFragment"
-        android:name="es.unex.nbafantasy.PerfilFragment"
+        android:name="es.unex.nbafantasy.perfil.PerfilFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_perfil" />
 

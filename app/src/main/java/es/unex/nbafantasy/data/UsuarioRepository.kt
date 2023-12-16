@@ -1,14 +1,7 @@
-package es.unex.nbafantasy.Data
+package es.unex.nbafantasy.data
 
-import es.unex.nbafantasy.api.NBAFantasyApi
-import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
-import es.unex.nbafantasy.bd.roomBD.JugadorDao
-import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 import es.unex.nbafantasy.bd.roomBD.UsuarioDao
-import es.unex.nbafantasy.bd.roomBD.UsuarioJugadorDao
 
 class UsuarioRepository (
     private val usuarioDao: UsuarioDao) {

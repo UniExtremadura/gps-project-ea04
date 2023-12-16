@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.Data.api
+package es.unex.nbafantasy.data.api
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,13 +1,7 @@
-package es.unex.nbafantasy.Data
+package es.unex.nbafantasy.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.switchMap
-import es.unex.nbafantasy.api.NBAFantasyApi
-import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.bd.roomBD.JugadorDao
-import es.unex.nbafantasy.bd.roomBD.JugadorEquipoDao
 import es.unex.nbafantasy.bd.roomBD.ResultadoPartidoDao
 
 class ResultadoPartidoRepository(

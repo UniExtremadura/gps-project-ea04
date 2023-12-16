@@ -1,15 +1,14 @@
-package es.unex.nbafantasy.Data
+package es.unex.nbafantasy.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.example.SeasonData
-import es.unex.nbafantasy.Data.api.Data
-import es.unex.nbafantasy.Data.model.NBAData
-import es.unex.nbafantasy.Data.model.NBASeasonData
+import es.unex.nbafantasy.data.api.Data
+import es.unex.nbafantasy.data.model.NBAData
+import es.unex.nbafantasy.data.model.NBASeasonData
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.api.NBAFantasyApi
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.roomBD.JugadorDao
 import kotlin.math.pow
 import kotlin.math.roundToInt

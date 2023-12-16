@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import es.unex.nbafantasy.Data.JugadorEquipoRepository
+import es.unex.nbafantasy.data.JugadorEquipoRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
@@ -18,119 +18,67 @@ import kotlinx.coroutines.launch
 class EditarAdapter(
     private var DataS: List<Jugador>,
     private var usuario: Long,
-    private val onClick: (show: Jugador, estrella: Boolean) -> Unit,
-    private val onLongClick: (title: Jugador) -> Unit,
+    private var jugadoresFavoritos: Map<Long, Boolean>,
+    private val onClick: (Jugador, Boolean) -> Unit,
+    private val onLongClick: (Jugador) -> Unit,
+    private val onFavoriteButtonClick: (Jugador, Int) -> Unit,
     private val lifecycleOwner: LifecycleOwner
 ) : RecyclerView.Adapter<EditarAdapter.ShowViewHolder>() {
-
-    private val jugadoresSeleccionados = mutableListOf<Jugador>()
-    private lateinit var listaUsuarioEquipo: List<JugadorEquipo>
-    private lateinit var db: BD
-    private lateinit var jugadorEquipoRepository: JugadorEquipoRepository
-
+    interface OnFavoriteButtonClickListener {
+        fun onFavoriteButtonClick(jugador: Jugador, position: Int)
+    }
     inner class ShowViewHolder(
-        private val binding: PlayerItemEditarBinding,
-        private val onClick: (show: Jugador, estrella: Boolean) -> Unit,
-        private val onLongClick: (title: Jugador) -> Unit
+        private val binding: PlayerItemEditarBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        private var isFavorite: Boolean = false
 
-        fun bind(nbadata: Jugador, usuario: Long, adritotalItems: Int) {
+        fun bind(jugador: Jugador,usuarioid:Long, position: Int) {
             with(binding) {
-                playersNameEdit.text = "${nbadata.nombre}" + " " + "${nbadata.apellido}"
-                playersTeamEdit.text = "Equipo: " + "${nbadata.equipo}"
-                playersPositionEdit.text = "Posicion: " + "${nbadata.posicion}"
-                playersStatsEdit.text = "Estadisticas: " + "${nbadata.mediaGeneralPartido}"
+                playersNameEdit.text = "${jugador.nombre} ${jugador.apellido}"
+                playersTeamEdit.text = "Equipo: ${jugador.equipo}"
+                playersPositionEdit.text = "Posicion: ${jugador.posicion}"
+                playersStatsEdit.text = "Estadisticas: ${jugador.mediaGeneralPartido}"
 
-                lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                    //listaUsuarioEquipo = db?.jugadorEquipoDao()?.getJugadoresByUsuario(usuario) ?: emptyList()
-                    listaUsuarioEquipo = jugadorEquipoRepository.getJugadoresUsuario(usuario)
-                    for (equipo in listaUsuarioEquipo) {
-                        if (equipo.jugadorId == nbadata.jugadorId) {
-                            isFavorite = true
-                            btnFavorite.isSelected = isFavorite
-                            if (jugadoresSeleccionados.size < 3) {
-                                jugadoresSeleccionados.add(nbadata)
-                            } else {
-                                if (jugadoresSeleccionados.size == 3) {
-                                    for (enlista in jugadoresSeleccionados) {
-                                        if (equipo.jugadorId != enlista.jugadorId) {
-                                            jugadoresSeleccionados.add(nbadata)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                val isFavorite = jugadoresFavoritos[jugador.jugadorId] ?: false
+                btnFavorite.isSelected = isFavorite
 
-                    binding.btnFavorite.setOnClickListener {
-                        if (jugadoresSeleccionados.size == 3 && !isFavorite) {
-                            Toast.makeText(itemView.context, "Equipo completo", Toast.LENGTH_SHORT).show()
-                        } else {
-                            isFavorite = !isFavorite
-                        }
-
-                        if (isFavorite) {
-                            if (jugadoresSeleccionados.size < 3) {
-                                lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                                    insertarUsuarioEquipo(usuario, nbadata.jugadorId ?: 0)
-                                }
-                                jugadoresSeleccionados.add(nbadata)
-                                updateFavoriteButtonState()
-                                if (jugadoresSeleccionados.size == 3) {
-                                    Toast.makeText(itemView.context, "Equipo completo", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        } else {
-                            lifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                                EliminarUsuarioEquipo(usuario, nbadata.jugadorId ?: 0)
-                            }
-                            jugadoresSeleccionados.remove(nbadata)
-                            updateFavoriteButtonState()
-                        }
-                    }
+                btnFavorite.setOnClickListener {
+                    onFavoriteButtonClick(jugador, position)
                 }
 
                 clEditar.setOnClickListener {
-                    onClick(nbadata, isFavorite)
+                    onClick(jugador, isFavorite)
                 }
                 clEditar.setOnLongClickListener {
-                    onLongClick(nbadata)
+                    onLongClick(jugador)
                     true
                 }
             }
         }
-
-        private fun updateFavoriteButtonState() {
-            binding.btnFavorite.isSelected = isFavorite
-        }
-
-        private suspend fun insertarUsuarioEquipo(usuario: Long, jugadorId: Long) {
-            jugadorEquipoRepository.insertar(usuario, jugadorId)
-        }
-
-        private suspend fun EliminarUsuarioEquipo(usuario: Long, jugadorId: Long) {
-            jugadorEquipoRepository.eliminar(usuario, jugadorId)
-        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowViewHolder {
-        val appContainer = (parent.context.applicationContext as NBAFantasyApplication).appContainer
-        jugadorEquipoRepository = appContainer.repositoryJugadorEquipo
-
         val binding = PlayerItemEditarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ShowViewHolder(binding, onClick, onLongClick)
+        return ShowViewHolder(binding)
     }
 
-    override fun getItemCount() = DataS.size
+    override fun getItemCount(): Int = DataS.size
 
     override fun onBindViewHolder(holder: ShowViewHolder, position: Int) {
-        holder.bind(DataS[position], usuario, DataS.size)
+        holder.bind(DataS[position],usuario,position)
     }
 
-    fun updateData(DataS: List<Jugador>, usuarioid: Long) {
-        this.DataS = DataS
-        this.usuario = usuarioid
+    fun updateData(newData: List<Jugador>, newUsuario: Long, newFavoritos: Map<Long, Boolean>) {
+        this.DataS = newData
+        this.usuario = newUsuario
+        this.jugadoresFavoritos = newFavoritos
         notifyDataSetChanged()
     }
+
+    fun updateItem(jugador: Jugador, position: Int, isFavorite: Boolean) {
+        jugadoresFavoritos = jugadoresFavoritos.toMutableMap().apply {
+            put(jugador.jugadorId ?: 0L, isFavorite)
+        }
+        notifyItemChanged(position)
+    }
 }
+

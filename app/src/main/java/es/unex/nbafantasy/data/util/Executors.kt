@@ -1,4 +1,4 @@
-package es.unex.nbafantasy.Data.Util
+package es.unex.nbafantasy.data.util
 
 import java.util.concurrent.Executors
 

@@ -1,20 +1,15 @@
-package es.unex.nbafantasy
+package es.unex.nbafantasy.ajustes
 
 import android.os.Bundle
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import android.view.LayoutInflater
 
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceFragmentCompat
-import es.unex.nbafantasy.juego.resultadoPartido.VictoriaActivity
+import es.unex.nbafantasy.R
 
 class AjustesFragment : PreferenceFragmentCompat(){
     private  val PREF_MODO_OSCURO = "modoOscuro"

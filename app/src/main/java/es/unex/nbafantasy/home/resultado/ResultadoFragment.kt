@@ -44,6 +44,11 @@ class ResultadoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //val usuarioProvider = activity as UsuarioProvider
+        //val usuario = usuarioProvider.getUser()
+
+        //viewModel.usuario = usuario
+
         // Observa LiveData en onViewCreated
         viewModel.spinner.observe(viewLifecycleOwner) { show ->
             binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
