@@ -15,7 +15,9 @@ class PerfilViewModel  (
     suspend fun actualizarUsuario(nuevoNombre:String, nuevaContrasena:String){
         repositoryUsuario.actualizar(usuario!!.usuarioId!!,nuevoNombre,nuevaContrasena)
     }
-
+    suspend fun setUsuario(usuarioId:Long){
+        repositoryUsuario.setUsuario(usuarioId)
+    }
     suspend fun busquedaNombre(nombreUsuario:String): Usuario{
         return repositoryUsuario.busquedaNombre(nombreUsuario)
     }

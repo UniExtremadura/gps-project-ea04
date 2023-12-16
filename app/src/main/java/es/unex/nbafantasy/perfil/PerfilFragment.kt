@@ -1,6 +1,7 @@
 package es.unex.nbafantasy.perfil
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -67,7 +68,10 @@ class PerfilFragment : Fragment() {
                         viewModel.buscarIdByNombre(binding.etNombre.text.toString())?.toLong() != viewModel.usuario!!.usuarioId) {
                         notificarMensaje("Nombre de usuario ocupado")
                     } else {
+                        //Log.e("aaaaaaaaaa","aaaa"+user.usuarioId!!.toLong())
                         viewModel.actualizarUsuario(etNombre.text.toString(), etContrasena1.text.toString())
+                        val user = viewModel.busquedaNombre(etNombre.text.toString())
+                        viewModel.setUsuario(user.usuarioId!!.toLong())
                         notificarMensaje("Usuario actualizado")
                     }
                 }

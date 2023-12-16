@@ -15,6 +15,9 @@ class LoginViewModel (
     suspend fun busquedaNombre(nombreUsuario:String): Usuario{
         return repositoryUsuario.busquedaNombre(nombreUsuario)
     }
+    suspend fun setUsuario(usuarioId:Long){
+        repositoryUsuario.setUsuario(usuarioId)
+    }
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")

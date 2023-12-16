@@ -23,28 +23,11 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class VictoriaActivity : AppCompatActivity() {
-    private lateinit var resultadoPartido: ResultadoPartido
+    //private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var listaJugador: List<UsuarioJugador>
     private lateinit var binding:ActivityVictoriaBinding
 
     private val viewModel: VictoriaViewModel by viewModels { VictoriaViewModel.Factory }
-
-    companion object {
-        const val USUARIO = "USUARIO"
-        const val RESULTADOPARTIDO="RESULTADOPARTIDO"
-
-        fun start(
-            context: Context,
-            usuario: Usuario,
-            resultadoPartido: ResultadoPartido
-        ) {
-            val intent = Intent(context, VictoriaActivity::class.java).apply {
-                putExtra(USUARIO, usuario)
-                putExtra(RESULTADOPARTIDO, resultadoPartido)
-            }
-            context.startActivity(intent)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,8 +40,10 @@ class VictoriaActivity : AppCompatActivity() {
 
 
         lifecycleScope.launch {
-            viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
-            resultadoPartido=(intent?.getSerializableExtra(RESULTADOPARTIDO) as? ResultadoPartido)!!
+            //viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+            viewModel.getUsuario()
+            viewModel.getResultado()
+            //resultadoPartido=(intent?.getSerializableExtra(RESULTADOPARTIDO) as? ResultadoPartido)!!
             darCarta()
             setUpListener()
         }
@@ -73,9 +58,9 @@ class VictoriaActivity : AppCompatActivity() {
         var jugadorNuevo: Int
         if (listaJugador.size == 29) {
             with(binding) {
-                val x = "Mis puntos: " + resultadoPartido.misPuntos.toString()
+                val x = "Mis puntos: " + viewModel.Resultado!!.misPuntos.toString()
                 misPuntos.setText(x)
-                val y = "Puntos rival: " + resultadoPartido.puntosRivales.toString()
+                val y = "Puntos rival: " + viewModel.Resultado!!.puntosRivales.toString()
                 puntosRival.setText(y)
                 jugadorGanado.setText("Has conseguido a todos")
             }
@@ -95,9 +80,9 @@ class VictoriaActivity : AppCompatActivity() {
 
     private suspend fun mostrarText(jugadorNuevo:Long){
         with(binding) {
-            val x = "Mis puntos: " + resultadoPartido.misPuntos.toString()
+            val x = "Mis puntos: " + viewModel.Resultado!!.misPuntos.toString()
             misPuntos.setText(x)
-            val y = "Puntos rival: " + resultadoPartido.puntosRivales.toString()
+            val y = "Puntos rival: " + viewModel.Resultado!!.puntosRivales.toString()
             puntosRival.setText(y)
             val jugador = obtenerJugadorById(jugadorNuevo)
             val nombreApellido = getNombre(jugador.jugadorId ?: 0)

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -53,9 +54,9 @@ class PantallaJuegoActivity : AppCompatActivity() {
         binding = ActivityPantallaJuegoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
-
-        val appContainer = (this.application as NBAFantasyApplication).appContainer
+        //viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+        viewModel.getUsuario()
+        //val appContainer = (this.application as NBAFantasyApplication).appContainer
 
         if(viewModel.usuario!=null) {
             lifecycleScope.launch {
@@ -176,19 +177,25 @@ class PantallaJuegoActivity : AppCompatActivity() {
                 puntosMiEquipo, puntosRival,"Victoria")
 
             lifecycleScope.launch {
-                viewModel.insertarResultado(resultadoPartido)
+                val id = viewModel.insertarResultado(resultadoPartido)
+                viewModel.setResultado(id)
+
             }
 
-            VictoriaActivity.start(this, viewModel.usuario!!, resultadoPartido)
+            val intent = Intent (this, VictoriaActivity::class.java)
+            startActivity(intent)
         } else {
             resultadoPartido = ResultadoPartido(null,viewModel.usuario!!.usuarioId ?: 0,
                 puntosMiEquipo, puntosRival,"Derrota")
 
             lifecycleScope.launch {
-                viewModel.insertarResultado(resultadoPartido)
+                val ID = viewModel.insertarResultado(resultadoPartido)
+                viewModel.setResultado(ID)
+
             }
 
-            DerrotaActivity.start(this, viewModel.usuario!!, resultadoPartido)
+            val intent = Intent (this, DerrotaActivity::class.java)
+            startActivity(intent)
         }
     }
 

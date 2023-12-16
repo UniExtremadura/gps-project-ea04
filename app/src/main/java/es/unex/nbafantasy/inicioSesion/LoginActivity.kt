@@ -98,8 +98,9 @@ class LoginActivity : AppCompatActivity() {
         //return repositoryUsuario.busquedaNombre(nombreUsuario)
     //}
 
-    private fun navegacionMainActivity(usuario: Usuario, mensaje: String){
+    private suspend fun navegacionMainActivity(usuario: Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
+        viewModel.setUsuario(usuario.usuarioId!!)
 
         val intent = Intent (this, MainActivity::class.java)
         startActivity(intent )

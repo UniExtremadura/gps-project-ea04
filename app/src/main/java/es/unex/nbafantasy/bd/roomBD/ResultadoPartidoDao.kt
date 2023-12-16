@@ -39,6 +39,6 @@ interface ResultadoPartidoDao {
      * @return El identificador único del resultado de partido recién insertado.
      */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertar(resultadopartido: ResultadoPartido)
+    suspend fun insertar(resultadopartido: ResultadoPartido): Long
 
 }

@@ -30,6 +30,9 @@ class PantallaJuegoViewModel(
     fun getUsuario(){
         usuario=repositoryUsuario.usuario
     }
+    suspend fun setResultado(ResultadoId:Long){
+        repositoryResultadoPartido.setResultado(ResultadoId)
+    }
 
     suspend fun getAll(): List<Jugador>{
         return repositoryJugador.getAll()
@@ -39,10 +42,8 @@ class PantallaJuegoViewModel(
         return repositoryJugador.getJugadorById(jugadorId)
     }
 
-    fun insertarResultado(resultadoPartido: ResultadoPartido){
-        viewModelScope.launch {
-            repositoryResultadoPartido.insertarResultado((resultadoPartido))
-        }
+    suspend fun insertarResultado(resultadoPartido: ResultadoPartido):Long{
+        return repositoryResultadoPartido.insertarResultado(resultadoPartido)
     }
 
     companion object {

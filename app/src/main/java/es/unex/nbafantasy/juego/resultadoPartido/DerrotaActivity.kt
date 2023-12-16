@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
@@ -15,26 +16,8 @@ import es.unex.nbafantasy.databinding.ActivityVictoriaBinding
 import kotlinx.coroutines.launch
 
 class DerrotaActivity : AppCompatActivity() {
-    private lateinit var usuario: Usuario
-    private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var binding: ActivityDerrotaBinding
-
-    companion object {
-        const val USUARIO = "USUARIO"
-        const val RESULTADOPARTIDO="RESULTADOPARTIDO"
-
-        fun start(
-            context: Context,
-            usuario: Usuario,
-            resultadoPartido: ResultadoPartido
-        ) {
-            val intent = Intent(context, DerrotaActivity::class.java).apply {
-                putExtra(USUARIO, usuario)
-                putExtra(VictoriaActivity.RESULTADOPARTIDO, resultadoPartido)
-            }
-            context.startActivity(intent)
-        }
-    }
+    private val viewModel: DerrotaViewModel by viewModels { DerrotaViewModel.Factory}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +27,8 @@ class DerrotaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
-            resultadoPartido=(intent?.getSerializableExtra(RESULTADOPARTIDO) as? ResultadoPartido)!!
+            viewModel.getUsuario()
+            viewModel.getResultado()
             mostrarText()
             setUpListener()
         }
@@ -54,9 +37,9 @@ class DerrotaActivity : AppCompatActivity() {
     private fun mostrarText(){
         lifecycleScope.launch {
             with(binding) {
-                val x = "Mis puntos: " + resultadoPartido.misPuntos.toString()
+                val x = "Mis puntos: " + viewModel.Resultado!!.misPuntos.toString()
                 misPuntos.setText(x)
-                val y = "Puntos rival: " + resultadoPartido.puntosRivales.toString()
+                val y = "Puntos rival: " + viewModel.Resultado!!.puntosRivales.toString()
                 puntosRival.setText(y)
             }
         }
