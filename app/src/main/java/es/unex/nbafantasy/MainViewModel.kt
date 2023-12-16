@@ -5,9 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
+import es.unex.nbafantasy.bd.elemBD.Jugador
+import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.data.UsuarioRepository
-import es.unex.nbafantasy.inicioSesion.RegistroViewModel
 
 class MainViewModel(
     private val repositoryUsuario: UsuarioRepository
@@ -28,6 +29,30 @@ class MainViewModel(
             field = value
             _usuario.value = value!!
         }
+
+    private val _navigateToListajugador = MutableLiveData<Jugador>(null)
+    private val _navigateToEditarjugador = MutableLiveData<Pair<Jugador?, Boolean>>(null)
+    private val _navigateToResultado = MutableLiveData<ResultadoPartido>(null)
+
+    val navigateListajugador: LiveData<Jugador>
+        get() = _navigateToListajugador
+    fun onShowClick(player: Jugador) {
+        _navigateToListajugador.value = player
+    }
+
+
+    val navigateEditarjugador: LiveData<Pair<Jugador?, Boolean>>
+        get() = _navigateToEditarjugador
+    fun onEditClick(player: Jugador, Estrella: Boolean) {
+        _navigateToEditarjugador.value = Pair(player, Estrella)
+    }
+
+
+    val navigateResultado: LiveData<ResultadoPartido>
+        get() = _navigateToResultado
+    fun onResultClick(player: ResultadoPartido) {
+        _navigateToResultado.value = player
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

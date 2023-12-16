@@ -1,16 +1,12 @@
 package es.unex.nbafantasy.juego
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.MainActivity
-import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
@@ -39,9 +35,7 @@ class PantallaJuegoActivity : AppCompatActivity() {
         binding = ActivityPantallaJuegoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
         viewModel.getUsuario()
-        //val appContainer = (this.application as NBAFantasyApplication).appContainer
 
         if(viewModel.usuario!=null) {
             lifecycleScope.launch {

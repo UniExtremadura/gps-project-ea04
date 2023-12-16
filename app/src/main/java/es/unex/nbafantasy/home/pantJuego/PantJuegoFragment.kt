@@ -3,7 +3,6 @@ package es.unex.nbafantasy.home.pantJuego
 import PantJuegoViewModel
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,18 +11,12 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.data.JugadorEquipoRepository
-import es.unex.nbafantasy.data.JugadorRepository
-import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.FragmentPantJuegoBinding
-import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragment
-import es.unex.nbafantasy.home.resultado.ResultadoViewModel
 import es.unex.nbafantasy.juego.PantallaJuegoActivity
-import es.unex.nbafantasy.juego.PantallaJuegoViewModel
 import kotlinx.coroutines.launch
 
 class PantJuegoFragment : Fragment() {
@@ -31,19 +24,10 @@ class PantJuegoFragment : Fragment() {
     private lateinit var _binding:FragmentPantJuegoBinding
     private val binding get()=_binding!!
     private lateinit var listaEquipo: List<JugadorEquipo>
-    private lateinit var listener: ListaJugadoresFragment.OnJugadorClickListener
 
     private val viewModel: PantJuegoViewModel by viewModels { PantJuegoViewModel.Factory }
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-        if (context is ListaJugadoresFragment.OnJugadorClickListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnShowClickListener")
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

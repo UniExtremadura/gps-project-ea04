@@ -1,6 +1,5 @@
 package es.unex.nbafantasy.juego
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,15 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.example.example.SeasonData
-import es.unex.nbafantasy.data.JugadorEquipoRepository
-import es.unex.nbafantasy.data.JugadorRepository
-import es.unex.nbafantasy.data.UsuarioJugadorRepository
 import es.unex.nbafantasy.data.model.NBAData
 import es.unex.nbafantasy.data.model.NBASeasonData
-import es.unex.nbafantasy.data.toSeasonAverages
 import es.unex.nbafantasy.MainActivity
-import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -32,7 +25,6 @@ class DarCartaActivity : AppCompatActivity() {
     private var _datas: List<NBAData> = emptyList()
     private var _seasondatas: List<NBASeasonData> = emptyList()
     private lateinit var binding:ActivityDarCartaBinding
-    private lateinit var listaJugador: List<Jugador>
 
     private val viewModel: DarCartaViewModel by viewModels { DarCartaViewModel.Factory }
 

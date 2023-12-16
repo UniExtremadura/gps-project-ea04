@@ -2,16 +2,12 @@ package es.unex.nbafantasy.juego.resultadoPartido
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
-import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.data.ResultadoPartidoRepository
 import es.unex.nbafantasy.data.UsuarioRepository
-import kotlinx.coroutines.launch
 
 class DerrotaViewModel(
     private val repositoryUsuario: UsuarioRepository,

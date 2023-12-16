@@ -20,6 +20,11 @@ interface ResultadoPartidoDao {
     @Query("SELECT * FROM resultadopartido WHERE usuarioId = :usuarioId")
     fun getResultadoByUsuario(usuarioId: Long): LiveData<List<ResultadoPartido>>
 
+    /**
+     * Recupera todos los resultados de partidos registrados en la base de datos.
+     *
+     * @return LiveData conteniendo una lista de todos los resultados de partidos.
+     */
     @Query("SELECT * FROM ResultadoPartido")
     fun getAllResultados(): LiveData<List<ResultadoPartido>>
 

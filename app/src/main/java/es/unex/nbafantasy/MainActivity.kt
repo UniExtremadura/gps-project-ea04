@@ -1,10 +1,7 @@
 package es.unex.nbafantasy
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,15 +16,12 @@ import androidx.navigation.ui.setupWithNavController
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.databinding.ActivityMainBinding
-import es.unex.nbafantasy.home.editar.EditarFragment
 import es.unex.nbafantasy.home.editar.EditarFragmentDirections
-import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragment
 import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresFragmentDirections
 
-import es.unex.nbafantasy.home.resultado.ResultadoFragment
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickListener, EditarFragment.OnEditarJugadorClickListener, ResultadoFragment.OnResultadoClickListener {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -44,6 +38,26 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         setContentView(binding.root)
 
         viewModel.getUsuario()
+
+        viewModel.navigateListajugador.observe(this) {
+            jugador -> jugador?.let {
+                onShowClick(jugador)
+            }
+        }
+
+        viewModel.navigateResultado.observe(this) {
+            resultado -> resultado?.let {
+                onResultClick(resultado)
+            }
+        }
+
+        viewModel.navigateEditarjugador.observe(this) { pair ->
+            pair?.let { (resultado, estrella) ->
+                resultado?.let {
+                    onEditClick(resultado, estrella)
+                }
+            }
+        }
 
         setUpUI()
     }
@@ -78,21 +92,19 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
                 || super.onSupportNavigateUp()
     }
 
-    override fun onShowClick(nbadata: Jugador) {
+    fun onShowClick(nbadata: Jugador) {
         val action = ListaJugadoresFragmentDirections.actionListaJugadoresFragmentToListaJugadoresDetailsFragment(
             nbadata)
         navController.navigate(action)
     }
 
-    override fun onEditClick(data: Jugador, estrella: Boolean) {
+    fun onEditClick(data: Jugador, estrella: Boolean) {
         val action = EditarFragmentDirections.actionEditarFragmentToEditarDetailsFragment(
             data,estrella)
         navController.navigate(action)
     }
 
-    override fun onResultClick(data: ResultadoPartido) {
-
-    }
+    fun onResultClick(data: ResultadoPartido) {}
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         lifecycleScope.launch {

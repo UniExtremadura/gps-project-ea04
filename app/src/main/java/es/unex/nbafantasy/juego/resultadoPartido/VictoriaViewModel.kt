@@ -13,7 +13,6 @@ import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.data.ResultadoPartidoRepository
 import es.unex.nbafantasy.data.UsuarioRepository
-import es.unex.nbafantasy.juego.DarCartaViewModel
 import kotlinx.coroutines.launch
 
 class VictoriaViewModel (

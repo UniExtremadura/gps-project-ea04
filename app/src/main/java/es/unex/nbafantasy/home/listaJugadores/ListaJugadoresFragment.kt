@@ -6,35 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import es.unex.nbafantasy.MainViewModel
 
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.databinding.FragmentListaJugadoresBinding
 
 
 class ListaJugadoresFragment : Fragment() {
-    private lateinit var listener: OnJugadorClickListener
     private val viewModel: ListaJugadoresViewModel by viewModels { ListaJugadoresViewModel.Factory }
+    private val mainviewModel: MainViewModel by activityViewModels()
 
-
-    interface OnJugadorClickListener {
-        fun onShowClick(data: Jugador)
-    }
 
     private var _binding: FragmentListaJugadoresBinding? = null
     private val binding get()=_binding!!
     private lateinit var adapter: ListaJugadoresAdapter
 
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-        if (context is OnJugadorClickListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnShowClickListener")
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,7 +57,8 @@ class ListaJugadoresFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         adapter = ListaJugadoresAdapter(DataS = emptyList(), onClick = {
-            listener.onShowClick(it)
+            mainviewModel.onShowClick(it)
+            //listener.onShowClick(it)
         },
             onLongClick = {
                 Toast.makeText(context, "long click on: "+it.apellido, Toast.LENGTH_SHORT).show()

@@ -1,12 +1,9 @@
 package es.unex.nbafantasy.home.editar
 
-import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import es.unex.nbafantasy.NBAFantasyApplication
@@ -25,9 +22,6 @@ class EditarViewModel(
     private val jugadorEquipoRepository: JugadorEquipoRepository
 ): ViewModel() {
     var usuario: Usuario? = null
-    val listaJugadores = jugadorRepository.jugadores
-    val usuarioJugador = usuarioJugadorRepository.usuarioJugador
-    val jugadorEquipo = jugadorEquipoRepository.jugadoresEquipo
 
     private val _spinner = MutableLiveData<Boolean>()
     private val _toast = MutableLiveData<String?>()

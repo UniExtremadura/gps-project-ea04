@@ -1,29 +1,21 @@
 package es.unex.nbafantasy.juego.resultadoPartido
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import es.unex.nbafantasy.data.JugadorRepository
-import es.unex.nbafantasy.data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.R
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 import es.unex.nbafantasy.databinding.ActivityVictoriaBinding
-import es.unex.nbafantasy.home.resultado.ResultadoViewModel
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class VictoriaActivity : AppCompatActivity() {
-    //private lateinit var resultadoPartido: ResultadoPartido
     private lateinit var listaJugador: List<UsuarioJugador>
     private lateinit var binding:ActivityVictoriaBinding
 
@@ -36,14 +28,11 @@ class VictoriaActivity : AppCompatActivity() {
         binding = ActivityVictoriaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val appContainer = (this.application as NBAFantasyApplication).appContainer
-
 
         lifecycleScope.launch {
-            //viewModel.usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
+
             viewModel.getUsuario()
             viewModel.getResultado()
-            //resultadoPartido=(intent?.getSerializableExtra(RESULTADOPARTIDO) as? ResultadoPartido)!!
             darCarta()
             setUpListener()
         }

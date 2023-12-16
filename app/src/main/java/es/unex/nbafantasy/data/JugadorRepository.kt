@@ -1,6 +1,5 @@
 package es.unex.nbafantasy.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.example.SeasonData
 import es.unex.nbafantasy.data.api.Data
@@ -115,10 +114,8 @@ class JugadorRepository (
                 media.round(2)
             )
             listaJug.add(jugador)
-            //db?.jugadorDao()?.insertar(jugador)
             i=i+1;
 
-            Log.e("AAAAAAAAAAAAAA","aa " + jugador.jugadorId )
             }
         jugadorDao.insertAll(listaJug)
     }

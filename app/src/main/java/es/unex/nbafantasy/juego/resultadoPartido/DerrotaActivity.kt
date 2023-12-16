@@ -1,6 +1,5 @@
 package es.unex.nbafantasy.juego.resultadoPartido
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,10 +8,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.R
-import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.ActivityDerrotaBinding
-import es.unex.nbafantasy.databinding.ActivityVictoriaBinding
 import kotlinx.coroutines.launch
 
 class DerrotaActivity : AppCompatActivity() {

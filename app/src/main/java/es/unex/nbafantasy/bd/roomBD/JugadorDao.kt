@@ -9,12 +9,28 @@ import es.unex.nbafantasy.bd.elemBD.Jugador
 
 @Dao
 interface JugadorDao {
+    /**
+     * Recupera todos los jugadores registrados en la base de datos.
+     *
+     * @return LiveData conteniendo una lista de todos los jugadores.
+     */
     @Query("SELECT * FROM jugador")
     fun getAllJugadores(): LiveData<List<Jugador>>
 
+    /**
+     * Busca y retorna jugadores específicos basados en una lista de identificadores.
+     *
+     * @param ids Una lista de identificadores de jugadores que se desean recuperar.
+     * @return LiveData con la lista de jugadores que coinciden con los identificadores dados.
+     */
     @Query("SELECT * FROM Jugador WHERE jugadorId IN (:ids)")
     fun getJugadoresByIds(ids: List<Long>): LiveData<List<Jugador>>
 
+    /**
+     * Inserta una lista de jugadores en la base de datos.
+     *
+     * @param jugadores La lista de jugadores a insertar en la base de datos.
+     */
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(Jugador: List<Jugador>)
 

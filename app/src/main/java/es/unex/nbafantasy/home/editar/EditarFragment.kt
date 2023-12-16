@@ -1,7 +1,6 @@
 package es.unex.nbafantasy.home.editar
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,32 +10,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.nbafantasy.data.JugadorRepository
-import es.unex.nbafantasy.data.UsuarioJugadorRepository
-import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.MainViewModel
-import es.unex.nbafantasy.NBAFantasyApplication
-import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.data.JugadorEquipoRepository
 import es.unex.nbafantasy.databinding.FragmentEditarBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 
 class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
     private var _datas: MutableList<Jugador> = mutableListOf()
-    private lateinit var listener: OnEditarJugadorClickListener
     private val EditarviewModel: EditarViewModel by viewModels { EditarViewModel.Factory }
     private var jugadoresFavoritos: MutableMap<Long, Boolean> = mutableMapOf()
     private var Idusuario: Long = 0
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    interface OnEditarJugadorClickListener {
-        fun onEditClick(data: Jugador, estrella: Boolean)
-    }
 
     private lateinit var adapter: EditarAdapter
     private var _binding: FragmentEditarBinding? = null
@@ -48,15 +36,6 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
     ): View? {
         _binding = FragmentEditarBinding.inflate(layoutInflater, container, false)
         return binding.root
-    }
-
-    override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-        if (context is OnEditarJugadorClickListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnShowClickListener")
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,18 +62,14 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
 
 
     private fun subscribeEditarJugadores() {
-        // Primero, obtener los jugadores favoritos actuales del usuario
         EditarviewModel.getJugadoresEnEquipoDeUsuario().observe(viewLifecycleOwner) { jugadoresEquipo ->
-        // Crear un conjunto de IDs de jugadores favoritos
             val favoritosIds = jugadoresEquipo.mapNotNull { it.jugadorId }.toSet()
 
-            // Actualizar el mapa de jugadores favoritos
             jugadoresFavoritos.clear()
             favoritosIds.forEach { id ->
                 jugadoresFavoritos[id] = true
             }
 
-            // Luego, obtener todos los jugadores y actualizar el adaptador
             EditarviewModel.getJugadoresDeUsuario().observe(viewLifecycleOwner) { jugadores ->
 
                 adapter.updateData(jugadores, EditarviewModel.usuario!!.usuarioId!!, jugadoresFavoritos)
@@ -111,7 +86,7 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
             usuario = Idusuario,
             jugadoresFavoritos = jugadoresFavoritos,
             onClick = { jugador, estrella ->
-                listener.onEditClick(jugador, estrella)
+                mainViewModel.onEditClick(jugador, estrella)
             },
             onLongClick = {
                 Toast.makeText(context, "long click on: " + it.apellido, Toast.LENGTH_SHORT).show()

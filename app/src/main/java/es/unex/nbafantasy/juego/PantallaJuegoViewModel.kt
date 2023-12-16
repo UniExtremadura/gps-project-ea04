@@ -2,7 +2,6 @@ package es.unex.nbafantasy.juego
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import es.unex.nbafantasy.data.JugadorEquipoRepository
 import es.unex.nbafantasy.data.JugadorRepository
@@ -13,7 +12,6 @@ import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.data.UsuarioRepository
-import kotlinx.coroutines.launch
 
 class PantallaJuegoViewModel(
     private val repositoryResultadoPartido: ResultadoPartidoRepository,

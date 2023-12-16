@@ -12,6 +12,11 @@ import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
 
 @Dao
 interface UsuarioJugadorDao {
+    /**
+     * Recupera todas las relaciones entre usuarios y jugadores de la base de datos.
+     *
+     * @return LiveData conteniendo una lista de todas las relaciones 'UsuarioJugador'.
+     */
     @Query("SELECT * FROM UsuarioJugador")
     fun getAllJugUsuarios(): LiveData<List<UsuarioJugador>>
     /**
@@ -23,6 +28,13 @@ interface UsuarioJugadorDao {
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
     suspend fun getTodosJugadores(usuarioId: Long): List<UsuarioJugador>
 
+    /**
+     * Obtiene la lista de relaciones entre usuarios y jugadores para un usuario específico.
+     *
+     * @param usuarioId El identificador del usuario para el cual se buscan las relaciones con jugadores.
+     * @return LiveData conteniendo una lista de objetos 'UsuarioJugador' que representan
+     *         la relación entre el usuario especificado y sus jugadores.
+     */
     @Query("SELECT * FROM usuariojugador WHERE usuarioId = :usuarioId")
     fun getJugadorByUsuario(usuarioId: Long): LiveData<List<UsuarioJugador>>
 
