@@ -34,21 +34,6 @@ class PantallaJuegoActivity : AppCompatActivity() {
 
     private val viewModel: PantallaJuegoViewModel by viewModels { PantallaJuegoViewModel.Factory }
 
-
-    companion object{
-        const val USUARIO="USUARIO"
-
-        fun start(
-            context: Context?,
-            usuario: Usuario,
-        ){
-            val intent= Intent(context, PantallaJuegoActivity::class.java).apply {
-                putExtra(USUARIO, usuario)
-            }
-            context?.startActivity(intent)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPantallaJuegoBinding.inflate(layoutInflater)

@@ -35,8 +35,6 @@ class DarCartaActivity : AppCompatActivity() {
     private lateinit var listaJugador: List<Jugador>
 
     private val viewModel: DarCartaViewModel by viewModels { DarCartaViewModel.Factory }
-    private val mainViewModel: MainViewModel by viewModels { MainViewModel.Factory }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
