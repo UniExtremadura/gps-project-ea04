@@ -12,13 +12,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
-import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.data.JugadorEquipoRepository
 import es.unex.nbafantasy.data.JugadorRepository
 import es.unex.nbafantasy.data.UsuarioJugadorRepository
-import es.unex.nbafantasy.home.listaJugadores.ListaJugadoresViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 

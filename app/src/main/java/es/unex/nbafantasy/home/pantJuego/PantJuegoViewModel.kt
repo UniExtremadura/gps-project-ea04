@@ -1,8 +1,8 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import es.unex.nbafantasy.Data.JugadorEquipoRepository
-import es.unex.nbafantasy.Data.JugadorRepository
+import es.unex.nbafantasy.data.JugadorEquipoRepository
+import es.unex.nbafantasy.data.JugadorRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo

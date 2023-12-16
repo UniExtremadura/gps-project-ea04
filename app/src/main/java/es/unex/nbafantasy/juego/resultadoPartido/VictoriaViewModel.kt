@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import es.unex.nbafantasy.Data.JugadorRepository
-import es.unex.nbafantasy.Data.UsuarioJugadorRepository
+import es.unex.nbafantasy.data.JugadorRepository
+import es.unex.nbafantasy.data.UsuarioJugadorRepository
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.Usuario
@@ -17,7 +17,6 @@ class VictoriaViewModel (
     private val repositoryJugador: JugadorRepository,
     private val repositoryUsuarioJugador: UsuarioJugadorRepository
 ): ViewModel(){
-
     var usuario: Usuario? = null
 
 
