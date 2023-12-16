@@ -14,7 +14,6 @@ class PantJuegoViewModel(
 ) : ViewModel() {
     var usuario: Usuario?=null
     var jugador = repositoryJugador.jugadores
-    var jugadorEquipo = repositoryJugadorEquipo.jugadoresEquipo
 
 
     suspend fun obtenerListaJugadores(): List<JugadorEquipo> {

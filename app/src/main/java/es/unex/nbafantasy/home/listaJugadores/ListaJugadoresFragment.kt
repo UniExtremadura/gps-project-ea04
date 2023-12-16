@@ -58,7 +58,6 @@ class ListaJugadoresFragment : Fragment() {
     private fun setUpRecyclerView() {
         adapter = ListaJugadoresAdapter(DataS = emptyList(), onClick = {
             mainviewModel.onShowClick(it)
-            //listener.onShowClick(it)
         },
             onLongClick = {
                 Toast.makeText(context, "long click on: "+it.apellido, Toast.LENGTH_SHORT).show()

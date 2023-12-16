@@ -18,7 +18,6 @@ class ResultadoViewModel (
     private val repositoryResultadoPartido: ResultadoPartidoRepository
 ): ViewModel() {
     var usuario: Usuario? = null
-    val resultadoPartidoRepository = repositoryResultadoPartido.getResultadoPartidoPorId(usuario?.usuarioId?:0)
 
     private val _spinner = MutableLiveData<Boolean>()
     val spinner: LiveData<Boolean>

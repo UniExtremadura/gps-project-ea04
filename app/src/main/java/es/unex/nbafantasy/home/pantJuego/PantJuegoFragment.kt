@@ -41,8 +41,6 @@ class PantJuegoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val appContainer = (this.activity?.application as NBAFantasyApplication).appContainer
-
         mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
             viewModel.usuario=usuario
             setUpUi()

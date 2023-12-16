@@ -9,23 +9,17 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import es.unex.nbafantasy.MainActivity
 import es.unex.nbafantasy.MainViewModel
-import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.databinding.FragmentResultadoBinding
 
 class ResultadoFragment : Fragment() {
     private var _binding: FragmentResultadoBinding? = null
-    //private lateinit var listener: OnResultadoClickListener
     private lateinit var adapter: ResultadoAdapter
     private val binding get() = _binding!!
 
     private val viewModel: ResultadoViewModel by viewModels { ResultadoViewModel.Factory }
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    /*interface OnResultadoClickListener {
-        fun onResultClick(data: ResultadoPartido)
-    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,15 +28,6 @@ class ResultadoFragment : Fragment() {
         _binding = FragmentResultadoBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
-
-    /*override fun onAttach(context: android.content.Context) {
-        super.onAttach(context)
-        if (context is OnResultadoClickListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " debe implementar OnResultadoClickListener")
-        }
-    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,7 +62,6 @@ class ResultadoFragment : Fragment() {
             DataS = emptyList(),
             onClick = {
                 mainViewModel.onResultClick(it)
-                //listener.onResultClick(it)
             },
             onLongClick = {
                 Toast.makeText(context, "long click on: " + it.estadoResultado, Toast.LENGTH_SHORT).show()

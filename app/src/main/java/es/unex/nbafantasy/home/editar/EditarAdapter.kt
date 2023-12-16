@@ -2,18 +2,10 @@ package es.unex.nbafantasy.home.editar
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import es.unex.nbafantasy.data.JugadorEquipoRepository
-import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
-import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
-import es.unex.nbafantasy.bd.roomBD.BD
 import es.unex.nbafantasy.databinding.PlayerItemEditarBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class EditarAdapter(
     private var DataS: List<Jugador>,
