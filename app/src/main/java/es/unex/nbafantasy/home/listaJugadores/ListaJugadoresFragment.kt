@@ -18,6 +18,7 @@ class ListaJugadoresFragment : Fragment() {
     private lateinit var listener: OnJugadorClickListener
     private val viewModel: ListaJugadoresViewModel by viewModels { ListaJugadoresViewModel.Factory }
 
+
     interface OnJugadorClickListener {
         fun onShowClick(data: Jugador)
     }

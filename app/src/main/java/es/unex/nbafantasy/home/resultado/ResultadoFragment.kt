@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
 import es.unex.nbafantasy.databinding.FragmentResultadoBinding
 
@@ -19,6 +21,7 @@ class ResultadoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: ResultadoViewModel by viewModels { ResultadoViewModel.Factory }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     interface OnResultadoClickListener {
         fun onResultClick(data: ResultadoPartido)
@@ -28,6 +31,11 @@ class ResultadoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
+            viewModel.usuario=usuario
+        }
+
         _binding = FragmentResultadoBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -44,11 +52,6 @@ class ResultadoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val usuarioProvider = activity as UsuarioProvider
-        //val usuario = usuarioProvider.getUser()
-
-        //viewModel.usuario = usuario
-
         // Observa LiveData en onViewCreated
         viewModel.spinner.observe(viewLifecycleOwner) { show ->
             binding.spinner.visibility = if (show) View.VISIBLE else View.GONE
@@ -60,7 +63,6 @@ class ResultadoFragment : Fragment() {
                 viewModel.onToastShown()
             }
         }
-        viewModel.usuario = ((requireActivity() as? MainActivity)?.getUsuario())
 
         setUpRecyclerView()
         subscribeUiResultados(adapter)

@@ -6,6 +6,12 @@ import es.unex.nbafantasy.bd.roomBD.UsuarioDao
 class UsuarioRepository (
     private val usuarioDao: UsuarioDao) {
 
+    var usuario : Usuario?=null
+
+    suspend fun setUsuario(usuarioId: Long){
+        usuario=usuarioDao.getUsuarioId(usuarioId.toInt())
+    }
+
     suspend fun busquedaNombre(nombreUsuario: String): Usuario {
         return usuarioDao.busquedaNombre(nombreUsuario)
     }

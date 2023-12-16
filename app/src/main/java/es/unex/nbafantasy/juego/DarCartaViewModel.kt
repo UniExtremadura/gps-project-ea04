@@ -15,10 +15,12 @@ import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.bd.elemBD.UsuarioJugador
+import es.unex.nbafantasy.data.UsuarioRepository
 import kotlinx.coroutines.launch
 
 class DarCartaViewModel(
     private val repositoryJugador: JugadorRepository,
+    private val repositoryUsuario: UsuarioRepository,
     private val repositoryUsuarioJugador: UsuarioJugadorRepository,
     private val repositoryJugadorEquipo: JugadorEquipoRepository
 ): ViewModel() {
@@ -26,6 +28,14 @@ class DarCartaViewModel(
 
     suspend fun getAll(): List<Jugador>{
         return repositoryJugador.getAll()
+    }
+
+    suspend fun setUsuario(usuarioId:Long){
+        repositoryUsuario.setUsuario(usuarioId)
+    }
+
+    fun getUsuario(){
+        usuario=repositoryUsuario.usuario
     }
 
     fun insertarUsuarioJugador(usuarioJugador: UsuarioJugador){
@@ -65,6 +75,7 @@ class DarCartaViewModel(
                 val application = checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 return DarCartaViewModel(
                     (application as NBAFantasyApplication).appContainer.repositoryJugador,
+                    (application as NBAFantasyApplication).appContainer.repositoryUsuario,
                     (application as NBAFantasyApplication).appContainer.repositoryUsuarioJugador,
                     (application as NBAFantasyApplication).appContainer.repositoryJugadorEquipo
                 ) as T

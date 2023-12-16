@@ -131,7 +131,8 @@ class VictoriaActivity : AppCompatActivity() {
     private fun setUpListener(){
         val btnContinuar = findViewById<Button>(R.id.bt_salir_victoria)
         btnContinuar.setOnClickListener{
-            MainActivity.start(this,viewModel.usuario!!)
+            val intent = Intent (this, MainActivity::class.java)
+            startActivity(intent )
         }
     }
 }

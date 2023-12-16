@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.databinding.FragmentPerfilBinding
 import es.unex.nbafantasy.utils.ComprobacionCredenciales
 import kotlinx.coroutines.launch
@@ -18,6 +20,8 @@ class PerfilFragment : Fragment() {
     private lateinit var _binding: FragmentPerfilBinding
     private val binding get()=_binding!!
     private val viewModel: PerfilViewModel by viewModels { PerfilViewModel.Factory }
+    private val mainViewModel: MainViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -29,13 +33,16 @@ class PerfilFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
+            viewModel.usuario=usuario
+        }
+
         _binding= FragmentPerfilBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
 
     private fun cargarDatosUsuario(){
         lifecycleScope.launch {
-            viewModel.usuario = (requireActivity() as? MainActivity)?.getUsuario()!!
             val usuario = viewModel.buscarId()
             with(binding) {
                 etNombre.setText(usuario.nombre)

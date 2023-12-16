@@ -100,7 +100,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navegacionMainActivity(usuario: Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
-        MainActivity.start(this,usuario)
+
+        val intent = Intent (this, MainActivity::class.java)
+        startActivity(intent )
     }
 
     private fun navegacionRegistroActivity() {

@@ -18,6 +18,7 @@ import es.unex.nbafantasy.data.model.NBAData
 import es.unex.nbafantasy.data.model.NBASeasonData
 import es.unex.nbafantasy.data.toSeasonAverages
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -34,21 +35,8 @@ class DarCartaActivity : AppCompatActivity() {
     private lateinit var listaJugador: List<Jugador>
 
     private val viewModel: DarCartaViewModel by viewModels { DarCartaViewModel.Factory }
+    private val mainViewModel: MainViewModel by viewModels { MainViewModel.Factory }
 
-
-    companion object{
-        const val USUARIO="USUARIO"
-
-        fun start(
-            context: Context,
-            usuario: Usuario,
-        ){
-            val intent= Intent(context, DarCartaActivity::class.java).apply {
-                putExtra(USUARIO, usuario)
-            }
-            context.startActivity(intent)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +46,9 @@ class DarCartaActivity : AppCompatActivity() {
         //Inicializacion BD
         val appContainer = (this.application as NBAFantasyApplication).appContainer
 
-        viewModel.usuario = intent?.getSerializableExtra(USUARIO) as Usuario
-
         lifecycleScope.launch {
+            viewModel.getUsuario()
+
             setUpUI()
             kotlinx.coroutines.delay(50)
 
@@ -78,7 +66,6 @@ class DarCartaActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private suspend fun setUpUI() {
         val numJugadoresEnBD = getAll().size
@@ -137,7 +124,6 @@ class DarCartaActivity : AppCompatActivity() {
 
     private suspend fun obtenerPosicionAleatoria(vararg exclusiones: Int): Int {
         val numJugadores = getAll().size
-        Log.e("aaaaaaaaaaaaaaaaaaaaaaaaa", "ausjsjd "+numJugadores)
         val random = Random(System.currentTimeMillis())
         val listaExclusiones = exclusiones.toList()
 
@@ -170,7 +156,8 @@ class DarCartaActivity : AppCompatActivity() {
 
     private fun navegarPantallaPrincipal(usuario:Usuario, mensaje: String){
         Toast.makeText(this,mensaje,Toast.LENGTH_SHORT).show()
-        MainActivity.start(this,usuario)
+        val intent = Intent (this, MainActivity::class.java)
+        startActivity(intent)
     }
 
 }

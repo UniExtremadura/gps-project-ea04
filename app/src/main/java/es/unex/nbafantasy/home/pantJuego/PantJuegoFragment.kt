@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.unex.nbafantasy.data.JugadorEquipoRepository
 import es.unex.nbafantasy.data.JugadorRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.bd.elemBD.JugadorEquipo
 import es.unex.nbafantasy.bd.elemBD.Usuario
@@ -30,6 +32,7 @@ class PantJuegoFragment : Fragment() {
     private lateinit var listener: ListaJugadoresFragment.OnJugadorClickListener
 
     private val viewModel: PantJuegoViewModel by viewModels { PantJuegoViewModel.Factory }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onAttach(context: android.content.Context) {
         super.onAttach(context)
@@ -44,6 +47,11 @@ class PantJuegoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
+            viewModel.usuario=usuario
+        }
+
         _binding= FragmentPantJuegoBinding.inflate(layoutInflater,container, false)
         return binding.root
     }
@@ -75,8 +83,6 @@ class PantJuegoFragment : Fragment() {
     }
 
     private fun setUpUi() {
-        viewModel.usuario = ((requireActivity() as? MainActivity)?.getUsuario())
-
         if(viewModel.usuario!=null) {
             lifecycleScope.launch {
                 mostrarJugadores(viewModel.usuario!!)

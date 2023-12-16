@@ -65,7 +65,8 @@ class DerrotaActivity : AppCompatActivity() {
     private fun setUpListener(){
         val btnContinuar = findViewById<Button>(R.id.bt_salir_derrota)
         btnContinuar.setOnClickListener{
-            MainActivity.start(this,usuario)
+            val intent = Intent (this, MainActivity::class.java)
+            startActivity(intent )
         }
     }
 }

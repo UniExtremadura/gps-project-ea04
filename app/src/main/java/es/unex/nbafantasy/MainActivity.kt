@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
@@ -16,7 +18,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import es.unex.nbafantasy.bd.elemBD.Jugador
 import es.unex.nbafantasy.bd.elemBD.ResultadoPartido
-import es.unex.nbafantasy.bd.elemBD.Usuario
 import es.unex.nbafantasy.databinding.ActivityMainBinding
 import es.unex.nbafantasy.home.editar.EditarFragment
 import es.unex.nbafantasy.home.editar.EditarFragmentDirections
@@ -30,21 +31,8 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var usuario: Usuario
 
-    companion object{
-        const val USUARIO="USUARIO"
-
-        fun start(
-            context: Context,
-            usuario: Usuario,
-        ){
-            val intent= Intent(context, MainActivity::class.java).apply {
-                putExtra(USUARIO, usuario)
-            }
-            context.startActivity(intent)
-        }
-    }
+    private val viewModel: MainViewModel  by viewModels { MainViewModel.Factory }
 
     val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
@@ -55,10 +43,10 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lifecycleScope.launch {
-            usuario = (intent?.getSerializableExtra(USUARIO) as? Usuario)!!
-            setUpUI()
-        }
+        viewModel.getUsuario()
+        Log.e("BBBBBBBBBBB", viewModel.userInSession?.usuarioId.toString())
+
+        setUpUI()
     }
 
     fun setUpUI() {
@@ -106,6 +94,7 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
     override fun onResultClick(data: ResultadoPartido) {
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         lifecycleScope.launch {
             menuInflater.inflate(R.menu.menu_barra, menu)
@@ -114,7 +103,6 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
         }
         return super.onCreateOptionsMenu(menu)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.accion_perfil->{
@@ -127,9 +115,5 @@ class MainActivity : AppCompatActivity(), ListaJugadoresFragment.OnJugadorClickL
             super.onOptionsItemSelected(item)
         }
 
-    }
-
-    fun getUsuario(): Usuario? {
-        return usuario
     }
 }

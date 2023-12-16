@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import es.unex.nbafantasy.data.JugadorRepository
 import es.unex.nbafantasy.data.UsuarioJugadorRepository
 import es.unex.nbafantasy.MainActivity
+import es.unex.nbafantasy.MainViewModel
 import es.unex.nbafantasy.NBAFantasyApplication
 import es.unex.nbafantasy.api.APIError
 import es.unex.nbafantasy.bd.elemBD.Jugador
@@ -27,8 +29,10 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
     private var _datas: MutableList<Jugador> = mutableListOf()
     private lateinit var listener: OnEditarJugadorClickListener
     private val EditarviewModel: EditarViewModel by viewModels { EditarViewModel.Factory }
-    private var Idusuario: Long = 0
     private var jugadoresFavoritos: MutableMap<Long, Boolean> = mutableMapOf()
+    private var Idusuario: Long = 0
+
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     interface OnEditarJugadorClickListener {
         fun onEditClick(data: Jugador, estrella: Boolean)
@@ -42,6 +46,11 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        mainViewModel.usuario.observe(viewLifecycleOwner){usuario ->
+            EditarviewModel.usuario=usuario
+        }
+
         _binding = FragmentEditarBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -59,8 +68,6 @@ class EditarFragment : Fragment(), EditarAdapter.OnFavoriteButtonClickListener {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
 
-        val usuario = ((requireActivity() as? MainActivity)?.getUsuario())
-        EditarviewModel.usuario = usuario
 
         EditarviewModel.spinner.observe(viewLifecycleOwner) { jugador ->
             binding.spinnerEditar.visibility = if (jugador) View.VISIBLE else View.GONE
