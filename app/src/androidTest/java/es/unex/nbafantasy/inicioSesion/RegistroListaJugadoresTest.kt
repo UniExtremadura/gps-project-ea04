@@ -58,7 +58,7 @@ class RegistroListaJugadoresTest {
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText("adri"), closeSoftKeyboard())
+        appCompatEditText.perform(replaceText("juan"), closeSoftKeyboard())
 
         val appCompatEditText2 = onView(
             allOf(
@@ -105,7 +105,7 @@ class RegistroListaJugadoresTest {
         )
         materialButton2.perform(click())
 
-        Thread.sleep(100000)
+        Thread.sleep(20000)
 
         val materialButton3 = onView(
             allOf(

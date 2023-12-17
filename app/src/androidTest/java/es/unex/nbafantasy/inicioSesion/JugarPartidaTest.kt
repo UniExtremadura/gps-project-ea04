@@ -57,7 +57,7 @@ class JugarPartidaTest {
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText("manu"), closeSoftKeyboard())
+        appCompatEditText.perform(replaceText("arantxa"), closeSoftKeyboard())
 
         val appCompatEditText2 = onView(
             allOf(
@@ -105,7 +105,7 @@ class JugarPartidaTest {
         )
         materialButton2.perform(click())
 
-        Thread.sleep(100000)
+        Thread.sleep(20000)
 
         val materialButton3 = onView(
             allOf(

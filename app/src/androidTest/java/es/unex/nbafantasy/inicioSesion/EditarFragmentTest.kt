@@ -121,7 +121,7 @@ class EditarFragmentTest {
         )
         materialButton2.perform(click())
 
-        Thread.sleep(100000)
+        Thread.sleep(20000)
 
         val materialButton3 = onView(
             allOf(
