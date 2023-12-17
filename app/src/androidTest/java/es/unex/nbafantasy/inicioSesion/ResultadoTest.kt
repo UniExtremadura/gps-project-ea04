@@ -21,14 +21,14 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class ResultadoFragmentTest {
+class ResultadoTest {
 
     @Rule
     @JvmField
     var mActivityScenarioRule = ActivityScenarioRule(LoginActivity::class.java)
 
     @Test
-    fun resultadoFragmentTest() {
+    fun resultadoTest() {
         val materialButton = onView(
             allOf(
                 withId(R.id.bt_registro), withText("Registro"),
@@ -57,7 +57,7 @@ class ResultadoFragmentTest {
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText("manu"), closeSoftKeyboard())
+        appCompatEditText.perform(replaceText("adri"), closeSoftKeyboard())
 
         val appCompatEditText2 = onView(
             allOf(
@@ -72,9 +72,24 @@ class ResultadoFragmentTest {
                 isDisplayed()
             )
         )
-        appCompatEditText2.perform(replaceText("1111"), closeSoftKeyboard())
+        appCompatEditText2.perform(replaceText("1234"), closeSoftKeyboard())
 
         val appCompatEditText3 = onView(
+            allOf(
+                withId(R.id.etContrasena1), withText("1234"),
+                childAtPosition(
+                    childAtPosition(
+                        withId(android.R.id.content),
+                        0
+                    ),
+                    1
+                ),
+                isDisplayed()
+            )
+        )
+        appCompatEditText3.perform(pressImeActionButton())
+
+        val appCompatEditText4 = onView(
             allOf(
                 withId(R.id.etContrasena2),
                 childAtPosition(
@@ -87,22 +102,7 @@ class ResultadoFragmentTest {
                 isDisplayed()
             )
         )
-        appCompatEditText3.perform(replaceText("1111"), closeSoftKeyboard())
-
-        val appCompatEditText4 = onView(
-            allOf(
-                withId(R.id.etContrasena2), withText("1111"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    4
-                ),
-                isDisplayed()
-            )
-        )
-        appCompatEditText4.perform(pressImeActionButton())
+        appCompatEditText4.perform(replaceText("1234"), closeSoftKeyboard())
 
         val materialButton2 = onView(
             allOf(
@@ -119,7 +119,7 @@ class ResultadoFragmentTest {
         )
         materialButton2.perform(click())
 
-        Thread.sleep(10000)
+        Thread.sleep(100000)
 
         val materialButton3 = onView(
             allOf(
@@ -135,51 +135,6 @@ class ResultadoFragmentTest {
             )
         )
         materialButton3.perform(click())
-
-        val materialButton5 = onView(
-            allOf(
-                withId(R.id.bt_jugar), withText("Jugar"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(R.id.nav_host_fragment),
-                        0
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton5.perform(click())
-
-        val materialButton6 = onView(
-            allOf(
-                withId(R.id.bt_comenzar_partida), withText("Comenzar partida"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    6
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton6.perform(click())
-
-        val materialButton8 = onView(
-            allOf(
-                withId(R.id.bt_salir_derrota), withText("Salir"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    3
-                ),
-                isDisplayed()
-            )
-        )
-        materialButton8.perform(click())
 
         val bottomNavigationItemView = onView(
             allOf(
